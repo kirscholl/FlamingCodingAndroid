@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".androidTrials.SecondActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/SecondButton1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="跳转到HomeActivity" />
+
+        <Button
+            android:id="@+id/SecondButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="销毁SecondActivity" />
+        <!--        <Button-->
+        <!--            android:id="@+id/SecondButton3"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="SecondButton3" />-->
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

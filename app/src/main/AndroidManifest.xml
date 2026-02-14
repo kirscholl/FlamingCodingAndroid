@@ -23,9 +23,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlaMingCoding">
         <activity
-            android:name=".androidTrials.WorkManagerPracticeActivity"
-            android:label="WorkManagerPracticeActivity"
+            android:name=".androidDevArt.ActivityLifecycleActivity2"
             android:exported="false" />
+        <activity
+            android:name=".androidDevArt.ActivityLifecycleActivity1"
+            android:exported="false" />
+        <activity
+            android:name=".androidTrials.WorkManagerPracticeActivity"
+            android:exported="false"
+            android:label="WorkManagerPracticeActivity" />
         <activity
             android:name=".androidTrials.RoomPracticeActivity"
             android:exported="false" />

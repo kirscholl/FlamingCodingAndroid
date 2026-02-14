@@ -1,6 +1,8 @@
 package com.example.flamingcoding.androidTrials
 
 class CodeNote {
+    // 第一行代码Android读书笔记
+
     // 如果你需要在XML中引用一个id，就使用@id/id_name这种语法，而如果你需要在XML中定义一个id，则要使用@+id/id_name这种语法
     // 使用Kotlin编写的Android项目在app/build.gradle文件的头部默认引入了一个kotlin-android-extensions插件，这个插件会根据布局文件中定义的控件id自动生成一个具有相同名称的变量
     // android:exported="false" ???

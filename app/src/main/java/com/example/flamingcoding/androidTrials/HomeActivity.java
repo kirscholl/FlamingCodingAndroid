@@ -38,7 +38,7 @@ public class HomeActivity extends AppCompatActivity {
         Button homeButton1 = findViewById(R.id.HomeButton1);
         homeButton1.setOnClickListener(v -> {
 //            Toast.makeText(this, "HomeButton1 Click", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, RoomPracticeActivity.class);
+            Intent intent = new Intent(this, WorkManagerPracticeActivity.class);
             startActivity(intent);
         });
 

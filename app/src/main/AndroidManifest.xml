@@ -24,6 +24,7 @@
         android:theme="@style/Theme.FlaMingCoding">
         <activity
             android:name=".androidTrials.WorkManagerPracticeActivity"
+            android:label="WorkManagerPracticeActivity"
             android:exported="false" />
         <activity
             android:name=".androidTrials.RoomPracticeActivity"

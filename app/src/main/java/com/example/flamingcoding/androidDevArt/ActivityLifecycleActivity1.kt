@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.flamingcoding.R
 
+// Manifest找中配置 --> android:configChanges="orientation|screenSize"
+// orientation配置在activity旋转屏幕时不重建Activity,此时不会调用onSaveInstanceState()和onRestoreInstanceState()
 class ActivityLifecycleActivity1 : AppCompatActivity() {
 
     // onCreate生命周期的第一个方法。在这个方法中，我们可以做一些初始化工作，比如调用setContentView去加载界面布局资源、初始化Activity所需数据

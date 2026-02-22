@@ -29,72 +29,72 @@
             android:name=".androidDevArt.ActivityLifecycleActivity1"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.WorkManagerPracticeActivity"
+            android:name=".firstLineCodeAndroid.WorkManagerPracticeActivity"
             android:exported="false"
             android:label="WorkManagerPracticeActivity" />
         <activity
-            android:name=".androidTrials.RoomPracticeActivity"
+            android:name=".firstLineCodeAndroid.RoomPracticeActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.LifecyclePracticeActivity"
+            android:name=".firstLineCodeAndroid.LifecyclePracticeActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.ViewModelPracticeActivity"
+            android:name=".firstLineCodeAndroid.ViewModelPracticeActivity"
             android:exported="false"
             android:label="JetPackTest" />
         <activity
-            android:name=".androidTrials.MaterialDesignActivity"
+            android:name=".firstLineCodeAndroid.MaterialDesignActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".androidTrials.CoroutinesPracticeActivity"
+            android:name=".firstLineCodeAndroid.CoroutinesPracticeActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.HttpRequestPracticeActivity"
+            android:name=".firstLineCodeAndroid.HttpRequestPracticeActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.WebViewActivity"
+            android:name=".firstLineCodeAndroid.WebViewActivity"
             android:exported="false"
             android:label="WebViewActivity" />
         <activity
-            android:name=".androidTrials.ServicePracticeActivity"
+            android:name=".firstLineCodeAndroid.ServicePracticeActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.NotificationActivity"
+            android:name=".firstLineCodeAndroid.NotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.ContentProviderActivity"
+            android:name=".firstLineCodeAndroid.ContentProviderActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.PermissionActivity"
+            android:name=".firstLineCodeAndroid.PermissionActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.SQLLiteDatabaseActivity"
+            android:name=".firstLineCodeAndroid.SQLLiteDatabaseActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.DataPersistenceActivity"
+            android:name=".firstLineCodeAndroid.DataPersistenceActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.BroadcastActivity"
+            android:name=".firstLineCodeAndroid.BroadcastActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.FragmentActivity"
+            android:name=".firstLineCodeAndroid.FragmentActivity"
             android:exported="false"
             android:label="FragmentActivity" />
         <activity
-            android:name=".androidTrials.RecycleViewActivity"
+            android:name=".firstLineCodeAndroid.RecycleViewActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.ListViewActivity"
+            android:name=".firstLineCodeAndroid.ListViewActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.LayoutActivity"
+            android:name=".firstLineCodeAndroid.LayoutActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.ViewActivity"
+            android:name=".firstLineCodeAndroid.ViewActivity"
             android:exported="false" />
         <activity
-            android:name=".androidTrials.ThirdActivity"
+            android:name=".firstLineCodeAndroid.ThirdActivity"
             android:exported="true"
             android:label="ThirdActivity">
             <intent-filter tools:ignore="AppLinkUrlError">
@@ -106,7 +106,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".androidTrials.SecondActivity"
+            android:name=".firstLineCodeAndroid.SecondActivity"
             android:exported="false"
             android:label="SecondActivity">
             <intent-filter>
@@ -116,7 +116,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".androidTrials.HomeActivity"
+            android:name=".firstLineCodeAndroid.HomeActivity"
             android:exported="true"
             android:label="HomeActivity"
             android:launchMode="singleInstance"
@@ -129,7 +129,7 @@
         </activity>
 
         <receiver
-            android:name=".androidTrials.TestBoardCastReceiver"
+            android:name=".firstLineCodeAndroid.TestBoardCastReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -139,7 +139,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.flamingcoding.androidTrials.fileprovider"
+            android:authorities="com.example.flamingcoding.firstLineCodeAndroid.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -148,7 +148,7 @@
         </provider>
 
         <service
-            android:name=".androidTrials.PracticeService"
+            android:name=".firstLineCodeAndroid.PracticeService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="dataSync" />

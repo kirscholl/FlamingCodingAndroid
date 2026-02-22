@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".androidTrials.LayoutActivity">
+    tools:context=".firstLineCodeAndroid.LayoutActivity">
 
     <include layout="@layout/common_title" />
 
-    <com.example.flamingcoding.androidTrials.CommonTitleLayout
+    <com.example.flamingcoding.firstLineCodeAndroid.CommonTitleLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.example.flamingcoding.androidTrials.CommonTitleLayoutJava
+    <com.example.flamingcoding.firstLineCodeAndroid.CommonTitleLayoutJava
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

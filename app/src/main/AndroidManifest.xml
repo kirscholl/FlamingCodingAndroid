@@ -23,6 +23,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlaMingCoding">
         <activity
+            android:name=".kotlinCoroutinesTrials.CoroutinesTestActivity"
+            android:label="CoroutinesTestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".retrofitOkHttpDev.OkHttpTestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".retrofitOkHttpDev.RetrofitTestActivity"
+            android:exported="false"
+            android:label="RetrofitTestActivity" />
+        <activity
+            android:name=".firstLineCodeAndroid.ConstraintLayoutPracticeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".composeTrials.NativeComposeMixTestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".composeTrials.ComposeTestActivity"
+            android:exported="false"
+            android:label="ComposeTestActivity" />
+        <activity
+            android:name=".rengWuXianKotlin.ReWuXianKotlinActivity"
+            android:exported="false" />
+        <activity
             android:name=".androidDevArt.ActivityLifecycleActivity2"
             android:exported="false" />
         <activity
@@ -34,9 +58,6 @@
             android:label="WorkManagerPracticeActivity" />
         <activity
             android:name=".firstLineCodeAndroid.RoomPracticeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".firstLineCodeAndroid.LifecyclePracticeActivity"
             android:exported="false" />
         <activity
             android:name=".firstLineCodeAndroid.ViewModelPracticeActivity"

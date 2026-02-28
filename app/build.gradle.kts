@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.devtools.ksp")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -33,6 +34,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
+        compose = true
         viewBinding = true
     }
 }
@@ -50,16 +52,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.squareup.okhttp3:okhttp:5.3.2")
-    implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     implementation("com.google.android.material:material:1.13.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.room:room-runtime:2.1.0")
 
+    // ########################################## room ##########################################
     val room_version = "2.8.4"
     implementation("androidx.room:room-runtime:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
@@ -72,4 +71,41 @@ dependencies {
     implementation("androidx.room:room-paging:$room_version")
 
     implementation("androidx.work:work-runtime:2.11.1")
+
+    // ########################################## compose ##########################################
+    val composeBom = platform("androidx.compose:compose-bom:2025.12.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+    // Choose one of the following:
+    // Material Design 3
+    implementation("androidx.compose.material3:material3")
+    // or skip Material Design and build directly on top of foundational components
+//    implementation("androidx.compose.foundation:foundation")
+    // or only import the main APIs for the underlying toolkit systems,
+    // such as input and measurement/layout
+//    implementation("androidx.compose.ui:ui")
+    // Android Studio Preview support
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    // UI Tests
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    // Optional - Add window size utils
+    implementation("androidx.compose.material3.adaptive:adaptive")
+    // Optional - Integration with activities
+    implementation("androidx.activity:activity-compose:1.12.4")
+    // Optional - Integration with ViewModels
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
+    // Optional - Integration with LiveData
+    implementation("androidx.compose.runtime:runtime-livedata")
+    // Optional - Integration with RxJava
+    implementation("androidx.compose.runtime:runtime-rxjava2")
+
+    // ########################################## Retrofit #########################################
+    // Retrofit 核心库
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    // Gson 转换器，用于将JSON自动解析为对象
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    // okhttp
+    implementation("com.squareup.okhttp3:okhttp:5.3.2")
 }

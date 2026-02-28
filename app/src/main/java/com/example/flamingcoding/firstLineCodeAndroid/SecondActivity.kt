@@ -17,7 +17,6 @@ class SecondActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("ActivityLifeCycle", "onCreate")
         enableEdgeToEdge()
         setContentView(R.layout.activity_second)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -47,36 +46,6 @@ class SecondActivity : AppCompatActivity() {
             setResult(RESULT_OK, intent)
             finish()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("ActivityLifeCycle", "onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("ActivityLifeCycle", "onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("ActivityLifeCycle", "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("ActivityLifeCycle", "onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("ActivityLifeCycle", "onDestroy")
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        Log.d("ActivityLifeCycle", "onRestart")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

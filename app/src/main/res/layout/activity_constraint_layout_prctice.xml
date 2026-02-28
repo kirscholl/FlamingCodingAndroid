@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".firstLineCodeAndroid.ConstraintLayoutPracticeActivity">
+
+
+    <!--    group layer #########################################################################-->
+
+    <!--    <Button-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        android:id="@+id/groupTestButton"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="GroupTest" />-->
+
+    <!--    <androidx.constraintlayout.widget.Group-->
+    <!--        android:id="@+id/consTestGroup"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:constraint_referenced_ids="consTestImage1, consTestImage2, consTestImage3">-->
+
+    <!--    </androidx.constraintlayout.widget.Group>-->
+
+    <!--    <androidx.constraintlayout.helper.widget.Layer-->
+    <!--        android:id="@+id/consTestLayer"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:constraint_referenced_ids="consTestImage1,consTestImage2,consTestImage3"-->
+    <!--        tools:ignore="MissingConstraints" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/consTestImage1"-->
+    <!--        android:layout_width="60dp"-->
+    <!--        android:layout_height="60dp"-->
+    <!--        android:src="@drawable/board_icon"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toStartOf="@id/consTestImage2" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/consTestImage2"-->
+    <!--        android:layout_width="60dp"-->
+    <!--        android:layout_height="60dp"-->
+    <!--        android:src="@drawable/board_icon"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/consTestImage1"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/consTestImage3" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/consTestImage3"-->
+    <!--        android:layout_width="60dp"-->
+    <!--        android:layout_height="60dp"-->
+    <!--        android:src="@drawable/board_icon"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/consTestImage2"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+    <!--    barrier #############################################################################-->
+
+    <!--    <androidx.constraintlayout.widget.Barrier-->
+    <!--        android:id="@+id/consTestBarrier"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:constraint_referenced_ids="consTestTextView1, consTestTextView2"-->
+    <!--        app:barrierDirection="end" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/consTestImage1"-->
+    <!--        android:layout_width="60dp"-->
+    <!--        android:layout_height="60dp"-->
+    <!--        android:src="@drawable/board_icon"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/consTestTextView1"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/consTestBarrier"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/consTestImage2"-->
+    <!--        android:layout_width="60dp"-->
+    <!--        android:layout_height="60dp"-->
+    <!--        android:src="@drawable/board_icon"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/consTestImage1"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/consTestBarrier"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/consTestTextView1"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="文字文字文字文文字文字" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/consTestTextView2"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/consTestTextView1"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="50dp"-->
+    <!--        android:text="文字文字文字文字文字ssssssss文字文字" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

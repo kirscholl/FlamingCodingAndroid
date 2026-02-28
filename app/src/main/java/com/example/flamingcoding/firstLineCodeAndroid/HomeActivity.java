@@ -18,6 +18,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.flamingcoding.R;
+import com.example.flamingcoding.kotlinCoroutinesTrials.CoroutinesTestActivity;
+import com.example.flamingcoding.retrofitOkHttpDev.RetrofitTestActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -38,26 +40,32 @@ public class HomeActivity extends AppCompatActivity {
         Button homeButton1 = findViewById(R.id.HomeButton1);
         homeButton1.setOnClickListener(v -> {
 //            Toast.makeText(this, "HomeButton1 Click", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, WorkManagerPracticeActivity.class);
+            Intent intent = new Intent(this, CoroutinesTestActivity.class);
             startActivity(intent);
         });
 
         Button homeButton2 = findViewById(R.id.HomeButton2);
         homeButton2.setOnClickListener(v -> {
-            // 跳转到SecondActivity
-//            Intent intent = new Intent(this, SecondActivity.class);
-//            this.startActivity(intent);
-
-            // 传递数据
-//            Intent intent = new Intent(this, SecondActivity.class);
-//            String data = "Home To Second";
-//            intent.putExtra("extra_data", data);
-//            this.startActivity(intent);
-
-            // 接受下一个Activity销毁时返回的数据
-            Intent intent = new Intent(this, SecondActivity.class);
-            startActivityForResult(intent, 1);
+            Intent intent = new Intent(this, RetrofitTestActivity.class);
+            startActivity(intent);
         });
+
+//        Button homeButton2 = findViewById(R.id.HomeButton2);
+//        homeButton2.setOnClickListener(v -> {
+//            // 跳转到SecondActivity
+////            Intent intent = new Intent(this, SecondActivity.class);
+////            this.startActivity(intent);
+//
+//            // 传递数据
+////            Intent intent = new Intent(this, SecondActivity.class);
+////            String data = "Home To Second";
+////            intent.putExtra("extra_data", data);
+////            this.startActivity(intent);
+//
+//            // 接受下一个Activity销毁时返回的数据
+//            Intent intent = new Intent(this, SecondActivity.class);
+//            startActivityForResult(intent, 1);
+//        });
 
         Button homeButton3 = findViewById(R.id.HomeButton3);
         homeButton3.setOnClickListener(v -> {
@@ -109,29 +117,5 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("ActivityLifeCycle", "onPause");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d("ActivityLifeCycle", "onStop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("ActivityLifeCycle", "onDestroy");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d("ActivityLifeCycle", "onRestart");
     }
 }

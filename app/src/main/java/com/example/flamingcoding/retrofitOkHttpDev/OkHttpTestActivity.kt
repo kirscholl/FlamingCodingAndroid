@@ -58,6 +58,8 @@ class OkHttpTestActivity : AppCompatActivity() {
         })
     }
 
+
+    // TODO OkHttpClient Params
     // @get:JvmName("dispatcher")
     //  val dispatcher: Dispatcher = builder.dispatcher
     //

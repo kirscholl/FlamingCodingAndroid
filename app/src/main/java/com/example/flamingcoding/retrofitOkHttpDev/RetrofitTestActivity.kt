@@ -44,7 +44,7 @@ class RetrofitTestActivity : AppCompatActivity() {
             // 在构建Retrofit对象时，指明使用的Converter工厂，否则Crash！！！
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val service: RetrofitServerInterface = retrofit.create(RetrofitServerInterface::class.java)
+        val service: TestServerInterface = retrofit.create(TestServerInterface::class.java)
         val repos: Call<List<Repo>> = service.listRepos("octocat")
         // 同步
 //        repos.execute()

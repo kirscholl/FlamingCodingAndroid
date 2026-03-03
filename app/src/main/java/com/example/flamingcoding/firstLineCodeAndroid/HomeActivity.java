@@ -1,7 +1,6 @@
 package com.example.flamingcoding.firstLineCodeAndroid;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +17,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.flamingcoding.R;
+import com.example.flamingcoding.common.FunctionalTestActivity;
 import com.example.flamingcoding.kotlinCoroutinesTrials.CoroutinesTestActivity;
 import com.example.flamingcoding.retrofitOkHttpDev.RetrofitTestActivity;
 
@@ -74,14 +74,16 @@ public class HomeActivity extends AppCompatActivity {
 //            this.startActivity(intent);
 
             // 隐式打开浏览器，跳转到百度
-            Intent intent1 = new Intent(Intent.ACTION_VIEW);
-            intent1.setData(Uri.parse("https://www.baidu.com"));
-            startActivity(intent1);
+//            Intent intent1 = new Intent(Intent.ACTION_VIEW);
+//            intent1.setData(Uri.parse("https://www.baidu.com"));
+//            startActivity(intent1);
 
             // 隐式拉起通话 10086
 //            Intent intent2 = new Intent(Intent.ACTION_DIAL);
 //            intent2.setData(Uri.parse("tel:10086"));
 //            startActivity(intent2);
+            Intent intent = new Intent(this, FunctionalTestActivity.class);
+            startActivity(intent);
         });
     }
 

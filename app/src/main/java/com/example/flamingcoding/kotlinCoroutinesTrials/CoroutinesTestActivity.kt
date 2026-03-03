@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.example.flamingcoding.R
 import com.example.flamingcoding.retrofitOkHttpDev.Repo
-import com.example.flamingcoding.retrofitOkHttpDev.RetrofitServerInterface
+import com.example.flamingcoding.retrofitOkHttpDev.TestServerInterface
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -47,8 +47,10 @@ class CoroutinesTestActivity : ComponentActivity() {
 
         val reqButton = findViewById<Button>(R.id.corBeginRequestBtn)
         reqButton.setOnClickListener { _ ->
-            val note = KotlinCoroutinesNote()
-            note.coroutinesException()
+//            val note = KotlinCoroutinesNote()
+//            note.createCoroutinesTest()
+//            val note2 = KotlinFlowNote()
+//            note2.threadLockTest()
         }
 
         class CorViewModel : ViewModel() {
@@ -66,23 +68,13 @@ class CoroutinesTestActivity : ComponentActivity() {
         }
     }
 
-    suspend fun retroRequest(hostName: String, user: String): List<Repo> {
-        val retro = Retrofit.Builder()
-            .baseUrl(hostName)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val retroService = retro.create(RetrofitServerInterface::class.java)
-        // 调用了其他挂起函数
-        return retroService.listReposCor(user)
-    }
-
     fun testRetroReq() {
         CoroutineScope(Dispatchers.Main).launch {
             val retro = Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-            val retroService = retro.create(RetrofitServerInterface::class.java)
+            val retroService = retro.create(TestServerInterface::class.java)
             val repos = retroService.listReposCor("octocat")
             val testTextView = findViewById<TextView>(R.id.corTestTextView)
             testTextView.text = repos[1].name
@@ -107,17 +99,17 @@ class CoroutinesTestActivity : ComponentActivity() {
     fun coroutinesMultiRun() {
         lifecycleScope.launch {
             // 使用launch 实际上这两个协程会并行执行
-            val repos1 = retroRequest("https://api.github.com", "octocat")
-            val repos2 = retroRequest("https://api.github.com", "octocat")
+            val repos1 = TestServerInterface.retroRequest("https://api.github.com", "octocat")
+            val repos2 = TestServerInterface.retroRequest("https://api.github.com", "octocat")
             Log.d("TAG", repos1.toString() + repos2.toString())
         }
 
         // 使用async使两个协程并发执行
         val async1 = lifecycleScope.async {
-            retroRequest("https://api.github.com", "octocat")
+            TestServerInterface.retroRequest("https://api.github.com", "octocat")
         }
         val async2 = lifecycleScope.async {
-            retroRequest("https://api.github.com", "octocat")
+            TestServerInterface.retroRequest("https://api.github.com", "octocat")
         }
         lifecycleScope.launch {
             val res1 = async1.await()
@@ -139,7 +131,7 @@ class CoroutinesTestActivity : ComponentActivity() {
                 initData()
             }
             // #2.发起一个网络请求
-            val repos1 = retroRequest("https://api.github.com", "octocat")
+            val repos1 = TestServerInterface.retroRequest("https://api.github.com", "octocat")
 
             // 因为#1和#2互相不关联，所以#1和#2可以在两个协程中去分别执行
             // #3.处理初始化数据
@@ -158,33 +150,9 @@ class CoroutinesTestActivity : ComponentActivity() {
         }
     }
 
-    fun retroRequestWithCallback(baseUrl: String, user: String): Call<List<Repo>> {
-        val retro = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create()).build()
-        val service = retro.create(RetrofitServerInterface::class.java)
-        val repo = service.listRepos(user)
-        return repo
-//        repo.enqueue(object : Callback<List<Repo>> {
-//            override fun onResponse(
-//                call: Call<List<Repo>?>,
-//                response: Response<List<Repo>?>
-//            ) {
-//                Log.d(TAG, "${response.code()}")
-//            }
-//
-//            override fun onFailure(
-//                call: Call<List<Repo>?>,
-//                t: Throwable
-//            ) {
-//                //...
-//            }
-//        })
-    }
-
     private suspend fun requestWithCallbackInvoke(): List<Repo>? {
         return suspendCoroutine {
-            retroRequestWithCallback("https://api.github.com", "octocat")
+            TestServerInterface.getRetroRequestCallbackCall("https://api.github.com", "octocat")
                 .enqueue(object : Callback<List<Repo>> {
                     override fun onResponse(
                         call: Call<List<Repo>?>,
@@ -208,7 +176,7 @@ class CoroutinesTestActivity : ComponentActivity() {
         lifecycleScope.launch {
             // 使用该函数如果其中有调用传统Java回调式函数则会将此传统函数转化成一个挂起函数
             val response = suspendCoroutine<List<Repo>?> {
-                retroRequestWithCallback("https://api.github.com", "octocat")
+                TestServerInterface.getRetroRequestCallbackCall("https://api.github.com", "octocat")
                     .enqueue(object : Callback<List<Repo>> {
                         override fun onResponse(
                             call: Call<List<Repo>?>,
@@ -235,7 +203,7 @@ class CoroutinesTestActivity : ComponentActivity() {
                     // 注册在协程取消的时候的回调
                     Log.d("TAG", it.toString())
                 }
-                retroRequestWithCallback("123", "231")
+                TestServerInterface.getRetroRequestCallbackCall("123", "231")
                     .enqueue(object : Callback<List<Repo>> {
                         override fun onResponse(
                             call: Call<List<Repo>?>,

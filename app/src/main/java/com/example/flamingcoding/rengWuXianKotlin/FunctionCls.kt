@@ -169,32 +169,50 @@ class FunctionCls {
     }
 
     // ######################################## crossinline ########################################
-    // Lambda 表达式里不允许使用 return，**除非——**这个 Lambda 是内联函数的参数
-    // 1.Lambda 里的 return，结束的不是直接的外层函数，而是外层再外层的函数；
-    // 2.但只有内联函数的 Lambda 参数可以使用 return。
+    // lambda 表达式里不允许使用 return，除非这个lambda是内联函数的参数
+    // 1.lambda里的 return，结束的不是直接的外层函数，而是外层再外层的函数；
+    // 2.但只有内联函数的lambda参数可以使用 return。
+
+    fun lambdaReturnTest(lb: () -> Unit) {
+        lb()
+    }
+
+    inline fun lambdaInlineReturnTest(lb: () -> Unit) {
+        // 调用lambda
+        lb()
+    }
+
+    fun lambdaReturnTestRun() {
+        lambdaReturnTest {
+            // 任何 Lambda：都可以使用带标签的 return（局部返回）
+            println("普通lambda函数内部输出")
+            return@lambdaReturnTest
+            // 报错 'return' is prohibited here.
+//            return
+        }
+        lambdaInlineReturnTest {
+            println("内联lambda函数内部输出")
+            // 不报错 但是返回的是外层lambdaReturnTestRun
+            // 因为lambda函数在这里展开了！！！
+            return
+        }
+        // 代码不可达
+        println("内联函数的lambda返回之后外层输出")
+    }
 
     inline fun crossFunTest(preAction: () -> Unit, crossinline postAction: () -> Unit) {
         preAction()
         println("noinlineTest")
         // 如果在其他线程中调用postAction则需要crossinline关键字禁止在lambda表达式中使用return
         thread {
+            // 报错 需要加crossinline
             postAction()
-            // 报错
-//            return
         }
     }
 
-    // Lambda 里的 return，结束的不是直接的外层函数，而是外层再外层的函数 !!!
-//    fun crossTestRun() {
-//        println("preAction")
-//        println("noinlineTest")
-//        println("postAction")
-//        return
-//    }
-
     // ############################################ Unit ###########################################
-    // Unit和Java的void真正的区别在于，void是真的表示什么都不返回，而 Kotlin 的Unit却是一个真实存在的类型
-    // Java的泛型中 没有Function<void>这种存在，于是经常被动地返回一个null， 但是kotlin中的Unit却可以直接承接泛型
+    // Unit和Java的void真正的区别在于，void是真的表示什么都不返回，而kotlin的Unit却是一个真实存在的类型
+    // Java的泛型中没有Function<void>这种存在，于是经常被动地返回一个null，但是kotlin中的Unit却可以直接承接泛型
 
     // ########################################### Nothing #########################################
     // Nothing这个类既没有、也不会有任何的实例对象
@@ -212,7 +230,7 @@ class FunctionCls {
     // var images: List<Image> = emptyList
 
     // Nothing 的「是所有类型的子类型」这个特点，还帮助了 Kotlin 语法的完整化
-    var _name: String? = null
+    var _name: String? = "null"
     val name: String = _name ?: throw NullPointerException("_name 在运行时不能为空！")
 
     // throw 的返回值是 Nothing，我们就可以把它写在等号的右边，在语法层面假装成一个值来使用，但其实目的是在例外情况时抛异常
@@ -227,13 +245,13 @@ class FunctionCls {
     fun letTest() {
         val testString = "testString"
         // 作用1：使用it替代object对象去访问其公有的属性 & 方法
-        var testLetRemake = testString.let {
+        var letReturn = testString.let {
             val test1 = it.first()
             val test2 = it.length
             // let 的返回值为最后一行
-            "testLetReturn"
+            "letReturn"
         }
-        Log.d("letTest", testLetRemake)
+        println(".let{ }中的返回值：$letReturn")
         // 作用2：判断object为null的操作
         testString?.let {
             //表示object不为null的条件下，才会去执行let函数体
@@ -263,34 +281,41 @@ class FunctionCls {
     // also函数：返回值 = 传入的对象的本身
     fun alsoTest() {
         val testString = "testString"
-        val testResult = testString.also {
+        val alsoReturn = testString.also {
             // 直接持有testString语义
             val test1 = it.first()
             val test2 = it.length
+            it + "Also"
             "testAlsoReturn"
             // 返回自身
         }
-        Log.d("alsoTest", testResult)
+        // testString
+        println(".also{ }中的返回值：$alsoReturn")
     }
 
     // 调用同一个对象的多个方法 / 属性时，可以省去对象名重复，直接调用方法名 / 属性即可
     fun withTest() {
         val testString = "testString"
-        with(testString) {
+        val withReturn = with(testString) {
             // 直接持有testString语义
             val test1 = first()
             val test2 = length
+            " "
         }
+        // 空
+        println(".with{ }中的返回值：$withReturn")
     }
 
     // 调用同一个对象的多个方法 / 属性时，可以省去对象名重复，直接调用方法名 / 属性即可
     // 返回值 = 函数块的最后一行 / return表达式
     fun runTest() {
         val testString = "testString"
-        testString.run {
+        val runReturn = testString.run {
             val test1 = first()
             val test2 = length
+            "runReturn"
         }
+        println(".run{ }的返回值：$runReturn")
     }
 
     // 与run函数类似，但区别在于返回值：
@@ -298,11 +323,13 @@ class FunctionCls {
     // apply函数返回传入的对象的本身
     fun applyTest() {
         val testString = "testString"
-        val testResult = testString.apply {
+        val applyReturn = testString.apply {
             // 直接持有testString语义
             val test1 = first()
             val test2 = length
             // 返回自身
+            "applyReturn"
         }
+        println(".apply{ }的返回值：$applyReturn")
     }
 }

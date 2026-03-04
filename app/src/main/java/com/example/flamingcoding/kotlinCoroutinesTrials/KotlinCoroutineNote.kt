@@ -315,61 +315,65 @@ class KotlinCoroutinesNote {
             var innerJob2: Job? = null
             var innerJob3: Job? = null
             var parentJob: Job? = null
+            // 通过指定Job的方式来关联父子协程
+            innerJob3 = scope.launch(scope.coroutineContext[Job]!!) {
+                delay(2000)
+                println("innerJob3: $innerJob3")
+            }
+
+            innerJob2 = scope.launch {
+                delay(2000)
+                println("innerJob2: $innerJob2")
+            }
+
+            // 自定义Job
+            val innerJob4 = Job()
+            val innerLaunchJob4 = scope.launch(innerJob4) {
+                delay(2000)
+            }
+
             parentJob = scope.launch {
                 // 内部协程是由this也就是外部的CoroutineScope创建的
                 // 外部的CoroutineScope包含了外部返回的Job对象
                 innerJob1 = this.launch {
                     delay(2000)
-                    println("111")
+                    println("innerJob1: $innerJob1")
                 }
-                innerJob2 = scope.launch {
-                    delay(2000)
-                    println("222")
-                }
-                // 通过制定Job的方式来关联父子协程
-                innerJob3 = scope.launch(scope.coroutineContext[Job]!!) {
-                    delay(2000)
-                    println("333")
-                }
-                // 自定义Job
-                val innerJob4 = Job()
-                val innerJob4Launch = scope.launch(innerJob4) {
-                    delay(2000)
-                    println("444")
-                }
+
+                println("里层Context获取的Job与返回Job对比: ${scope.coroutineContext[Job] === parentJob}")
+                // 父协程内部Context获取的Job children count 3 -> innerJob1 innerJob2 innerJob3
+                println("父协程内部Context获取的Job children count: ${scope.coroutineContext[Job]!!.children.count()}")
+                // 父协程返回的Job children count 1 -> innerJob1
+                println("父协程返回的Job children count: ${coroutineContext[Job]?.children?.count()}")
             }
             delay(1000)
-            // Children Count: 1
-            // innerJob === job.children.first() true
-            // innerJob.parent === job true
-            println("Children Count: ${parentJob?.children?.count()}")
-            println("innerJob === job.children.first() ${innerJob1 === parentJob?.children?.first()}")
-            println("innerJob.parent === job ${innerJob1?.parent === parentJob}")
+            // parentJob children count: 1 -> innerJob1
+            println("parentJob children count: ${parentJob.children.count()}")
 
             // 所有父子协程，兄弟协程的执行顺序都是并列的，并没有前后关系 -- 前后关系只会通过Join()或者await()确定
             // 但是父协程会等待所有子协程执行完毕之后才会关闭
-            // 具体的应用场
+            // 具体的应用场景：
             // 当程序中有一个initData()方法该方法承担数据库的读取/网络请求/文件读取，可以开一个协程去处理这个initData()方法
             // 在initData()执行的过程中同步做视图的初始化
             // 但是当有一个任务依赖这些数据时，可以调用Join()等待initData()协程的执行完成，
             // initData()执行完成的时候，initData()的子协程也一定执行完成了
-            val initJob = scope.launch {
-                // initData()
-                launch {
-                    // 子协程1处理 ...
-                    println("子协程1处理")
-                }
-                launch {
-                    // 子协程2处理 ...
-                    println("子协程2处理")
-                }
-            }
-            // 处理不依赖initData()的逻辑
-            scope.launch {
-                initJob.join()
-                // 处理一定依赖initData()执行完毕之后的逻辑
-                println("initData()执行完毕之后的逻辑")
-            }
+//            val initJob = scope.launch {
+//                // initData()
+//                launch {
+//                    // 子协程1处理 ...
+//                    println("子协程1处理")
+//                }
+//                launch {
+//                    // 子协程2处理 ...
+//                    println("子协程2处理")
+//                }
+//            }
+//            // 处理不依赖initData()的逻辑
+//            scope.launch {
+//                initJob.join()
+//                // 处理一定依赖initData()执行完毕之后的逻辑
+//                println("initData()执行完毕之后的逻辑")
+//            }
         }
     }
 
@@ -498,11 +502,15 @@ class KotlinCoroutinesNote {
             // 在这些特殊情况下子协程会一直执行直至协程内的逻辑执行完毕，这种情况是需要预防的
             // 所以不管是父子协程的取消本质上还是交互式的取消
             parentJob.cancel()
-            println("父协程已经结束了，父协程的isActive状态：${parentJob.isActive}")
-            println("父协程已经结束了，子协程的isActive状态：${childJob?.isActive}")
+            println("父协程已经结束了，父协程的isActive状态：${parentJob.isActive}")    // false
+            println("父协程已经结束了，子协程的isActive状态：${childJob?.isActive}")    // false
+            println("父协程已经结束了，父协程的isCancelled状态：${parentJob.isCancelled}")  // true
+            println("父协程已经结束了，子协程的isCancelled状态：${childJob?.isCancelled}")  // true
+            println("父协程已经结束了，父协程的isCompleted状态：${parentJob.isCompleted}")  // false
+            println("父协程已经结束了，子协程的isCompleted状态：${childJob?.isCompleted}")  // false
             measureTime { parentJob.join() }.also { println("父协程被拖住了：$it") }
             // 另外如果子协程一直结束不了，会拖住他的父协程让父协程也一直结束不了
-            // 另一个层面上当一个协程的isActive为false的时候，该协程也可能是运行状态
+            // 另一个层面上当一个协程的isActive为false的时候，该协程也可能是运行状态 -> 用isCompleted判断
         }
     }
 
@@ -539,7 +547,7 @@ class KotlinCoroutinesNote {
             delay(1500)
 
             parentJob.cancel()
-            // 使用launch返回的childJob对象去取消内部的子协程，子协程是可以被取消的 ！！！
+            // 使用launch返回的childJob对象去取消内部的子协程，子协程是可以被取消的
             childJob?.cancel()
 //            NonCancellable.cancel()
             // 此时子协程的isActive还是true
@@ -574,36 +582,36 @@ class KotlinCoroutinesNote {
 //            }
 
             // 当一个协程抛出异常，他的父子协程树中的协程都会被取消
-            var topParentJob: Job?
-            var parentJob: Job? = null
-            var childJob: Job? = null
-            topParentJob = scope.launch {
-                parentJob = launch {
-                    childJob = launch {
-                        println("child job begin")
-                        delay(3000)
-                        println("child job end")
-                    }
-                    println("parent job begin")
-                    delay(1000)
-//                     throw IllegalStateException("Wrong!")
-//                    throw CancellationException()
-                    println("parent job end")
-                }
-                println("top parent job begin")
-                delay(5000)
-                println("top parent job end")
-            }
-            delay(500)
-            println("父父协程的isActive状态：${topParentJob.isActive}")
-            println("父协程的isActive状态：${parentJob?.isActive}")
-            println("子协程的isActive状态：${childJob?.isActive}")
-//            parentJob?.cancel()
-            delay(1000)
-            println("父父协程的isActive状态：${topParentJob.isActive}")
-            println("抛出异常之后父协程的isActive状态：${parentJob?.isActive}")
-            println("抛出异常之后子协程的isActive状态：${childJob?.isActive}")
-            CancellationException()
+//            var topParentJob: Job?
+//            var parentJob: Job? = null
+//            var childJob: Job? = null
+//            topParentJob = scope.launch {
+//                parentJob = launch {
+//                    childJob = launch {
+//                        println("child job begin")
+//                        delay(3000)
+//                        println("child job end")
+//                    }
+//                    println("parent job begin")
+//                    delay(1000)
+////                     throw IllegalStateException("Wrong!")
+////                    throw CancellationException()
+//                    println("parent job end")
+//                }
+//                println("top parent job begin")
+//                delay(5000)
+//                println("top parent job end")
+//            }
+//            delay(500)
+//            println("父父协程的isActive状态：${topParentJob.isActive}")
+//            println("父协程的isActive状态：${parentJob?.isActive}")
+//            println("子协程的isActive状态：${childJob?.isActive}")
+////            parentJob?.cancel()
+//            delay(1000)
+//            println("父父协程的isActive状态：${topParentJob.isActive}")
+//            println("抛出异常之后父协程的isActive状态：${parentJob?.isActive}")
+//            println("抛出异常之后子协程的isActive状态：${childJob?.isActive}")
+//            CancellationException()
 
             // 如果子协程关闭，如果父协程下的全部子协程都关闭了，则父协程会关闭，否则子协程的关闭不会传递到父协程
             // 子协程抛出CancellationException异常和关闭逻辑一样
@@ -675,12 +683,12 @@ class KotlinCoroutinesNote {
             val scope = CoroutineScope(Dispatchers.Default)
             var asyncParent: Job
             var asyncRes: Deferred<String>? = null
-            // 这里要async启动！！！因为只有async启动的协程才会把异常抛给调用它的协程
-            // 如果这里使用launch则调用它的协程变为了该launch启动的协程，外层是捕获不到异常的，会直接crash
             val handler = CoroutineExceptionHandler { context, throwable ->
                 println("父协程的handler捕获到异常: $throwable")
             }
             asyncParent = scope.launch(handler) {
+                // 这里要async启动，因为只有async启动的协程才会把异常抛给调用它的协程
+                // 如果这里使用launch则调用它的协程变为了该launch启动的协程，外层是捕获不到异常的，会直接crash
                 asyncRes = async {
                     delay(1000)
                     println("调用 async协程 输出")
@@ -689,11 +697,11 @@ class KotlinCoroutinesNote {
                 }
             }
             delay(500)
-//            println("async协程的父协程的isActive状态：${asyncParent.isActive}")
-//            println("async协程的isActive状态：${asyncRes?.isActive}")
-//            delay(2000)
-//            println("抛出异常之后async协程的父协程的isActive状态：${asyncParent.isActive}")
-//            println("抛出异常之后async协程的isActive状态：${asyncRes?.isActive}")
+            println("async协程的父协程的isActive状态：${asyncParent.isActive}")
+            println("async协程的isActive状态：${asyncRes?.isActive}")
+            delay(2000)
+            println("抛出异常之后async协程的父协程的isActive状态：${asyncParent.isActive}")
+            println("抛出异常之后async协程的isActive状态：${asyncRes?.isActive}")
 //            var asyncStr: String? = ""
 //            try {
 //                asyncStr = asyncRes?.await()
@@ -705,7 +713,6 @@ class KotlinCoroutinesNote {
 
         runBlocking {
             val scope = CoroutineScope(Dispatchers.Default)
-            var deferred: Deferred<String>
 //            scope.launch(Dispatchers.Default) {
 //                deferred = async {
 //                    delay(2000)
@@ -732,10 +739,9 @@ class KotlinCoroutinesNote {
             println("抛出异常之后调用async协程的isActive状态: ${invokeAsyncJob.isActive}")
 
             // async协程在抛出异常之后不仅触发结构化异常流程，还会传递给调用async协程的协程导致该协程的关闭
-            // async协程的异常并不会直接抛出到线程世界而是先抛到调用它的协程 有疑问App还是crash了
+            // async协程的异常并不会直接抛出到线程世界而是先抛到调用它的协程
             // 因为async的异常不往线程世界抛所以为async协程设置CoroutineExceptionHandler也是没有意义和效果的
-//            val scope = CoroutineScope(Dispatchers.Default)
-//            scope.async {
+//            scope.async(/*handler*/) {
 //                val deferred = async {
 //                    delay(1000)
 //                    throw RuntimeException("Error!")
@@ -880,9 +886,12 @@ class KotlinCoroutinesNote {
 
     // 并行协程之间的交互
     suspend fun suspendInter() {
-        // 实际上这两个请求是串行的？？？
+        // 实际上这两个请求是串行的
+        println("1")
         val repos1 = retroRequest("https://api.github.com", "octocat")
+        println("2")
         val repos2 = retroRequest("https://api.github.com", "octocat")
+        println("3")
     }
 
     fun coroutinesRunBlocking() {

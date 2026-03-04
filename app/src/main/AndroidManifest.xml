@@ -24,10 +24,12 @@
         android:theme="@style/Theme.FlaMingCoding">
         <activity
             android:name=".common.FunctionalTestActivityJava"
-            android:exported="false" />
+            android:exported="false"
+            android:label="FunctionalTestActivityJava" />
         <activity
             android:name=".common.FunctionalTestActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="FunctionalTestActivity" />
         <activity
             android:name=".kotlinCoroutinesTrials.CoroutinesTestActivity"
             android:exported="false"

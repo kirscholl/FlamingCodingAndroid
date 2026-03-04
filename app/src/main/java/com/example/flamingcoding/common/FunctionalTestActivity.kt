@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.flamingcoding.R
-import com.example.flamingcoding.kotlinCoroutinesTrials.KotlinCoroutinesNote
+import com.example.flamingcoding.kotlinCoroutinesTrials.KotlinFlowNote
 
 class FunctionalTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,8 +22,12 @@ class FunctionalTestActivity : AppCompatActivity() {
 
         val reqButton = findViewById<Button>(R.id.functionalTestButton)
         reqButton.setOnClickListener { _ ->
-            val note = KotlinCoroutinesNote()
-            note.corCorParentTest()
+//            val note = KotlinCoroutinesNote()
+//            lifecycleScope.async {
+//                note.suspendInter()
+//            }
+            val flowNote = KotlinFlowNote()
+            flowNote.flowMergeTest()
         }
     }
 }

@@ -12,18 +12,19 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.chunked
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.combine
@@ -38,6 +39,11 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flattenConcat
+import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
@@ -56,6 +62,7 @@ import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.runningReduce
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.flow.timeout
@@ -95,47 +102,60 @@ class KotlinFlowNote {
         }
     }
 
+    fun channelProduceTest() {
+        val scope = CoroutineScope(EmptyCoroutineContext)
+        // 在一个协程中多次进行网络请求，而在另一个协程中不断地获取上一个协程中网络请求的结果
+        // 返回一个ReceiveChannel
+        //  produce创建一个协程返回一个ReceiveChannel，并且在内部暴露一个SendChannel以ProducerCoroutine的形式
+        val receiveChannel = scope.produce {
+            // scope调用produce的前后其实返回的都是Channel对象，出于Api暴露的考虑
+            // scope.produce返回一个ProducerCoroutine : ChannelCoroutine : Channel : SendChannel<E>, ReceiveChannel<E>
+            var count = 0
+            while (count <= 10) {
+                count++
+                val data = TestServerInterface.retroRequest("https://api.github.com", "octocat")
+                // 调用内部ProducerScope的send方法，ProducerScope继承自SendChannel
+                send(data)
+            }
+        }
+        scope.launch {
+            delay(5000)
+            while (!receiveChannel.isClosedForReceive) {
+                println("Get produce send data: ${receiveChannel.receive()}")
+            }
+        }
+    }
+
     fun channelTest() {
         runBlocking {
-//            // 实际应用场景：在一个协程中多次进行网络请求，而在另一个协程中不断地获取上一个协程中网络请求的结果
             val scope = CoroutineScope(EmptyCoroutineContext)
-//            // 返回一个ReceiveChannel
-            //produce创建一个协程返回一个ReceiveChannel，并且在内部暴露一个SendChannel以ProducerCoroutine的形式
-//            val receiveChannel = scope.produce {
-//                // scope调用produce的前后其实返回的都是Channel对象，出于Api暴露的考虑
-//                // scope.produce返回一个ProducerCoroutine : ChannelCoroutine : Channel : SendChannel<E>, ReceiveChannel<E>
-//                var count = 0
-//                while (count <= 10) {
-//                    count++
-//                    val data = TestServerInterface.retroRequest("https://api.github.com", "octocat")
-//                    // 调用内部ProducerScope的send方法，ProducerScope继承自SendChannel
-//                    send(data)
-//                }
-//            }
-//            launch {
-//                delay(5000)
-//                while (!receiveChannel.isClosedForReceive) {
-//                    println("Get produce send data: ${receiveChannel.receive()}")
-//                }
-//            }
 
-            // produce本质上是对Channel的一种封装
             // Channel的本质上是一个挂起队列，在队列满了会挂起等待
-            val channel = Channel<List<Repo>>()
+            val channel = Channel<Int>()
             scope.launch {
-                val data = TestServerInterface.retroRequest("https://api.github.com", "octocat")
-                channel.send(data)
+                var count = 1
+                while (count < 1000) {
+//                    val data = TestServerInterface.retroRequest("https://api.github.com", "octocat")
+                    channel.send(count)
+                    count++
+                }
             }
             // Channel是一个下层支持的组件，不适合直接用于业务
             // 可以在独立的模块实现单订阅的业务逻辑
-            // 每个send只能被一个receive收到 ！！！
+            // *** 每个send只能被一个receive收到 ！！！
+            // 创建时候如果使用默认参数Channel缓冲容量为0，超出缓冲策略为挂起
+            // 如果未能及时收到数据，数据不会被丢弃，channel send()所在协程会挂起
             scope.launch {
-                println("channel receive data: ${channel.receive()}")
-                channel.receive()
+                delay(1000)
+                while (!channel.isClosedForReceive) {
+                    println("channel receive data 1: ${channel.receive()}")
+                }
             }
             scope.launch {
-                println("channel receive data: ${channel.receive()}")
-                channel.receive()
+                while (!channel.isClosedForReceive) {
+                    delay(1000)
+                    println("channel receive data 2: ${channel.receive()}")
+                }
             }
         }
     }
@@ -211,7 +231,7 @@ class KotlinFlowNote {
         }
     }
 
-    fun flowTest() {
+    fun sequenceTest() {
         runBlocking {
             // 立即生产数据
             val numList = buildList {
@@ -245,7 +265,11 @@ class KotlinFlowNote {
                     if (count == 5) break
                 }
             }
+        }
+    }
 
+    fun flowTest() {
+        runBlocking {
             // 提供一个支持协程的边生产边消费的数据列
             val repoFlow = flow {
                 for (num in 1..10) {
@@ -376,7 +400,7 @@ class KotlinFlowNote {
             flow7.collect {
                 // 如果该协程是在主线程中调用，该方法是一个更新UI的方法
                 println("Refresh view in main thread: $it")
-                // 如果flow { }中开启的子协程并在IO线程处理数据提交，则此处代码等价于
+                // 如果flow { }中开启的子协程并在IO线程处理数据提交，则此处代码等价于 ###
                 // 这就是为什么flow { }中不允许开启子协程的原因
                 // flow { }中返回的只是提交代码的逻辑，相当于在collect时会替换这段逻辑
                 // ### 报错
@@ -510,7 +534,7 @@ class KotlinFlowNote {
                 flowTest.drop(2).collect {
                     println("drop collect: $it")
                 }
-                // 判断条件，抛弃符合条件的数据，一旦遇到不符合条件的数据下发剩下的数据
+                // 判断条件，抛弃符合条件的数据，一旦遇到不符合条件的数据则下发剩下的数据
                 flowTest.dropWhile {
                     it < 3
                 }.collect {
@@ -893,19 +917,19 @@ class KotlinFlowNote {
             }
         }
 
-        runBlocking {
-            val scope = CoroutineScope(Dispatchers.Default)
-            val flowTest = channelFlow {
-                println("channelFlow{ }中的CoroutineContext：${currentCoroutineContext()}")
-                send(1)
-            }.flowOn(Dispatchers.IO)
-
-            scope.launch {
-                flowTest.collect {
-                    println("channelFlow collect{ }中的CoroutineContext：${currentCoroutineContext()}")
-                }
-            }
-        }
+//        runBlocking {
+//            val scope = CoroutineScope(Dispatchers.Default)
+//            val flowTest = channelFlow {
+//                println("channelFlow{ }中的CoroutineContext：${currentCoroutineContext()}")
+//                send(1)
+//            }.flowOn(Dispatchers.IO)
+//
+//            scope.launch {
+//                flowTest.collect {
+//                    println("channelFlow collect{ }中的CoroutineContext：${currentCoroutineContext()}")
+//                }
+//            }
+//        }
     }
 
     fun flowBufferTest() {
@@ -916,7 +940,6 @@ class KotlinFlowNote {
                 emit(num)
                 println("数据生产 emit之后 +++++++ num：$num")
             }
-
         }
             // 给flow的生产添加一个缓冲，在数据还没有被收集消费完成时就生产下一个数据，缓存传入参数个数据
             // 通过切换线程池让数据的生产和使用分离，在上一条数据生产完毕且还没有使用之前下一条数据就已经开始生产了
@@ -962,6 +985,14 @@ class KotlinFlowNote {
         // 效果一样 连接flow1 flow2，在连接之后哪个数据先到先发
         val flowList = listOf(flow1, flow2)
         val mergedFlowList = flowList.merge()
+        runBlocking {
+            val scope = CoroutineScope(Dispatchers.Default)
+            scope.launch {
+                mergedFlow.collect {
+                    println("Merge flow test collect输出：$it")
+                }
+            }
+        }
 
         // 取目前的flow1中的元素和目前flow2中的元素进行自定义操作之后生成新的Flow
         // flow1和flow2中只要其中有一个emit()的元素发生改变，新的Flow就会发生一次emit()
@@ -979,28 +1010,37 @@ class KotlinFlowNote {
 //                emit(i)
 //            }
 //        }
+        runBlocking {
+            val scope = CoroutineScope(Dispatchers.Default)
+            scope.launch {
+                combinedFlow1.collect {
+                    println("combine flow test collect输出：$it")
+                }
+            }
+        }
+
         // 只成对输出，取第一个flow的第一个emit() 和 第二个flow的第一个emit()
-        val zippedFlow =
+        val zippedFlow1 =
             flow1.zip(flow2) { flow1Element, flow2Element -> "$flow1Element, $flow2Element" }
 
-//        val listFlow = flowOf(flow1, flow2)
-//        // 连接flow1 flow2，在连接之后哪个数据先到先发
-//        val contactedListFlow = listFlow.flattenMerge()
-//        // 合并flow1 flow2，合并之后会按照先flow1再flow2的顺序依次发
-//        val mergedListFlow = listFlow.flattenConcat()
-//
-//        val mappedFlow =
-//            flow1.map { from -> (1..from).asFlow().map { "$from- $it" } }
-//        val concatMappedFlow = mappedFlow.flattenConcat()
-//        val contactedMapListFlow = flow1.flatMapConcat { from -> (1..from).asFlow() }
-//        val mergedMapListFlow = flow1.flatMapMerge { from -> (1..from).asFlow() }
-//        val lastMapListFlow = flow1.flatMapLatest { from -> (1..from).asFlow() }
+        val listFlow = flowOf(flow1, flow2)
+        // 连接flow1 flow2，在连接之后哪个数据先到先发
+        val contactedListFlow = listFlow.flattenMerge()
+        // 合并flow1 flow2，合并之后会按照先flow1再flow2的顺序依次发
+        val mergedListFlow = listFlow.flattenConcat()
+
+        val mappedFlow =
+            flow1.map { from -> (1..from).asFlow().map { "$from- $it" } }
+        val concatMappedFlow = mappedFlow.flattenConcat()
+        val contactedMapListFlow = flow1.flatMapConcat { from -> (1..from).asFlow() }
+        val mergedMapListFlow = flow1.flatMapMerge { from -> (1..from).asFlow() }
+        val lastMapListFlow = flow1.flatMapLatest { from -> (1..from).asFlow() }
 
         runBlocking {
             val scope = CoroutineScope(Dispatchers.Default)
             scope.launch {
-                zippedFlow.collect {
-                    println("Merge flow test collect输出：$it")
+                zippedFlow1.collect {
+                    println("zip flow test collect输出：$it")
                 }
             }
         }
@@ -1022,6 +1062,7 @@ class KotlinFlowNote {
                     println("生产3完成")
                 }
                 // 使用shareIn创建SharedFlow 在调用shareIn的时候生产就已经开始
+                println("flow.shareIn调用")
                 val sharedFlow = flow.shareIn(scope, SharingStarted.Eagerly)
                 println("开始等待") // #1
                 delay(500)
@@ -1088,7 +1129,8 @@ class KotlinFlowNote {
         }
     }
 
-    fun mutableSharedFlowApi() {
+
+    fun asSharedFlowTest() {
         runBlocking {
             val scope = CoroutineScope(EmptyCoroutineContext)
             scope.launch {
@@ -1124,7 +1166,42 @@ class KotlinFlowNote {
         }
     }
 
-    fun stateFlowTest() {
+    fun stateInTest() {
+        runBlocking {
+            val scope = CoroutineScope(EmptyCoroutineContext)
+            scope.launch {
+                val flow = flow {
+                    println("开始生产") // #2
+                    emit(1)
+                    println("生产1完成")
+                    delay(1000)
+                    emit(2)
+                    println("生产2完成")
+                    delay(1000)
+                    emit(3)
+                    println("生产3完成")
+                }
+                // 使用shareIn创建SharedFlow 在调用shareIn的时候生产就已经开始
+                println("flow.shareIn调用")
+                val stateFlow = flow.stateIn(scope)
+                println("开始等待") // #1
+                delay(500)
+                println("等待完成") // #3
+                stateFlow.collect {
+                    println("开始收集") // #4
+                    // 只能收到2 3并且程序会未响应
+                    // sharedFlow只会对Flow的数据做转发，数据的生产和消费是分离的
+                    println("sharedFlow collect输出：$it")
+                }
+                // 执行顺序
+                // 开始等待 开始生产 生产1完成 等待完成 生产2完成 开始收集 sharedFlow collect输出：2
+                // 生产3完成 开始收集 sharedFlow collect输出：3
+            }
+            // 使用场景：1.可以接受部分数据流丢失的事件流订阅模式 2.需要生产数据进行分享的事件流数据订阅
+        }
+    }
+
+    fun stateFlowApiTest() {
         // StateFlow是一个缓冲和缓存大小都是1的SharedFlow，并且可以让外部直接访问这个缓存的对象
         val mutableStateFlow = MutableStateFlow("init state")
         val scope = CoroutineScope(EmptyCoroutineContext)

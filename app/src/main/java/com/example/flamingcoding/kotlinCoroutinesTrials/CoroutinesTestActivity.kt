@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.example.flamingcoding.R
-import com.example.flamingcoding.retrofitOkHttpDev.Repo
-import com.example.flamingcoding.retrofitOkHttpDev.TestServerInterface
+import com.example.flamingcoding.retrofitOkHttpTrials.Repo
+import com.example.flamingcoding.retrofitOkHttpTrials.TestServerInterface
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

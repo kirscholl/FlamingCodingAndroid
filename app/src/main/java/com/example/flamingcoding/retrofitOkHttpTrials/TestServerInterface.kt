@@ -1,4 +1,4 @@
-package com.example.flamingcoding.retrofitOkHttpDev
+package com.example.flamingcoding.retrofitOkHttpTrials
 
 import retrofit2.Call
 import retrofit2.Callback

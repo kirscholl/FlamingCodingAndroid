@@ -18,8 +18,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.flamingcoding.R;
 import com.example.flamingcoding.common.FunctionalTestActivity;
-import com.example.flamingcoding.kotlinCoroutinesTrials.CoroutinesTestActivity;
-import com.example.flamingcoding.retrofitOkHttpDev.RetrofitTestActivity;
+import com.example.flamingcoding.customViewTrials.ViewRenderProcessTestActivity;
+import com.example.flamingcoding.dagger2Hilt.DaggerTestActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -40,13 +40,13 @@ public class HomeActivity extends AppCompatActivity {
         Button homeButton1 = findViewById(R.id.HomeButton1);
         homeButton1.setOnClickListener(v -> {
 //            Toast.makeText(this, "HomeButton1 Click", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, CoroutinesTestActivity.class);
+            Intent intent = new Intent(this, ViewRenderProcessTestActivity.class);
             startActivity(intent);
         });
 
         Button homeButton2 = findViewById(R.id.HomeButton2);
         homeButton2.setOnClickListener(v -> {
-            Intent intent = new Intent(this, RetrofitTestActivity.class);
+            Intent intent = new Intent(this, DaggerTestActivity.class);
             startActivity(intent);
         });
 

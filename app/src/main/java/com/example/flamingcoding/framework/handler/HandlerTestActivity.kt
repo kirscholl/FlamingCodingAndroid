@@ -1,30 +1,21 @@
-package com.example.flamingcoding.common
+package com.example.flamingcoding.framework.handler
 
 import android.os.Bundle
-import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.flamingcoding.R
-import com.example.flamingcoding.kotlinCoroutinesTrials.KotlinCoroutinesNote
-import com.example.flamingcoding.kotlinCoroutinesTrials.KotlinFlowNote
 
-class FunctionalTestActivity : AppCompatActivity() {
+class HandlerTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_functional_test)
+        setContentView(R.layout.activity_handler_test)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-
-        val reqButton = findViewById<Button>(R.id.functionalTestButton)
-        reqButton.setOnClickListener { _ ->
-            val note = KotlinCoroutinesNote()
-            val flowNote = KotlinFlowNote()
         }
     }
 }

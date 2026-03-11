@@ -1,7 +1,7 @@
 package com.example.flamingcoding.kotlinCoroutinesTrials
 
-import com.example.flamingcoding.retrofitOkHttpDev.Repo
-import com.example.flamingcoding.retrofitOkHttpDev.TestServerInterface
+import com.example.flamingcoding.retrofitOkHttpTrials.Repo
+import com.example.flamingcoding.retrofitOkHttpTrials.TestServerInterface
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
@@ -1361,6 +1361,64 @@ class KotlinFlowNote {
         scope.launch {
             // 转换成协程局部变量，不管怎么切线程只要没出协程其值不变
             val coroutineLocal = threadLock.asContextElement("flaming")
+        }
+    }
+
+    fun shareStateFlowHotColdTest() {
+        val flow1 = flow {
+            delay(1000)
+            println("flow 1 1")
+            emit(1)
+            delay(1000)
+            println("flow 1 2")
+            emit(2)
+            delay(1000)
+            println("flow 1 3")
+            emit(3)
+        }
+        val flow2 = flow {
+            delay(1000)
+            println("flow 2 1")
+            emit(1)
+            delay(1000)
+            println("flow 2 2")
+            emit(2)
+            delay(1000)
+            println("flow 2 3")
+            emit(3)
+        }
+        val scope = CoroutineScope(Dispatchers.IO)
+        println("flow sharedIn")
+        val sharedFlow = flow1.shareIn(scope, SharingStarted.Eagerly)
+        println("flow stateIn")
+        val stateFlow = flow2.stateIn(scope, SharingStarted.Lazily, 0)
+
+        // sharedFlow在没有开始collect就开始生产了，stateFlow在collect调用之后才开始生产
+        // sharedFlow和stateFlow是冷流还是热流是根据shareIn stateIn传入的SharingStarted参数决定的
+        // 它们即是冷流也是热流
+
+        // flow sharedIn
+        // flow stateIn
+        // flow collect begin
+        // flow 1 1
+        // flow 1 2
+        // stateFlow collected: 0
+        // flow 1 3
+
+        // flow 2 1
+        // stateFlow collected: 1
+        // flow 2 2
+        // stateFlow collected: 2
+        // flow 2 3
+        // stateFlow collected: 3
+        runBlocking {
+            scope.launch {
+                println("flow collect begin")
+                delay(2000)
+                stateFlow.collect {
+                    println("stateFlow collected: $it")
+                }
+            }
         }
     }
 }

@@ -31,7 +31,7 @@ class ComposeTestActivity : AppCompatActivity() {
         Text(text = "Compose Test $name")
     }
 
-    // 预览
+    // 预览 必须是无参数的函数
     @Preview(showSystemUi = true)
     @Composable
     fun PreViewComposeTest() {

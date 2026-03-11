@@ -25,8 +25,8 @@ class FragmentActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         // 在Activity中获取Fragment
-        // 获取fragment中的按钮
         val fragment = supportFragmentManager.findFragmentById(R.id.leftFrag) as LeftFragment
+        // 获取fragment中的按钮
         val button = fragment.view?.findViewById<Button>(R.id.buttonLeftFragment)
 //        val button = findViewById<Button>(R.id.buttonChangeFragment)
         replaceFragment(RightFragment())

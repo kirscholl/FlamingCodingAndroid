@@ -1,4 +1,4 @@
-package com.example.flamingcoding.retrofitOkHttpDev
+package com.example.flamingcoding.retrofitOkHttpTrials
 
 import android.os.Bundle
 import android.widget.Button

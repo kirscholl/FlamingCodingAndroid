@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".dagger2Hilt.HiltApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,6 +23,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FlaMingCoding">
+        <activity
+            android:name=".framework.binder.BinderTestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".framework.handler.HandlerTestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customViewTrials.ViewRenderProcessTestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".dagger2Hilt.HiltTestActivity"
+            android:exported="false"
+            android:label="HiltTestActivity" />
+        <activity
+            android:name=".dagger2Hilt.DaggerTestActivity"
+            android:exported="false"
+            android:label="DaggerTestActivity" />
+        <activity
+            android:name=".lifecycleViewModelLiveDataTrials.LifecycleTestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".rxJavaTrials.RxJavaTestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customViewTrials.CustomViewActivity"
+            android:exported="false" />
         <activity
             android:name=".common.FunctionalTestActivityJava"
             android:exported="false"
@@ -35,10 +62,10 @@
             android:exported="false"
             android:label="CoroutinesTestActivity" />
         <activity
-            android:name=".retrofitOkHttpDev.OkHttpTestActivity"
+            android:name=".retrofitOkHttpTrials.OkHttpTestActivity"
             android:exported="false" />
         <activity
-            android:name=".retrofitOkHttpDev.RetrofitTestActivity"
+            android:name=".retrofitOkHttpTrials.RetrofitTestActivity"
             android:exported="false"
             android:label="RetrofitTestActivity" />
         <activity

@@ -1,4 +1,4 @@
-package com.example.flamingcoding.retrofitOkHttpDev
+package com.example.flamingcoding.retrofitOkHttpTrials
 
 data class Repo(
     val id: Long,

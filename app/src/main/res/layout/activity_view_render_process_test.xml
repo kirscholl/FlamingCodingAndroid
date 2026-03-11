@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".firstLineCodeAndroid.HomeActivity">
+    tools:context=".customViewTrials.ViewRenderProcessTestActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/board_icon_nine">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/HomeButton1"
+            android:id="@+id/test_btn_view_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="跳转Test1" />
+            android:text="按钮1" />
 
         <Button
-            android:id="@+id/HomeButton2"
+            android:id="@+id/test_btn_view_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="跳转Test2" />
+            android:text="按钮2" />
 
         <Button
-            android:id="@+id/HomeButton3"
+            android:id="@+id/test_btn_view_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="跳转Test3" />
+            android:text="按钮3" />
+
+        <TextView
+            android:id="@+id/test_view_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="默认text" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

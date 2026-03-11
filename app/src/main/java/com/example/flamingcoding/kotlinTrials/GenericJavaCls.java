@@ -1,8 +1,18 @@
-package com.example.flamingcoding.rengWuXianKotlin;
+package com.example.flamingcoding.kotlinTrials;
 
 import android.content.Context;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
+import androidx.lifecycle.ViewModelStoreOwner;
+
+import com.example.flamingcoding.lifecycleViewModelLiveDataTrials.TestViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,5 +48,34 @@ public class GenericJavaCls {
 
         // 可以使用泛型通配符 ? extends 来使泛型支持协变，但是「只能读取不能修改」，这里的修改仅指对泛型集合添加元素，如果是 remove(int index) 以及 clear 当然是可以的。
         //可以使用泛型通配符 ? super 来使泛型支持逆变，但是「只能修改不能读取」，这里说的不能读取是指不能按照泛型类型读取，你如果按照 Object 读出来再强转当然也是可以的。
+
+
+    }
+
+    class Test implements LifecycleOwner, ViewModelStoreOwner {
+
+        Test testOwner = new Test();
+
+        @NonNull
+        @Override
+        public Lifecycle getLifecycle() {
+            return null;
+        }
+
+        public void test() {
+            TestViewModel testViewModel = new ViewModelProvider(this).get(TestViewModel.class);
+            testViewModel.getTestLiveData().observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(String s) {
+
+                }
+            });
+        }
+
+        @NonNull
+        @Override
+        public ViewModelStore getViewModelStore() {
+            return null;
+        }
     }
 }

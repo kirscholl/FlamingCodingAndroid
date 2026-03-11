@@ -3,8 +3,8 @@ package com.example.flamingcoding.kotlinCoroutinesTrials
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import com.example.flamingcoding.retrofitOkHttpDev.Repo
-import com.example.flamingcoding.retrofitOkHttpDev.TestServerInterface
+import com.example.flamingcoding.retrofitOkHttpTrials.Repo
+import com.example.flamingcoding.retrofitOkHttpTrials.TestServerInterface
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -26,6 +26,7 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.Executors
@@ -34,6 +35,7 @@ import kotlin.coroutines.AbstractCoroutineContextElement
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTime
 
 class CustomCoroutineContext : AbstractCoroutineContextElement(CustomCoroutineContext) {
@@ -759,7 +761,10 @@ class KotlinCoroutinesNote {
 
     // SupervisorJob
     fun supervisorJobTest() {
-        // 使用SupervisorJob创建的协程，子协程抛异常父协程不会连带性地被取消
+        // 使用SupervisorJob创建的协程，子协程抛异常父协程不会连带性地被取消子协程的兄弟协程也不会被连带取消
+        // 对于普通协程：子协程异常->子协程取消->传递到父协程->父协程取消->传递到子协程的兄弟协程->兄弟协程取消
+        // SupervisorJob协程 子协程异常->子协程取消->传递到父协程->父协程拦截异常但是不取消 子协程的兄弟协程也就不会取消
+        // SupervisorJob协程的childCancelled方法返回false
         // 但是其异常是可以在SupervisorJob协程所捕获到的
         // 使用SupervisorJob创建的协程，他自身触发的异常和取消同样还是结构化的
         runBlocking {
@@ -906,6 +911,30 @@ class KotlinCoroutinesNote {
             // 阻塞运行
             TestServerInterface.retroRequest("https://api.github.com", "octocat")
             TestServerInterface.retroRequest("https://api.github.com", "octocat")
+        }
+    }
+
+    fun completedInvoke() {
+        runBlocking {
+            val scope = CoroutineScope(EmptyCoroutineContext)
+            val parentJob = scope.launch(Dispatchers.Default) {
+                println("parentJob运行的coroutineContext： ${this.coroutineContext}")
+                withContext(Dispatchers.IO) {
+                    println("withContext运行的线程coroutineContext： ${this.coroutineContext}")
+                }
+            }
+
+            parentJob.invokeOnCompletion {
+                println("invokeOnCompletion 运行的线程： ${Thread.currentThread()}")
+            }
+        }
+    }
+
+    fun withTimeoutOrNull() {
+        runBlocking {
+            withTimeoutOrNull(1.seconds) {
+
+            }
         }
     }
 }

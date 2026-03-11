@@ -1,4 +1,4 @@
-package com.example.flamingcoding.rengWuXianKotlin
+package com.example.flamingcoding.kotlinTrials
 
 import android.content.Context
 import android.widget.Button

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     id("com.google.devtools.ksp")
     alias(libs.plugins.compose.compiler)
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -29,17 +30,17 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    
     buildFeatures {
         compose = true
         viewBinding = true
     }
 }
-
-
 
 dependencies {
     implementation(libs.androidx.core.ktx)
@@ -58,7 +59,7 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
-    // ########################################## room ##########################################
+    // ########################################### Room ############################################
     val room_version = "2.8.4"
     implementation("androidx.room:room-runtime:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
@@ -108,4 +109,27 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
     // okhttp
     implementation("com.squareup.okhttp3:okhttp:5.3.2")
+
+    // Lifecycle LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
+
+    // ########################################### Dagger ##########################################
+//    // Dagger2 核心库 //
+//    implementation("com.google.dagger:dagger:2.59.2")
+//    // Dagger2
+//    ksp("com.google.dagger:dagger-compiler:2.59.2")
+//
+//    // (可选) 如果你需要在 Android 组件（如 Activity/Fragment）中使用 Dagger
+//    implementation("com.google.dagger:dagger-android:2.59.2")
+//    implementation("com.google.dagger:dagger-android-support:2.59.2") // 如果使用 AndroidX
+//    ksp("com.google.dagger:dagger-android-processor:2.59.2")
+
+    // ########################################### Hilt ############################################
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.59.2")
+    ksp("com.google.dagger:hilt-compiler:2.59.2")
+    // 如需使用 Hilt 的 ViewModel 扩展
+    implementation("androidx.hilt:hilt-navigation-fragment:1.3.0")
 }

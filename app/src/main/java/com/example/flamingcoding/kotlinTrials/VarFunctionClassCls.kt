@@ -1,4 +1,4 @@
-package com.example.flamingcoding.rengWuXianKotlin
+package com.example.flamingcoding.kotlinTrials
 
 import android.util.Log
 
@@ -154,7 +154,7 @@ class ChildCls(var childParamInt: Int, var childParamString: String) : VarFuncti
     }
 
     fun childRun() {
-        VarFunctionClassCls.VarFunctionClassInnerCls.INNER_OBJECT_STRING
+        VarFunctionClassInnerCls.INNER_OBJECT_STRING
     }
 
     fun typeJudge() {

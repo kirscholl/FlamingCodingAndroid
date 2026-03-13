@@ -1,10 +1,5 @@
 package com.example.flamingcoding.kotlinTrials
 
-class ProjectFrameworkMVX {
-
-
-}
-
 // ############################################## MVP ##############################################
 // View 接口
 //interface LoginView {

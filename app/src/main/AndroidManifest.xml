@@ -24,6 +24,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlaMingCoding">
         <activity
+            android:name=".fragmentNavigation.FragmentNavigationTestActivity"
+            android:label="FragmentNavigationTestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".mvxprojectframe.mvvm.MVVMActivityTest"
+            android:exported="false" />
+        <activity
+            android:name=".mvxprojectframe.mvp.MVPActivityTest"
+            android:exported="false" />
+        <activity
+            android:name=".mvxprojectframe.mvc.MVCActivityTest"
+            android:exported="false" />
+        <activity
             android:name=".framework.binder.BinderTestActivity"
             android:exported="false" />
         <activity

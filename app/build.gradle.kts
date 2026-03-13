@@ -35,7 +35,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    
+
     buildFeatures {
         compose = true
         viewBinding = true
@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.fragment.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -132,4 +134,8 @@ dependencies {
     ksp("com.google.dagger:hilt-compiler:2.59.2")
     // 如需使用 Hilt 的 ViewModel 扩展
     implementation("androidx.hilt:hilt-navigation-fragment:1.3.0")
+
+    // ################################### Fragment navigation #####################################
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.9.7")
 }

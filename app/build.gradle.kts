@@ -43,6 +43,12 @@ android {
 }
 
 dependencies {
+    val buildMode = project.findProperty("buildMode")
+    val isRelease = buildMode == "release"
+    if (isRelease) {
+        implementation(project(":trials"))
+    }
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

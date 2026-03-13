@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "FlaMingCoding"
 include(":app")
- 
+include(":trials")

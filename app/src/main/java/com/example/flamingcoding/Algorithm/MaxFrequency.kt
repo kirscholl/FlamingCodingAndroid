@@ -26,7 +26,7 @@ class MaxFrequency {
     //输入：nums = [3,9,6], k = 2
     //输出：1
 
-    //
+    // 超时
     fun maxFrequency1(nums: IntArray, k: Int): Int {
         nums.sort()
         var lastIndex = nums.size - 1

@@ -26,57 +26,7 @@ class MaxFrequency {
     //输入：nums = [3,9,6], k = 2
     //输出：1
 
-    // 超时
-    fun maxFrequency1(nums: IntArray, k: Int): Int {
-        nums.sort()
-        var lastIndex = nums.size - 1
-        val firstIndex = 0
-        var tempIndex: Int
-        var tempTargetNum: Int
-        var tempTotalTimes: Int
-        var tempLeftTimes: Int
-        var tempRes: Int
-        var res = 1
-        while (lastIndex != firstIndex) {
-            tempTargetNum = nums[lastIndex]
-            tempIndex = lastIndex - 1
-            tempRes = 1
-            tempTotalTimes = k
-            while (tempIndex >= 0) {
-                tempLeftTimes = tempTotalTimes - (tempTargetNum - nums[tempIndex])
-                if (tempLeftTimes <= 0) {
-                    break
-                } else {
-                    tempTotalTimes = tempLeftTimes
-                    tempRes += 1
-                }
-                tempIndex--
-            }
-            if (tempRes > res) {
-                res = tempRes
-            }
-            lastIndex--
-        }
-        return res
-    }
-
-    // public int maxFrequency(int[] nums, int k) {
-    //    Arrays.sort(nums);
-    //    long sum = 0;
-    //    int left = 0;
-    //    int ans = 0;
-    //    for (int right = 0; right < nums.length; right++) {
-    //        int x = nums[right];
-    //        sum += x;
-    //        while ((long) (right - left + 1) * x - sum > k) {
-    //            sum -= nums[left];
-    //            left++;
-    //        }
-    //        ans = Math.max(ans, right - left + 1);
-    //    }
-    //    return ans;
-    //}
-
+    // TODO
     fun maxFrequency(nums: IntArray, k: Int): Int {
         Arrays.sort(nums)
         var sum: Long = 0

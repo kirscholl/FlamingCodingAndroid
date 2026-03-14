@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "FlaMingCoding"
 include(":app")
 include(":trials")
+include(":pffbrowser")

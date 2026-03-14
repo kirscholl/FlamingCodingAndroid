@@ -20,8 +20,13 @@ class LifecycleTestActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        // 将Activity中的lifecycle与自定义的DefaultLifecycleObserver(LifecycleObserver)绑定
         lifecycle.addObserver(TestLifecycleObserver2())
+
+        // 将自定义的testViewModel与Activity(ViewModelStoreOwner)绑定
         val testViewModel = ViewModelProvider(this)[TestViewModel::class.java]
+
+        // 将LiveData与Activity(LifecycleOwner)绑定
         testViewModel.testLiveData.observe(this, Observer {
 
         })

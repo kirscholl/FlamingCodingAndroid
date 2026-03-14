@@ -11,6 +11,32 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.flamingcoding.R;
 
+class Test {
+    public int getAge() {
+        return age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    Test(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    String name = "";
+    int age = 0;
+}
+
 public class FunctionalTestActivityJava extends AppCompatActivity {
 
     @Override
@@ -28,5 +54,13 @@ public class FunctionalTestActivityJava extends AppCompatActivity {
         button.setOnClickListener(v -> {
 
         });
+        test();
+    }
+
+    public void test() {
+        final Test t = new Test("1", 2);
+        t.name = "2";
+        t.age = 12;
+        System.out.println("t: " + t.name + t.age);
     }
 }

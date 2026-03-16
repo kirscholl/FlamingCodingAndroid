@@ -1,22 +1,21 @@
 package com.example.pffbrowser.base
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.pffbrowser.utils.CommonLog.logLifeCycle
 
 open class BaseFragment : Fragment() {
 
     companion object {
         const val TAG = "BaseFragment"
-        const val LOG_FLAG = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        logFragmentLifeCycle("onCreate")
+        logLifeCycle(this, "onCreate")
     }
 
     override fun onCreateView(
@@ -24,48 +23,42 @@ open class BaseFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        logFragmentLifeCycle("onCreateView")
+        logLifeCycle(this, "onCreateView")
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        logFragmentLifeCycle("onViewCreated")
+        logLifeCycle(this, "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onStart() {
-        logFragmentLifeCycle("onStart")
+        logLifeCycle(this, "onStart")
         super.onStart()
     }
 
     override fun onResume() {
-        logFragmentLifeCycle("onResume")
+        logLifeCycle(this, "onResume")
         super.onResume()
     }
 
     override fun onPause() {
-        logFragmentLifeCycle("onPause")
+        logLifeCycle(this, "onPause")
         super.onPause()
     }
 
     override fun onStop() {
-        logFragmentLifeCycle("onStop")
+        logLifeCycle(this, "onStop")
         super.onStop()
     }
 
     override fun onDestroyView() {
-        logFragmentLifeCycle("onDestroyView")
+        logLifeCycle(this, "onDestroyView")
         super.onDestroyView()
     }
 
     override fun onDestroy() {
-        logFragmentLifeCycle("onDestroy")
+        logLifeCycle(this, "onDestroy")
         super.onDestroy()
-    }
-
-    fun logFragmentLifeCycle(lifeCycleName: String) {
-        if (LOG_FLAG) {
-            Log.d(TAG, "LifCycleName: $lifeCycleName ### className: ${javaClass.simpleName}")
-        }
     }
 }

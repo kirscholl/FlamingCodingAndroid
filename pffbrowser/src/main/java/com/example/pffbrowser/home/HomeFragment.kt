@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.pffbrowser.R
 import com.example.pffbrowser.base.BaseFragment
 import com.example.pffbrowser.databinding.PbFragmentHomeBinding
 import com.example.pffbrowser.request.search.HotSearchWordService
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.async
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -40,8 +43,8 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.searchBtn.setOnClickListener {
-//            findNavController().navigate(R.id.pb_action_homefragment_to_searchfragment)
-            test()
+            findNavController().navigate(R.id.pb_action_homefragment_to_searchfragment)
+//            test()
         }
     }
 
@@ -51,9 +54,8 @@ class HomeFragment : BaseFragment() {
 
     fun test() {
         val service = retrofit.create(HotSearchWordService::class.java)
-        runBlocking {
-            val res = service.getHotSearchWord()
-            println(res.toString())
+        lifecycleScope.async {
+            service.getHotSearchWord()
         }
     }
 }

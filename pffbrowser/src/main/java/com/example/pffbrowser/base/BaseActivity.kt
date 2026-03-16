@@ -1,46 +1,94 @@
 package com.example.pffbrowser.base
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
+import com.example.pffbrowser.R
+import com.example.pffbrowser.utils.CommonLog.logLifeCycle
 
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatActivity(),
+    IBaseView<VB> {
+
+    lateinit var viewModel: VM
+    protected val viewBinding: VB by lazy(mode = LazyThreadSafetyMode.NONE) {
+        BindingReflex.reflexViewBinding(javaClass, layoutInflater)
+    }
 
     companion object {
         const val TAG = "BaseActivity"
     }
 
-    override fun onCreate(
-        savedInstanceState: Bundle?,
-        persistentState: PersistableBundle?
-    ) {
-        Log.d(TAG, "LifCycleName: onCreate ### className: ${javaClass.simpleName}")
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        logLifeCycle(this, "onCreate")
+        // 适配系统栏边距
+        enableEdgeToEdge()
+        setContentView(viewBinding.root)
+        // 当窗口insets发生变化时（例如系统栏显示/隐藏、屏幕旋转、键盘弹出等），
+        // 会回调该监听器根据 insets 调整视图的布局，从而避免内容被系统 UI 遮挡
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+        viewModel = createViewModel()
+        viewBinding.initView()
+        viewBinding.initClickListener()
+        initObserver()
+        initRequestData()
     }
 
     override fun onStart() {
-        Log.d(TAG, "LifCycleName: onStart ### className: ${javaClass.simpleName}")
+        logLifeCycle(this, "onStart")
         super.onStart()
     }
 
     override fun onResume() {
-        Log.d(TAG, "LifCycleName: onResume ### className: ${javaClass.simpleName}")
+        logLifeCycle(this, "onResume")
         super.onResume()
     }
 
     override fun onPause() {
-        Log.d(TAG, "LifCycleName: onPause ### className: ${javaClass.simpleName}")
+        logLifeCycle(this, "onPause")
         super.onPause()
     }
 
     override fun onStop() {
-        Log.d(TAG, "LifCycleName: onStop ### className: ${javaClass.simpleName}")
+        logLifeCycle(this, "onStop")
         super.onStop()
     }
 
     override fun onDestroy() {
-        Log.d(TAG, "LifCycleName: onDestroy ### className: ${javaClass.simpleName}")
+        logLifeCycle(this, "onDestroy")
         super.onDestroy()
+    }
+
+    // 自动创建 ViewModel
+    private fun <VM : BaseViewModel> createViewModel(): VM {
+        val vmClass = getViewModelClass<VM>(this)
+        return ViewModelProvider(this)[vmClass]
+    }
+
+    override fun VB.initView() {
+    }
+
+    override fun VB.initClickListener() {
+    }
+
+    override fun initObserver() {
+    }
+
+    override fun initRequestData() {
+    }
+
+    override fun reLoadData() {
+    }
+
+    override fun isRecreate(): Boolean {
+        return false
     }
 }

@@ -1,7 +1,7 @@
 package com.example.pffbrowser.mine
 
-import androidx.lifecycle.ViewModel
+import com.example.pffbrowser.base.BaseViewModel
 
-class MineViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class MineViewModel : BaseViewModel() {
+
 }

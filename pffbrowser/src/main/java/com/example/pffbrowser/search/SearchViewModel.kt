@@ -1,7 +1,6 @@
 package com.example.pffbrowser.search
 
-import androidx.lifecycle.ViewModel
+import com.example.pffbrowser.base.BaseViewModel
 
-class SearchViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class SearchViewModel : BaseViewModel() {
 }

@@ -1,7 +1,7 @@
 package com.example.pffbrowser.square.find
 
-import androidx.lifecycle.ViewModel
+import com.example.pffbrowser.base.BaseViewModel
 
-class FindViewModel : ViewModel() {
+class FindViewModel : BaseViewModel() {
     // TODO: Implement the ViewModel
 }

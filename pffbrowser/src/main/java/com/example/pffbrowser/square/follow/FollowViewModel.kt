@@ -1,7 +1,7 @@
 package com.example.pffbrowser.square.follow
 
-import androidx.lifecycle.ViewModel
+import com.example.pffbrowser.base.BaseViewModel
 
-class FollowViewModel : ViewModel() {
+class FollowViewModel : BaseViewModel() {
     // TODO: Implement the ViewModel
 }

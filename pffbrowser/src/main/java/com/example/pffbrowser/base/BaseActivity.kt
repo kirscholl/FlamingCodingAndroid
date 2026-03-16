@@ -37,7 +37,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         }
         viewModel = createViewModel()
         viewBinding.initView()
-        viewBinding.initClickListener()
+        viewBinding.setOnClickListener()
         initObserver()
         initRequestData()
     }
@@ -76,13 +76,17 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
     override fun VB.initView() {
     }
 
-    override fun VB.initClickListener() {
+    override fun VB.setOnClickListener() {
     }
 
     override fun initObserver() {
     }
 
     override fun initRequestData() {
+    }
+
+    override fun refreshRequestData() {
+
     }
 
     override fun reLoadData() {

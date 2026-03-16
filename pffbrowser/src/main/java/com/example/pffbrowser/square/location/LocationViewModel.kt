@@ -1,7 +1,7 @@
 package com.example.pffbrowser.square.location
 
-import androidx.lifecycle.ViewModel
+import com.example.pffbrowser.base.BaseViewModel
 
-class LocationViewModel : ViewModel() {
+class LocationViewModel : BaseViewModel() {
     // TODO: Implement the ViewModel
 }

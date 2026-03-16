@@ -1,9 +1,5 @@
 package com.example.pffbrowser.home
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.pffbrowser.R
@@ -17,7 +13,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment<PbFragmentHomeBinding, HomeViewModel>() {
 
     companion object {
         const val TAG = "HomeFragment"
@@ -26,30 +22,10 @@ class HomeFragment : BaseFragment() {
     @Inject
     lateinit var retrofit: Retrofit
 
-    lateinit var binding: PbFragmentHomeBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = PbFragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.searchBtn.setOnClickListener {
+    override fun PbFragmentHomeBinding.setOnClickListener() {
+        viewBinding.searchBtn.setOnClickListener {
             findNavController().navigate(R.id.pb_action_homefragment_to_searchfragment)
-//            test()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 
     fun test() {

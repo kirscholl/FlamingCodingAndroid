@@ -1,15 +1,18 @@
 package com.example.pffbrowser.utils
 
+import android.util.Log
+
 object CommonLog {
 
     const val LOG_FLAG = false
+    const val TAG = "LifeCycleLog"
 
     fun logLifeCycle(obj: Any, lifeCycleName: String) {
-//        if (LOG_FLAG) {
-//            Log.d(
-//                BaseFragment.Companion.TAG,
-//                "LifCycleName: $lifeCycleName ### className: ${obj.javaClass.simpleName}"
-//            )
-//        }
+        if (LOG_FLAG) {
+            Log.d(
+                TAG,
+                "LifCycleName: $lifeCycleName ### className: ${obj.javaClass.simpleName}"
+            )
+        }
     }
 }

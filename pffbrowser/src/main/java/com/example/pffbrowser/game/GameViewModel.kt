@@ -1,7 +1,7 @@
 package com.example.pffbrowser.game
 
-import androidx.lifecycle.ViewModel
+import com.example.pffbrowser.base.BaseViewModel
 
-class GameViewModel : ViewModel() {
+class GameViewModel : BaseViewModel() {
     // TODO: Implement the ViewModel
 }

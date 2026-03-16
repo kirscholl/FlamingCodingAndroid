@@ -15,7 +15,7 @@ interface IBaseView<VB : ViewBinding> {
      */
     fun VB.initView()
 
-    fun VB.initClickListener()
+    fun VB.setOnClickListener()
 
     /**
      * 订阅LiveData
@@ -28,6 +28,13 @@ interface IBaseView<VB : ViewBinding> {
      * 在Activity onCreate调用
      */
     fun initRequestData()
+
+
+    /**
+     * 用于在页面刷新时重新请求接口
+     * 在Activity onCreate调用
+     */
+    fun refreshRequestData()
 
     /**
      * 用于重新请求接口

@@ -1,7 +1,7 @@
 package com.example.pffbrowser.square
 
-import androidx.lifecycle.ViewModel
+import com.example.pffbrowser.base.BaseViewModel
 
-class SquareViewModel : ViewModel() {
+class SquareViewModel : BaseViewModel() {
     // TODO: Implement the ViewModel
 }

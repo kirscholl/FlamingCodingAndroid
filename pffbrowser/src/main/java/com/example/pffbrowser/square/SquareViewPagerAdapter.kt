@@ -16,7 +16,6 @@ class SquareViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment
         return when (position) {
             0 -> {
                 FollowFragment()
-
             }
 
             1 -> {

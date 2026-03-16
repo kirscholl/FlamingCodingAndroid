@@ -39,11 +39,6 @@ class LifecycleTestFragment : Fragment() {
         Log.d(TAG, "onViewCreated")
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        Log.d(TAG, "onActivityCreated")
-    }
-
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart")

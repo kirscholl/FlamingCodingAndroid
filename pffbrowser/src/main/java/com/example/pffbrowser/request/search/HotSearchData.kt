@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
-data class HotSearchWordData(
+data class HotSearchData(
     val id: Int,
     val link: String,
     val name: String,

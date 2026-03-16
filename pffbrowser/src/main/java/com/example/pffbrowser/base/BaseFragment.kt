@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.example.pffbrowser.utils.CommonLog.logLifeCycle
 
-open class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), IBaseView<VB> {
+abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), IBaseView<VB> {
 
     companion object {
         const val TAG = "BaseFragment"
@@ -18,13 +18,12 @@ open class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), IBas
     lateinit var viewModel: VM
     lateinit var viewBinding: VB
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         logLifeCycle(this, "onCreate")
         viewModel = createViewModel()
-        initObserver()
         initRequestData()
+        initObserver()
     }
 
     override fun onCreateView(
@@ -90,10 +89,15 @@ open class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), IBas
     }
 
     override fun initRequestData() {
+        if (viewModel is BaseNetWorkViewModel) {
+            (viewModel as BaseNetWorkViewModel).requestInitData()
+        }
     }
 
     override fun refreshRequestData() {
-
+        if (viewModel is BaseNetWorkViewModel) {
+            (viewModel as BaseNetWorkViewModel).requestRefreshData()
+        }
     }
 
     override fun reLoadData() {

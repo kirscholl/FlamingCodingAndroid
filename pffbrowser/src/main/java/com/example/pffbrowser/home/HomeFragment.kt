@@ -5,7 +5,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.pffbrowser.R
 import com.example.pffbrowser.base.BaseFragment
 import com.example.pffbrowser.databinding.PbFragmentHomeBinding
-import com.example.pffbrowser.request.search.HotSearchWordService
+import com.example.pffbrowser.request.search.IHotSearchService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.async
 import retrofit2.Retrofit
@@ -29,7 +29,7 @@ class HomeFragment : BaseFragment<PbFragmentHomeBinding, HomeViewModel>() {
     }
 
     fun test() {
-        val service = retrofit.create(HotSearchWordService::class.java)
+        val service = retrofit.create(IHotSearchService::class.java)
         lifecycleScope.async {
             service.getHotSearchWord()
         }

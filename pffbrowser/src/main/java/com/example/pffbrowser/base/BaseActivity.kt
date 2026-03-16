@@ -38,8 +38,8 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         viewModel = createViewModel()
         viewBinding.initView()
         viewBinding.setOnClickListener()
-        initObserver()
         initRequestData()
+        initObserver()
     }
 
     override fun onStart() {

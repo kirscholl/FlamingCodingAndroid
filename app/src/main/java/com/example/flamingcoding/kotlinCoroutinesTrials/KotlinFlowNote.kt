@@ -1,5 +1,7 @@
 package com.example.flamingcoding.kotlinCoroutinesTrials
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import com.example.flamingcoding.retrofitOkHttpTrials.Repo
 import com.example.flamingcoding.retrofitOkHttpTrials.TestServerInterface
 import kotlinx.coroutines.CoroutineScope
@@ -1420,5 +1422,13 @@ class KotlinFlowNote {
                 }
             }
         }
+    }
+
+    fun flowAsLiveDataTest(): LiveData<Int> {
+        val ld = flow {
+            delay(500)
+            emit(1)
+        }.asLiveData()
+        return ld
     }
 }

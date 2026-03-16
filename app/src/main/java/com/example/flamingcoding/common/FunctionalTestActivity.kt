@@ -6,10 +6,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.flamingcoding.Algorithm.MaxFrequency
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import com.example.flamingcoding.R
 import com.example.flamingcoding.dagger2Hilt.chaintest.Test1
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -31,9 +35,33 @@ class FunctionalTestActivity : AppCompatActivity() {
 
         val reqButton = findViewById<Button>(R.id.functionalTestButton)
         reqButton.setOnClickListener { _ ->
-            val maxFrequency = MaxFrequency()
-            maxFrequency.maxFrequency(intArrayOf(1, 2, 4), 5)
+//            val maxFrequency = MaxFrequency()
+//            maxFrequency.maxFrequency(intArrayOf(1, 2, 4), 5)
+            test()
         }
-        println("自动Inject测试：${test.testStr}")
+//        println("自动Inject测试：${test.testStr}")
+    }
+
+    fun test() {
+        lifecycleScope.launch {
+            val ld = flow {
+                delay(500)
+                emit(1)
+                println("FunctionalTestActivity 1")
+                delay(500)
+                emit(1)
+                println("FunctionalTestActivity 2")
+                delay(500)
+                emit(1)
+                println("FunctionalTestActivity 3")
+                delay(500)
+                emit(1)
+                println("FunctionalTestActivity 4")
+            }.asLiveData()
+            delay(1000)
+            ld.observe(this@FunctionalTestActivity) {
+                println("FunctionalTestActivity ob $it")
+            }
+        }
     }
 }

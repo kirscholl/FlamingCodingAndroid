@@ -9,12 +9,19 @@ import androidx.navigation.fragment.findNavController
 import com.example.pffbrowser.R
 import com.example.pffbrowser.base.BaseFragment
 import com.example.pffbrowser.databinding.PbFragmentSearchBinding
+import dagger.hilt.android.AndroidEntryPoint
+import retrofit2.Retrofit
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SearchFragment : BaseFragment<PbFragmentSearchBinding, SearchViewModel>() {
 
     companion object {
         const val TAG = "SearchFragment"
     }
+
+    @Inject
+    lateinit var retrofit: Retrofit
 
     override fun onResume() {
         super.onResume()
@@ -66,6 +73,19 @@ class SearchFragment : BaseFragment<PbFragmentSearchBinding, SearchViewModel>() 
             } else {
                 hideKeyboard(viewBinding.editTextSearch)
             }
+        }
+    }
+
+    override fun initRequestData() {
+        super.initRequestData()
+
+    }
+
+    override fun initObserver() {
+        super.initObserver()
+        viewModel.setHotSearchLiveData.observe(this) {
+            // todo 初始化搜索
+            println("初始化搜索热词 $it")
         }
     }
 }

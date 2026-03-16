@@ -78,12 +78,11 @@ class SearchFragment : BaseFragment<PbFragmentSearchBinding, SearchViewModel>() 
 
     override fun initRequestData() {
         super.initRequestData()
-
     }
 
     override fun initObserver() {
         super.initObserver()
-        viewModel.setHotSearchLiveData.observe(this) {
+        viewModel.hotSearchLiveData.observe(this) {
             // todo 初始化搜索
             println("初始化搜索热词 $it")
         }

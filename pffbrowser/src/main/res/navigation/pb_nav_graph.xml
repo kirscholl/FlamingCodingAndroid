@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pb_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.pffbrowser.home.HomeFragment"
+        tools:layout="@layout/pb_fragment_home">
+        <action
+            android:id="@+id/pb_action_homefragment_to_searchfragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/squareFragment"
+        android:name="com.example.pffbrowser.square.SquareFragment"
+        tools:layout="@layout/pb_fragment_square" />
+
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.example.pffbrowser.game.GameFragment"
+        tools:layout="@layout/pb_fragment_game" />
+
+    <fragment
+        android:id="@+id/mineFragment"
+        android:name="com.example.pffbrowser.mine.MineFragment"
+        tools:layout="@layout/pb_fragment_mine" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.pffbrowser.search.SearchFragment"
+        tools:layout="@layout/pb_fragment_search">
+        <action
+            android:id="@+id/pb_action_searchfragment_to_homefragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/pb_action_searchfragment_to_searchresultfragment"
+            app:destination="@id/searchResultFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchResultFragment"
+        android:name="com.example.pffbrowser.search.SearchResultFragment"
+        tools:layout="@layout/pb_fragment_search">
+
+        <action
+            android:id="@+id/pb_action_searchresultfragment_to_searchfragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/pb_action_searchresultfragment_self"
+            app:destination="@id/searchResultFragment" />
+    </fragment>
+</navigation>

@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">PffBrowser</string>
+    <string name="pb_app_name">PffBrowser</string>
+    <string name="searchWord">searchWord</string>
 </resources>

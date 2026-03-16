@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("com.google.devtools.ksp")
     alias(libs.plugins.compose.compiler)
+    id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
 }
 

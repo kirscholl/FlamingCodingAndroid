@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 通过 left/right 设置左右边距来控制指示器长度 -->
+    <item
+        android:left="40dp"
+        android:right="40dp"
+        android:height="4dp">  <!-- 必须设置高度 -->
+        <shape android:shape="rectangle">
+<!--            颜色在TabLayout处设置才生效-->
+            <!--            <solid android:color="@color/teal_200" />-->
+            <corners android:radius="2dp" />  <!-- 圆角效果 -->
+        </shape>
+    </item>
+</layer-list>

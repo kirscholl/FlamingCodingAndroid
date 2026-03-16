@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/cursor_color.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 设置光标的宽度，例如 2dp -->
+    <size android:width="2dp" />
+    <!-- 设置你想要的光标颜色 -->
+    <solid android:color="@color/design_default_color_primary" /> <!-- 红色 -->
+</shape>

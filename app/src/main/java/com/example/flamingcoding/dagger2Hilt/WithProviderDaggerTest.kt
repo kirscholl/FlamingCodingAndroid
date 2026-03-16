@@ -24,4 +24,6 @@ object WithProviderDaggerTestModule {
     fun providerDaggerTest(): WithProviderDaggerTest {
         return WithProviderDaggerTest()
     }
+
+    // TODO provider带参数， 参数由其他地方注入
 }

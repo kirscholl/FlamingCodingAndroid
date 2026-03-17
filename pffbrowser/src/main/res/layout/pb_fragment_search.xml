@@ -11,6 +11,7 @@
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:text="back"
         android:textAllCaps="false" />
@@ -32,9 +33,29 @@
         android:id="@+id/btn_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@id/edit_text_search"
         app:layout_constraintRight_toRightOf="parent"
         android:text="search"
         android:textAllCaps="false" />
 
+    <Button
+        android:id="@+id/btn_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btn_search"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="编辑"
+        android:layout_gravity="end" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexbox_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btn_edit"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="10dp"
+        app:flexWrap="wrap"
+        app:alignItems="stretch"
+        app:alignContent="flex_start" />
 </androidx.constraintlayout.widget.ConstraintLayout>

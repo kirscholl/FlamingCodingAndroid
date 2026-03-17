@@ -141,4 +141,6 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.9.7")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.3.10")
+
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
 }

@@ -12,8 +12,10 @@ import android.webkit.PermissionRequest
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import com.example.pffbrowser.base.BaseViewModel
+import com.example.pffbrowser.utils.CommonLog
 
-class PbWebChromeClient : WebChromeClient() {
+class PbWebChromeClient(mViewModel: BaseViewModel) : WebChromeClient() {
 
     override fun getDefaultVideoPoster(): Bitmap? {
         return super.getDefaultVideoPoster()
@@ -106,14 +108,17 @@ class PbWebChromeClient : WebChromeClient() {
 
     override fun onProgressChanged(view: WebView?, newProgress: Int) {
         super.onProgressChanged(view, newProgress)
+        CommonLog.logWebChromeClient("onProgressChanged: $newProgress")
     }
 
     override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
         super.onReceivedIcon(view, icon)
+        CommonLog.logWebChromeClient("onReceivedIcon: $icon")
     }
 
     override fun onReceivedTitle(view: WebView?, title: String?) {
         super.onReceivedTitle(view, title)
+        CommonLog.logWebChromeClient("onReceivedTitle: $title")
     }
 
     override fun onReceivedTouchIconUrl(

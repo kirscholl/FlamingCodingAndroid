@@ -15,13 +15,13 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), 
         const val TAG = "BaseFragment"
     }
 
-    lateinit var viewModel: VM
-    lateinit var viewBinding: VB
+    lateinit var mViewModel: VM
+    lateinit var mViewBinding: VB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         logLifeCycle(this, "onCreate")
-        viewModel = createViewModel()
+        mViewModel = createViewModel()
         initRequestData()
         initObserver()
     }
@@ -32,15 +32,15 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), 
         savedInstanceState: Bundle?
     ): View? {
         logLifeCycle(this, "onCreateView")
-        viewBinding = BindingReflex.reflexViewBinding(javaClass, layoutInflater)
-        return viewBinding.root
+        mViewBinding = BindingReflex.reflexViewBinding(javaClass, layoutInflater)
+        return mViewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         logLifeCycle(this, "onViewCreated")
-        viewBinding.initView()
-        viewBinding.setOnClickListener()
+        mViewBinding.initView()
+        mViewBinding.setOnClickListener()
     }
 
     override fun onStart() {
@@ -89,14 +89,14 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), 
     }
 
     override fun initRequestData() {
-        if (viewModel is BaseNetWorkViewModel) {
-            (viewModel as BaseNetWorkViewModel).requestInitData()
+        if (mViewModel is BaseNetWorkViewModel) {
+            (mViewModel as BaseNetWorkViewModel).requestInitData()
         }
     }
 
     override fun refreshRequestData() {
-        if (viewModel is BaseNetWorkViewModel) {
-            (viewModel as BaseNetWorkViewModel).requestRefreshData()
+        if (mViewModel is BaseNetWorkViewModel) {
+            (mViewModel as BaseNetWorkViewModel).requestRefreshData()
         }
     }
 

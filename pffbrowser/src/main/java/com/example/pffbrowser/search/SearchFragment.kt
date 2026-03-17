@@ -30,12 +30,12 @@ class SearchFragment : BaseFragment<PbFragmentSearchBinding, SearchViewModel>() 
 
     override fun onResume() {
         super.onResume()
-        viewBinding.editTextSearch.requestFocus()
+        mViewBinding.editTextSearch.requestFocus()
     }
 
     override fun onPause() {
         super.onPause()
-        viewBinding.editTextSearch.clearFocus()
+        mViewBinding.editTextSearch.clearFocus()
     }
 
     fun showKeyboard(view: View) {
@@ -53,13 +53,13 @@ class SearchFragment : BaseFragment<PbFragmentSearchBinding, SearchViewModel>() 
     }
 
     override fun PbFragmentSearchBinding.setOnClickListener() {
-        viewBinding.btnBack.setOnClickListener {
+        mViewBinding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.pb_action_searchfragment_to_homefragment)
         }
 
-        viewBinding.btnSearch.setOnClickListener {
-            if (!viewBinding.editTextSearch.text.isEmpty()) {
-                val searchWord = viewBinding.editTextSearch.text.toString()
+        mViewBinding.btnSearch.setOnClickListener {
+            if (!mViewBinding.editTextSearch.text.isEmpty()) {
+                val searchWord = mViewBinding.editTextSearch.text.toString()
                 val bundle = Bundle().apply {
                     putString("searchWord", searchWord)
                 }
@@ -72,19 +72,19 @@ class SearchFragment : BaseFragment<PbFragmentSearchBinding, SearchViewModel>() 
             }
         }
 
-        viewBinding.rootLayout.setOnClickListener {
-            viewBinding.editTextSearch.clearFocus()
+        mViewBinding.rootLayout.setOnClickListener {
+            mViewBinding.editTextSearch.clearFocus()
         }
 
-        viewBinding.editTextSearch.setOnFocusChangeListener { _, hasFocus ->
+        mViewBinding.editTextSearch.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                showKeyboard(viewBinding.editTextSearch)
+                showKeyboard(mViewBinding.editTextSearch)
             } else {
-                hideKeyboard(viewBinding.editTextSearch)
+                hideKeyboard(mViewBinding.editTextSearch)
             }
         }
 
-        viewBinding.btnEdit.setOnClickListener {
+        mViewBinding.btnEdit.setOnClickListener {
             toggleEditMode()
         }
     }
@@ -95,22 +95,21 @@ class SearchFragment : BaseFragment<PbFragmentSearchBinding, SearchViewModel>() 
 
     override fun initObserver() {
         super.initObserver()
-        viewModel.hotSearchLiveData.observe(this) {
+        mViewModel.hotSearchLiveData.observe(this) {
             // todo 初始化搜索
             println("初始化搜索热词 $it")
-            viewModel.hotSearchDataList = it.data
+            mViewModel.hotSearchDataList = it.data
             setHotSearchView()
         }
     }
 
     fun setHotSearchView() {
-        viewBinding.flexboxHistory.removeAllViews()
-        viewModel.tagViews.clear()
-
-        viewModel.hotSearchDataList.forEach { data ->
+        mViewBinding.flexboxHistory.removeAllViews()
+        mViewModel.tagViews.clear()
+        mViewModel.hotSearchDataList.forEach { data ->
             val tagView = layoutInflater.inflate(
                 R.layout.pb_hot_search_item,
-                viewBinding.flexboxHistory,
+                mViewBinding.flexboxHistory,
                 false
             )
             val tvTag = tagView.findViewById<TextView>(R.id.tv_tag)
@@ -125,33 +124,33 @@ class SearchFragment : BaseFragment<PbFragmentSearchBinding, SearchViewModel>() 
 
             // 标签点击事件（用于搜索，可选）
             tagView.setOnClickListener {
-                if (!viewModel.isEditMode) {
+                if (!mViewModel.isEditMode) {
                     // 执行搜索操作
                     Toast.makeText(context, "搜索：${data.name}", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            viewBinding.flexboxHistory.addView(tagView)
-            viewModel.tagViews.add(tagView)
+            mViewBinding.flexboxHistory.addView(tagView)
+            mViewModel.tagViews.add(tagView)
         }
 
         // 如果当前处于编辑模式，需更新删除按钮可见性并启动抖动
-        if (viewModel.isEditMode) {
-            viewModel.tagViews.forEach { switchTabItemViewEdit(it) }
+        if (mViewModel.isEditMode) {
+            mViewModel.tagViews.forEach { switchTabItemViewEdit(it) }
         }
     }
 
     // 切换编辑模式
     private fun toggleEditMode() {
-        viewModel.isEditMode = !viewModel.isEditMode
-        viewBinding.btnEdit.text = if (viewModel.isEditMode) "完成" else "编辑"
+        mViewModel.isEditMode = !mViewModel.isEditMode
+        mViewBinding.btnEdit.text = if (mViewModel.isEditMode) "完成" else "编辑"
 
-        if (viewModel.isEditMode) {
-            viewModel.tagViews.forEach { view ->
+        if (mViewModel.isEditMode) {
+            mViewModel.tagViews.forEach { view ->
                 switchTabItemViewEdit(view)
             }
         } else {
-            viewModel.tagViews.forEach { view ->
+            mViewModel.tagViews.forEach { view ->
                 switchTabItemViewNormal(view)
             }
         }
@@ -162,29 +161,29 @@ class SearchFragment : BaseFragment<PbFragmentSearchBinding, SearchViewModel>() 
         val ivDelete = view.findViewById<ImageView>(R.id.iv_delete)
         ivDelete.visibility = View.VISIBLE
         val anim = generateTabShakeAnim(view)
-        viewModel.hotSearchAnimMap[view] = anim
+        mViewModel.hotSearchAnimMap[view] = anim
         anim.start()
     }
 
     private fun switchTabItemViewNormal(view: View) {
         val ivDelete = view.findViewById<ImageView>(R.id.iv_delete)
         ivDelete.visibility = View.GONE
-        viewModel.hotSearchAnimMap[view]?.cancel()
+        mViewModel.hotSearchAnimMap[view]?.cancel()
         view.rotation = 0f  // 复位
     }
 
     // 删除标签
     private fun deleteTag(data: HotSearchData) {
-        val position = viewModel.hotSearchDataList.indexOf(data)
+        val position = mViewModel.hotSearchDataList.indexOf(data)
         if (position != -1) {
-            viewModel.hotSearchDataList.removeAt(position)
+            mViewModel.hotSearchDataList.removeAt(position)
             // 移除对应的View
-            val needRemoveView = viewBinding.flexboxHistory[position]
+            val needRemoveView = mViewBinding.flexboxHistory[position]
             // 关闭动画，移除动画
-            viewModel.hotSearchAnimMap[needRemoveView]?.cancel()
-            viewModel.hotSearchAnimMap.remove(needRemoveView)
-            viewBinding.flexboxHistory.removeViewAt(position)
-            viewModel.tagViews.removeAt(position)
+            mViewModel.hotSearchAnimMap[needRemoveView]?.cancel()
+            mViewModel.hotSearchAnimMap.remove(needRemoveView)
+            mViewBinding.flexboxHistory.removeViewAt(position)
+            mViewModel.tagViews.removeAt(position)
         }
     }
 

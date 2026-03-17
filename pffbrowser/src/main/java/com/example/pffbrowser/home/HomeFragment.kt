@@ -23,7 +23,7 @@ class HomeFragment : BaseFragment<PbFragmentHomeBinding, HomeViewModel>() {
     lateinit var retrofit: Retrofit
 
     override fun PbFragmentHomeBinding.setOnClickListener() {
-        viewBinding.searchBtn.setOnClickListener {
+        mViewBinding.searchBtn.setOnClickListener {
             findNavController().navigate(R.id.pb_action_homefragment_to_searchfragment)
         }
     }

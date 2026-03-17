@@ -4,14 +4,36 @@ import android.util.Log
 
 object CommonLog {
 
-    const val LOG_FLAG = true
-    const val TAG = "LifeCycleLog"
+    const val LIFE_CYCLE_LOG_FLAG = false
+    const val LIFE_CYCLE_TAG = "LifeCycleLog"
+    const val WEB_VIEW_LOG_FLAG = true
+    const val WEB_VIEW_CLIENT_TRACK_TAG = "WebViewClientTrack"
+    const val WEB_CHROME_CLIENT_TRACK_TAG = "WebChromeClientTrack"
+
 
     fun logLifeCycle(obj: Any, lifeCycleName: String) {
-        if (LOG_FLAG) {
+        if (LIFE_CYCLE_LOG_FLAG) {
             Log.d(
-                TAG,
+                LIFE_CYCLE_TAG,
                 "LifCycleName: $lifeCycleName ### className: ${obj.javaClass.simpleName}"
+            )
+        }
+    }
+
+    fun logWebViewClient(logStr: String) {
+        if (WEB_VIEW_LOG_FLAG) {
+            Log.d(
+                WEB_VIEW_CLIENT_TRACK_TAG,
+                logStr
+            )
+        }
+    }
+
+    fun logWebChromeClient(logStr: String) {
+        if (WEB_VIEW_LOG_FLAG) {
+            Log.d(
+                WEB_CHROME_CLIENT_TRACK_TAG,
+                logStr
             )
         }
     }

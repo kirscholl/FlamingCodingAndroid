@@ -18,10 +18,10 @@
       </SelectionState>
       <SelectionState runConfigName="pffbrowser">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-03-15T16:04:23.453982800Z">
+        <DropdownSelection timestamp="2026-03-17T11:33:54.617607200Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=9cb9edcd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Administrator\.android\avd\Medium_Phone.avd" />
             </handle>
           </Target>
         </DropdownSelection>

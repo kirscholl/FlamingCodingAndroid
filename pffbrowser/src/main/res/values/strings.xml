@@ -1,4 +1,5 @@
 <resources>
     <string name="pb_app_name">PffBrowser</string>
-    <string name="searchWord">searchWord</string>
+    <string name="pb_hot_search">searchWord</string>
+    <string name="pb_search_history">浏览历史</string>
 </resources>

@@ -2,34 +2,32 @@ package com.example.pffbrowser.search
 
 import androidx.navigation.fragment.findNavController
 import com.example.pffbrowser.R
-import com.example.pffbrowser.base.BaseFragment
 import com.example.pffbrowser.common.CommonConstValue
 import com.example.pffbrowser.databinding.PbFragmentSearchResultBinding
-import com.example.pffbrowser.webview.PbWebChromeClient
-import com.example.pffbrowser.webview.PbWebViewClient
+import com.example.pffbrowser.webview.BaseWebViewFragment
+import com.example.pffbrowser.webview.PbWebView
 
-class SearchResultFragment : BaseFragment<PbFragmentSearchResultBinding, SearchResultViewModel>() {
+class SearchResultFragment :
+    BaseWebViewFragment<PbFragmentSearchResultBinding, SearchResultViewModel>() {
 
     companion object {
         const val TAG = "SearchResultFragment"
     }
 
-    override fun PbFragmentSearchResultBinding.initView() {
-        viewBinding.editText.setText(arguments?.getString(CommonConstValue.SEARCH_WORD))
-        initWebView()
-    }
+    // 直接委托获取，确保第一时间初始化
+    override val mWebView: PbWebView
+        get() = mViewBinding.searchWebView
 
-    fun initWebView() {
-        viewBinding.searchWebView.loadUrl("https://www.baidu.com")
-        viewBinding.searchWebView.webViewClient = PbWebViewClient()
-        viewBinding.searchWebView.webChromeClient = PbWebChromeClient()
+    override fun PbFragmentSearchResultBinding.initView() {
+        mViewBinding.editText.setText(arguments?.getString(CommonConstValue.SEARCH_WORD))
+        mWebView.loadUrl("https://www.baidu.com/")
     }
 
     override fun PbFragmentSearchResultBinding.setOnClickListener() {
-        viewBinding.backBtn.setOnClickListener {
+        mViewBinding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
-        viewBinding.searchWebView.setOnClickListener {
+        mViewBinding.searchWebView.setOnClickListener {
             findNavController().navigate(R.id.pb_action_searchresultfragment_self)
         }
     }

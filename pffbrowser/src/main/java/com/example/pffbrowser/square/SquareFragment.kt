@@ -15,8 +15,8 @@ class SquareFragment : BaseFragment<PbFragmentSquareBinding, SquareViewModel>() 
 
     override fun PbFragmentSquareBinding.initView() {
         val adapter = SquareViewPagerAdapter(this@SquareFragment)
-        viewBinding.viewPager2.adapter = adapter
-        TabLayoutMediator(viewBinding.tabLayout, viewBinding.viewPager2) { tab, position ->
+        mViewBinding.viewPager2.adapter = adapter
+        TabLayoutMediator(mViewBinding.tabLayout, mViewBinding.viewPager2) { tab, position ->
             // 自定义tab的View
             tab.setCustomView(R.layout.pb_custom_square_tab_item)
             val customView = tab.customView

@@ -14,8 +14,10 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.example.pffbrowser.base.BaseViewModel
+import com.example.pffbrowser.utils.CommonLog
 
-class PbWebViewClient : WebViewClient() {
+class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
 
     override fun doUpdateVisitedHistory(
         view: WebView?,
@@ -41,16 +43,18 @@ class PbWebViewClient : WebViewClient() {
         super.onPageCommitVisible(view, url)
     }
 
-    override fun onPageFinished(view: WebView?, url: String?) {
-        super.onPageFinished(view, url)
-    }
-
     override fun onPageStarted(
         view: WebView?,
         url: String?,
         favicon: Bitmap?
     ) {
         super.onPageStarted(view, url, favicon)
+        CommonLog.logWebViewClient("onPageStarted -> url: $url --- favicon: $favicon")
+    }
+
+    override fun onPageFinished(view: WebView?, url: String?) {
+        super.onPageFinished(view, url)
+        CommonLog.logWebViewClient("onPageFinished -> url: $url")
     }
 
     override fun onReceivedClientCertRequest(

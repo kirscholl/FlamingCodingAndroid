@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
-import com.example.pffbrowser.utils.CommonLog.logLifeCycle
+import com.example.pffbrowser.utils.LogUtil.logLifeCycle
 
 abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), IBaseView<VB> {
 

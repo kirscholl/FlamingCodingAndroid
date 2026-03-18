@@ -17,7 +17,7 @@
         android:textAllCaps="false" />
 
     <EditText
-        style="@style/CustomEditTextStyle"
+        style="@style/PbCustomEditTextStyle"
         android:id="@+id/edit_text_search"
         android:layout_width="0dp"
         android:layout_height="50dp"

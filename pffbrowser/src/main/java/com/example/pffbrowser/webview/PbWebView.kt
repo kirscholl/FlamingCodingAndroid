@@ -1,8 +1,13 @@
 package com.example.pffbrowser.webview
 
 import android.content.Context
+import android.os.Bundle
 import android.util.AttributeSet
 import android.webkit.WebView
+import androidx.navigation.findNavController
+import com.example.pffbrowser.R
+import com.example.pffbrowser.download.DownloadInfo
+import com.example.pffbrowser.utils.FileUtil
 
 class PbWebView : WebView {
 
@@ -18,40 +23,33 @@ class PbWebView : WebView {
 
     init {
         setDownLoaderListener()
-    }
-
-    fun setDownLoaderListener() {
-        this.setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
-            // 在这里处理下载逻辑
-            // 1. 通过 mimeType 判断文件类型（例如 PDF、图片、APK 等）
-            if (mimeType != null) {
-                when {
-                    mimeType == "application/pdf" -> {
-                        // 处理 PDF 下载或使用 Google Docs 预览 [citation:2]
-                    }
-
-                    mimeType.startsWith("image/") -> {
-                        // 处理图片下载
-                    }
-                    // 其他类型判断...
-                }
-            }
-            // 2. 从 contentDisposition 或 URL 中提取文件名 [citation:1][citation:6]
-            val filename = extractFileName(contentDisposition, url)
-            // showDialog
-            // 3. 启动下载 (例如使用 DownloadManager)
-//            startDownload(url, filename, mimeType)
+        settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
         }
     }
 
-    // 辅助函数：提取文件名
-    fun extractFileName(contentDisposition: String?, url: String): String {
-        return if (contentDisposition != null && contentDisposition.contains("filename=")) {
-            // 从 Content-Disposition 中解析文件名 (例如: attachment; filename="example.pdf") [citation:1][citation:8]
-            contentDisposition.substringAfter("filename=").replace("\"", "")
-        } else {
-            // 备选方案：从 URL 路径中截取最后一段
-            url.substringAfterLast("/")
+    private fun setDownLoaderListener() {
+        this.setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
+            // 提取文件名
+            val fileName = FileUtil.extractFileName(contentDisposition, url)
+            // 创建下载信息对象
+            val downloadInfo = DownloadInfo(
+                url = url,
+                fileName = fileName,
+                mimeType = mimeType,
+                contentLength = contentLength,
+                userAgent = userAgent,
+                contentDisposition = contentDisposition
+            )
+            // 使用 Navigation 跳转到下载弹窗
+            val bundle = Bundle().apply {
+                putParcelable(DownloadInfo.ARG_KEY, downloadInfo)
+            }
+            findNavController().navigate(
+                R.id.action_global_to_downloaddialogfragment,
+                bundle
+            )
         }
     }
 }

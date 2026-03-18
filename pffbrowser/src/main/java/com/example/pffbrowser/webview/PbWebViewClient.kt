@@ -15,7 +15,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.example.pffbrowser.base.BaseViewModel
-import com.example.pffbrowser.utils.CommonLog
+import com.example.pffbrowser.utils.LogUtil
 
 class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
 
@@ -49,12 +49,12 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         favicon: Bitmap?
     ) {
         super.onPageStarted(view, url, favicon)
-        CommonLog.logWebViewClient("onPageStarted -> url: $url --- favicon: $favicon")
+        LogUtil.logWebViewClient("onPageStarted -> url: $url --- favicon: $favicon")
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
-        CommonLog.logWebViewClient("onPageFinished -> url: $url")
+        LogUtil.logWebViewClient("onPageFinished -> url: $url")
     }
 
     override fun onReceivedClientCertRequest(
@@ -152,7 +152,20 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         view: WebView?,
         request: WebResourceRequest?
     ): Boolean {
-        return super.shouldOverrideUrlLoading(view, request)
+        val url = request?.url?.toString() ?: return false
+        // 只处理需要特殊导航逻辑的场景（如自定义 scheme）
+        if (url.startsWith("myapp://")) {
+            handleCustomScheme(url)
+            return true  // 拦截
+        }
+
+        // 对于可能的下载链接，返回 false 让 DownloadListener 处理
+        // 因为 DownloadListener 能获取 MIME Type 等更精确信息
+        return false
+    }
+
+    fun handleCustomScheme(url: String?) {
+        
     }
 
     override fun equals(other: Any?): Boolean {

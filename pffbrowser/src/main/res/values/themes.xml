@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="PbTheme.PffBrowser" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="PbTheme.PffBrowser" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -12,10 +12,24 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <!-- Text appearances -->
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Material3.TitleLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.Material3.BodySmall</item>
+        <!-- Bottom Sheet Dialog Theme -->
+        <item name="bottomSheetDialogTheme">@style/PbBottomSheetDialogTheme</item>
     </style>
 
-    <style name="CustomEditTextStyle" parent="Widget.AppCompat.EditText">
+    <!-- Bottom Sheet Dialog Theme -->
+    <style name="PbBottomSheetDialogTheme" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/PbBottomSheetStyle</item>
+    </style>
+
+    <style name="PbBottomSheetStyle" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="PbCustomEditTextStyle" parent="Widget.AppCompat.EditText">
         <!-- 未聚焦时的下划线颜色 -->
         <item name="colorControlNormal">#999999</item> <!-- 灰色 -->
         <!-- 聚焦时的下划线颜色和光标颜色（通常跟随此属性） -->

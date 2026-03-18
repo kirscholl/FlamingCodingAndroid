@@ -8,7 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.example.pffbrowser.R
-import com.example.pffbrowser.utils.CommonLog.logLifeCycle
+import com.example.pffbrowser.utils.LogUtil.logLifeCycle
 
 abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatActivity(),
     IBaseView<VB> {

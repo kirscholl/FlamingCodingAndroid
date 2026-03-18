@@ -1,9 +1,7 @@
 package com.example.pffbrowser.search
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -13,7 +11,9 @@ import com.example.pffbrowser.R
 import com.example.pffbrowser.base.BaseFragment
 import com.example.pffbrowser.databinding.PbFragmentSearchBinding
 import com.example.pffbrowser.request.search.HotSearchData
-import com.example.pffbrowser.utils.AnimationUtils.generateTabShakeAnim
+import com.example.pffbrowser.utils.AnimationUtil.generateTabShakeAnim
+import com.example.pffbrowser.utils.KeyboardUtil.hideKeyboard
+import com.example.pffbrowser.utils.KeyboardUtil.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -36,16 +36,6 @@ class SearchFragment : BaseFragment<PbFragmentSearchBinding, SearchViewModel>() 
     override fun onPause() {
         super.onPause()
         mViewBinding.editTextSearch.clearFocus()
-    }
-
-    fun showKeyboard(view: View) {
-        val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-    }
-
-    fun hideKeyboard(view: View) {
-        val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun PbFragmentSearchBinding.initView() {
@@ -186,5 +176,4 @@ class SearchFragment : BaseFragment<PbFragmentSearchBinding, SearchViewModel>() 
             mViewModel.tagViews.removeAt(position)
         }
     }
-
 }

@@ -4,7 +4,7 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.view.View
 
-object AnimationUtils {
+object AnimationUtil {
 
     // 抖动动画（左右摆动） 用于tab编辑
     fun generateTabShakeAnim(view: View): ObjectAnimator {

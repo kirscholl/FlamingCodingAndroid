@@ -1,12 +1,14 @@
 package com.example.pffbrowser.room
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 
+@Dao
 interface SearchHistoryDao {
-    
+
     @Insert
     fun insertData(entity: SearchHistoryEntity): Long
 

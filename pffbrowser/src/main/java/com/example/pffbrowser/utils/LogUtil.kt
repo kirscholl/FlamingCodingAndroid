@@ -2,7 +2,7 @@ package com.example.pffbrowser.utils
 
 import android.util.Log
 
-object CommonLog {
+object LogUtil {
 
     const val LIFE_CYCLE_LOG_FLAG = false
     const val LIFE_CYCLE_TAG = "LifeCycleLog"

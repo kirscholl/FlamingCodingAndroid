@@ -143,4 +143,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.3.10")
 
     implementation("com.google.android.flexbox:flexbox:3.0.0")
+
+    // ########################################### OkDownload ############################################
+    implementation("com.liulishuo.okdownload:okdownload:1.0.7")
+    implementation("com.liulishuo.okdownload:sqlite:1.0.7")
+    implementation("com.liulishuo.okdownload:okhttp:1.0.7")
 }

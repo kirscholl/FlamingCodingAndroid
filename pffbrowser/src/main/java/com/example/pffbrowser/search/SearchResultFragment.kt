@@ -1,7 +1,6 @@
 package com.example.pffbrowser.search
 
 import androidx.navigation.fragment.findNavController
-import com.example.pffbrowser.R
 import com.example.pffbrowser.common.CommonConstValue
 import com.example.pffbrowser.databinding.PbFragmentSearchResultBinding
 import com.example.pffbrowser.webview.BaseWebViewFragment
@@ -20,15 +19,16 @@ class SearchResultFragment :
 
     override fun PbFragmentSearchResultBinding.initView() {
         mViewBinding.editText.setText(arguments?.getString(CommonConstValue.SEARCH_WORD))
-        mWebView.loadUrl("https://www.baidu.com/")
     }
 
     override fun PbFragmentSearchResultBinding.setOnClickListener() {
         mViewBinding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
-        mViewBinding.searchWebView.setOnClickListener {
-            findNavController().navigate(R.id.pb_action_searchresultfragment_self)
+        mViewBinding.btnResSearch.setOnClickListener {
+//            findNavController().navigate(R.id.pb_action_searchresultfragment_self)
+            // TODO 换成一个下载链接测试
+            mWebView.loadUrl("http://speedtest.tele2.net/10MB.zip")
         }
     }
 }

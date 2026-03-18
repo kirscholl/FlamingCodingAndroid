@@ -3,24 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pb_nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/HomeFragment">
+
+    <!-- 全局Action，任何Fragment都可以跳转到这里 -->
+    <action
+        android:id="@+id/action_global_to_downloaddialogfragment"
+        app:destination="@id/DownloadDialogFragment" />
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/HomeFragment"
         android:name="com.example.pffbrowser.home.HomeFragment"
         tools:layout="@layout/pb_fragment_home">
         <action
             android:id="@+id/pb_action_homefragment_to_searchfragment"
-            app:destination="@id/searchFragment" />
+            app:destination="@id/SearchFragment" />
+        <action
+            android:id="@+id/pb_action_homefragment_to_downloaddialogfragment"
+            app:destination="@id/DownloadDialogFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/squareFragment"
+        android:id="@+id/SquareFragment"
         android:name="com.example.pffbrowser.square.SquareFragment"
         tools:layout="@layout/pb_fragment_square" />
 
     <fragment
-        android:id="@+id/gameFragment"
+        android:id="@+id/GameFragment"
         android:name="com.example.pffbrowser.game.GameFragment"
         tools:layout="@layout/pb_fragment_game" />
 
@@ -30,27 +38,46 @@
         tools:layout="@layout/pb_fragment_mine" />
 
     <fragment
-        android:id="@+id/searchFragment"
+        android:id="@+id/SearchFragment"
         android:name="com.example.pffbrowser.search.SearchFragment"
         tools:layout="@layout/pb_fragment_search">
         <action
             android:id="@+id/pb_action_searchfragment_to_homefragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/HomeFragment" />
         <action
             android:id="@+id/pb_action_searchfragment_to_searchresultfragment"
-            app:destination="@id/searchResultFragment" />
+            app:destination="@id/SearchResultFragment" />
+        <action
+            android:id="@+id/pb_action_searchfragment_to_downloaddialogfragment"
+            app:destination="@id/DownloadDialogFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/searchResultFragment"
+        android:id="@+id/SearchResultFragment"
         android:name="com.example.pffbrowser.search.SearchResultFragment"
+        android:label="SearchResultFragment"
         tools:layout="@layout/pb_fragment_search">
 
         <action
             android:id="@+id/pb_action_searchresultfragment_to_searchfragment"
-            app:destination="@id/searchFragment" />
+            app:destination="@id/SearchFragment" />
         <action
             android:id="@+id/pb_action_searchresultfragment_self"
-            app:destination="@id/searchResultFragment" />
+            app:destination="@id/SearchResultFragment" />
+        <action
+            android:id="@+id/pb_action_searchresultfragment_to_downloaddialogfragment"
+            app:destination="@id/DownloadDialogFragment" />
     </fragment>
+
+    <!-- 下载确认弹窗 -->
+    <dialog
+        android:id="@+id/DownloadDialogFragment"
+        android:name="com.example.pffbrowser.download.DownloadDialogFragment"
+        android:label="DownloadDialogFragment"
+        tools:layout="@layout/pb_fragment_download_dialog">
+        <argument
+            android:name="downloadInfo"
+            app:argType="com.example.pffbrowser.download.DownloadInfo" />
+    </dialog>
+
 </navigation>

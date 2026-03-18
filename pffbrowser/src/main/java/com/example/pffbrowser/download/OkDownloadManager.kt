@@ -2,6 +2,7 @@ package com.example.pffbrowser.download
 
 import android.content.Context
 import android.os.Environment
+import com.example.pffbrowser.utils.LogUtil
 import com.liulishuo.okdownload.DownloadListener
 import com.liulishuo.okdownload.DownloadTask
 import com.liulishuo.okdownload.OkDownload
@@ -60,17 +61,26 @@ class OkDownloadManager @Inject constructor(
     }
 
     /**
-     * 开始下载文件
-     * 使用前台服务确保后台下载不被杀死
+     * 开始下载文件（供外部调用）
+     * 启动前台服务来确保后台下载不被杀死
+     *
+     * @param url 下载链接
+     * @param fileName 文件名
+     */
+    fun startDownload(url: String, fileName: String) {
+        // 启动前台服务
+        DownloadForegroundService.startDownload(context, url, fileName)
+    }
+
+    /**
+     * 实际执行下载（供 DownloadForegroundService 调用）
+     * 不要直接调用此方法，应使用 startDownload()
      *
      * @param url 下载链接
      * @param fileName 文件名
      * @return DownloadTask
      */
-    fun enqueueDownload(url: String, fileName: String): DownloadTask {
-        // 启动前台服务
-        DownloadForegroundService.startDownload(context, url, fileName)
-
+    fun executeDownload(url: String, fileName: String): DownloadTask {
         val downloadDir = File(
             context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
             DOWNLOAD_DIR
@@ -139,6 +149,7 @@ class OkDownloadManager @Inject constructor(
             }
 
             override fun fetchStart(task: DownloadTask, blockIndex: Int, contentLength: Long) {
+                LogUtil.logDownloadState("fetchStart")
             }
 
             override fun fetchProgress(task: DownloadTask, blockIndex: Int, increaseBytes: Long) {
@@ -155,9 +166,11 @@ class OkDownloadManager @Inject constructor(
                     totalBytes = totalBytes,
                     fileName = task.filename ?: ""
                 )
+                LogUtil.logDownloadState("fetchProgress: ${_downloadStatusFlow.value}")
             }
 
             override fun fetchEnd(task: DownloadTask, blockIndex: Int, contentLength: Long) {
+                LogUtil.logDownloadState("fetchEnd")
             }
 
             override fun taskEnd(
@@ -186,9 +199,9 @@ class OkDownloadManager @Inject constructor(
 
                     else -> {}
                 }
+                LogUtil.logDownloadState("taskEnd: ${_downloadStatusFlow.value}")
             }
         })
-
         return task
     }
 
@@ -205,6 +218,15 @@ class OkDownloadManager @Inject constructor(
     fun cancelTask(task: DownloadTask) {
         task.cancel()
         activeTasks.remove(task.id.toString())
+    }
+
+    /**
+     * 取消指定 URL 的下载任务
+     */
+    fun cancelTask(url: String, fileName: String) {
+        val taskId = "$url:$fileName"
+        activeTasks[taskId]?.cancel()
+        activeTasks.remove(taskId)
     }
 
     /**

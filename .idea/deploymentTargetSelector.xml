@@ -18,7 +18,7 @@
       </SelectionState>
       <SelectionState runConfigName="pffbrowser">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-03-18T02:16:00.145426100Z">
+        <DropdownSelection timestamp="2026-03-18T12:46:45.641379700Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="PhysicalDevice" identifier="serial=9cb9edcd" />

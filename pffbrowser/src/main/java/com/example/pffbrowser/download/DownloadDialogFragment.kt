@@ -198,8 +198,8 @@ class DownloadDialogFragment : BottomSheetDialogFragment() {
         } else {
             finalFileName
         }
-        // 添加到下载队列
-        downloadManager.enqueueDownload(downloadInfo.url, validFileName)
+        // 开始下载（启动前台服务）
+        downloadManager.startDownload(downloadInfo.url, validFileName)
         binding.etFileName.clearFocus()
         hideKeyboard(binding.etFileName)
         dismiss()

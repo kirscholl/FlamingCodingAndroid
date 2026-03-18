@@ -92,11 +92,11 @@ class DownloadForegroundService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     /**
-     * 开始下载
+     * 开始下载（由 Service 启动时调用）
      */
     private fun startDownload(url: String, fileName: String) {
-        // 启动下载
-        downloadManager.enqueueDownload(url, fileName)
+        // 调用 DownloadManager 实际执行下载
+        downloadManager.executeDownload(url, fileName)
 
         // 监听下载状态并更新通知
         serviceScope.launch {

@@ -2,43 +2,41 @@ package com.example.pffbrowser.download
 
 import android.content.Context
 import android.os.Environment
-import com.example.pffbrowser.utils.LogUtil
-import com.liulishuo.okdownload.DownloadListener
-import com.liulishuo.okdownload.DownloadTask
 import com.liulishuo.okdownload.OkDownload
-import com.liulishuo.okdownload.core.breakpoint.BreakpointInfo
-import com.liulishuo.okdownload.core.cause.ResumeFailedCause
 import com.liulishuo.okdownload.core.connection.DownloadOkHttp3Connection
 import com.liulishuo.okdownload.core.dispatcher.DownloadDispatcher
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.io.File
-import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
  * OkDownload 下载管理器
- * 支持后台下载和断点续传
+ * 作为下载功能的统一入口，协调前台服务和任务仓库
  */
 @Singleton
 class OkDownloadManager @Inject constructor(
-    @param:ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context,
+    private val taskRepository: DownloadTaskRepository
 ) {
     companion object {
         const val DOWNLOAD_DIR = "PbDownloads"
-        const val MAX_PARALLEL_DOWNLOADS = 3
     }
 
-    private val _downloadStatusFlow = MutableStateFlow<DownloadStatus>(DownloadStatus.Idle)
-    val downloadStatusFlow: Flow<DownloadStatus> = _downloadStatusFlow.asStateFlow()
+    private val managerScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     /**
-     * 跟踪正在进行的下载任务
+     * 下载状态流（用于通知栏等）
      */
-    private val activeTasks = ConcurrentHashMap<String, DownloadTask>()
+    private val _downloadStatusFlow = MutableStateFlow<DownloadStatus>(DownloadStatus.Idle)
+    val downloadStatusFlow: Flow<DownloadStatus> = _downloadStatusFlow.asStateFlow()
 
     /**
      * 初始化 OkDownload
@@ -50,197 +48,166 @@ class OkDownloadManager @Inject constructor(
             return
         }
 
-        // 设置同时下载的最大任务数
-        DownloadDispatcher.setMaxParallelRunningCount(MAX_PARALLEL_DOWNLOADS)
+        // 设置同时下载的最大任务数（由 Repository 控制，这里设为较大值）
+        DownloadDispatcher.setMaxParallelRunningCount(10)
 
         // 配置 OkDownload
         val okDownloadBuilder = OkDownload.Builder(context)
             .connectionFactory(DownloadOkHttp3Connection.Factory())
 
         OkDownload.setSingletonInstance(okDownloadBuilder.build())
-    }
 
-    /**
-     * 开始下载文件（供外部调用）
-     * 启动前台服务来确保后台下载不被杀死
-     *
-     * @param url 下载链接
-     * @param fileName 文件名
-     */
-    fun startDownload(url: String, fileName: String) {
-        // 启动前台服务
-        DownloadForegroundService.startDownload(context, url, fileName)
-    }
-
-    /**
-     * 实际执行下载（供 DownloadForegroundService 调用）
-     * 不要直接调用此方法，应使用 startDownload()
-     *
-     * @param url 下载链接
-     * @param fileName 文件名
-     * @return DownloadTask
-     */
-    fun executeDownload(url: String, fileName: String): DownloadTask {
-        val downloadDir = File(
-            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            DOWNLOAD_DIR
-        )
-
-        // 确保目录存在
-        if (!downloadDir.exists()) {
-            downloadDir.mkdirs()
-        }
-
-        val task = DownloadTask.Builder(url, downloadDir)
-            .setFilename(fileName)
-            .setPassIfAlreadyCompleted(false)
-            .setConnectionCount(1)
-            .setPreAllocateLength(false)
-            .build()
-
-        // 添加到活跃任务列表
-        activeTasks[task.id.toString()] = task
-
-        // 设置下载监听器
-        task.enqueue(object : DownloadListener {
-            override fun taskStart(task: DownloadTask) {
-                _downloadStatusFlow.value = DownloadStatus.Started(task.id.toString())
+        // 设置 Repository 的回调
+        taskRepository.downloadCallback = object : DownloadTaskRepository.DownloadTaskCallback {
+            override fun onTaskStarted(taskId: String) {
+                _downloadStatusFlow.value = DownloadStatus.Started(taskId)
             }
 
-            override fun connectTrialStart(
-                task: DownloadTask,
-                requestHeaderFields: MutableMap<String, MutableList<String>>
-            ) {
+            override fun onTaskPaused(taskId: String) {
+                _downloadStatusFlow.value = DownloadStatus.Paused(taskId)
             }
 
-            override fun connectTrialEnd(
-                task: DownloadTask,
-                responseCode: Int,
-                responseHeaderFields: MutableMap<String, MutableList<String>>
-            ) {
+            override fun onTaskCompleted(taskId: String) {
+                _downloadStatusFlow.value = DownloadStatus.Completed(taskId)
             }
 
-            override fun downloadFromBeginning(
-                task: DownloadTask,
-                info: BreakpointInfo,
-                cause: ResumeFailedCause
-            ) {
+            override fun onTaskError(taskId: String, errorMessage: String) {
+                _downloadStatusFlow.value = DownloadStatus.Error(taskId, errorMessage)
             }
 
-            override fun downloadFromBreakpoint(
-                task: DownloadTask,
-                info: BreakpointInfo
-            ) {
-            }
-
-            override fun connectStart(
-                task: DownloadTask,
-                blockIndex: Int,
-                requestHeaderFields: MutableMap<String, MutableList<String>>
-            ) {
-            }
-
-            override fun connectEnd(
-                task: DownloadTask,
-                blockIndex: Int,
-                responseCode: Int,
-                responseHeaderFields: MutableMap<String, MutableList<String>>
-            ) {
-            }
-
-            override fun fetchStart(task: DownloadTask, blockIndex: Int, contentLength: Long) {
-                LogUtil.logDownloadState("fetchStart")
-            }
-
-            override fun fetchProgress(task: DownloadTask, blockIndex: Int, increaseBytes: Long) {
-                val totalBytes = task.info?.totalLength ?: 0
-                val downloadedBytes = task.info?.totalOffset ?: 0
+            override fun onProgress(taskId: String, downloadedBytes: Long, totalBytes: Long) {
                 val progress = if (totalBytes > 0) {
                     ((downloadedBytes * 100) / totalBytes).toInt()
                 } else 0
 
                 _downloadStatusFlow.value = DownloadStatus.Progress(
-                    taskId = task.id.toString(),
+                    taskId = taskId,
                     progress = progress,
                     downloadedBytes = downloadedBytes,
-                    totalBytes = totalBytes,
-                    fileName = task.filename ?: ""
+                    totalBytes = totalBytes
                 )
-                LogUtil.logDownloadState("fetchProgress: ${_downloadStatusFlow.value}")
             }
+        }
 
-            override fun fetchEnd(task: DownloadTask, blockIndex: Int, contentLength: Long) {
-                LogUtil.logDownloadState("fetchEnd")
-            }
-
-            override fun taskEnd(
-                task: DownloadTask,
-                cause: com.liulishuo.okdownload.core.cause.EndCause,
-                realCause: Exception?
-            ) {
-                // 从活跃任务列表中移除
-                activeTasks.remove(task.id.toString())
-
-                when (cause) {
-                    com.liulishuo.okdownload.core.cause.EndCause.COMPLETED -> {
-                        _downloadStatusFlow.value = DownloadStatus.Completed(task.id.toString())
-                    }
-
-                    com.liulishuo.okdownload.core.cause.EndCause.ERROR -> {
-                        _downloadStatusFlow.value = DownloadStatus.Error(
-                            taskId = task.id.toString(),
-                            errorMessage = realCause?.message ?: "Unknown error"
-                        )
-                    }
-
-                    com.liulishuo.okdownload.core.cause.EndCause.CANCELED -> {
-                        _downloadStatusFlow.value = DownloadStatus.Cancelled(task.id.toString())
-                    }
-
-                    else -> {}
-                }
-                LogUtil.logDownloadState("taskEnd: ${_downloadStatusFlow.value}")
-            }
-        })
-        return task
+        // 恢复之前未完成的下载任务
+        resumeUnfinishedTasks()
     }
 
     /**
-     * 暂停下载
+     * 开始下载文件
+     * 启动前台服务来确保后台下载不被杀死
+     *
+     * @param url 下载链接
+     * @param fileName 文件名
+     * @param mimeType MIME 类型
+     * @param contentLength 文件大小（可能为 -1）
      */
-    fun pauseTask(task: DownloadTask) {
-        task.cancel()
+    fun startDownload(
+        url: String,
+        fileName: String,
+        mimeType: String? = null,
+        contentLength: Long = -1
+    ) {
+        // 启动前台服务
+        DownloadForegroundService.startDownload(context, url, fileName, mimeType, contentLength)
     }
 
     /**
-     * 取消下载
+     * 实际执行下载（供 DownloadForegroundService 调用）
+     * 不要直接调用此方法，应使用 startDownload()
      */
-    fun cancelTask(task: DownloadTask) {
-        task.cancel()
-        activeTasks.remove(task.id.toString())
+    suspend fun executeDownload(
+        url: String,
+        fileName: String,
+        mimeType: String? = null,
+        contentLength: Long = -1
+    ) {
+        taskRepository.addDownloadTask(url, fileName, mimeType, contentLength)
     }
 
     /**
-     * 取消指定 URL 的下载任务
+     * 暂停下载任务
      */
-    fun cancelTask(url: String, fileName: String) {
-        val taskId = "$url:$fileName"
-        activeTasks[taskId]?.cancel()
-        activeTasks.remove(taskId)
+    suspend fun pauseTask(taskId: String) {
+        taskRepository.pauseTask(taskId)
     }
 
     /**
-     * 检查是否有正在运行的下载任务
+     * 继续下载任务
+     * 先确保前台服务在运行，然后恢复下载
      */
-    fun hasRunningTasks(): Boolean {
-        return activeTasks.isNotEmpty()
+    suspend fun resumeTask(taskId: String) {
+        // 先确保前台服务在运行（后台保活）
+        DownloadForegroundService.ensureServiceRunning(context)
+        // 然后恢复下载任务
+        taskRepository.resumeTask(taskId)
     }
 
     /**
-     * 获取活跃任务数量
+     * 重试下载任务
+     * 先确保前台服务在运行，然后重试下载
      */
-    fun getActiveTaskCount(): Int {
-        return activeTasks.size
+    suspend fun retryTask(taskId: String) {
+        // 先确保前台服务在运行（后台保活）
+        DownloadForegroundService.ensureServiceRunning(context)
+        // 然后重试下载任务
+        taskRepository.retryTask(taskId)
+    }
+
+    /**
+     * 删除下载任务
+     */
+    suspend fun deleteTask(taskId: String) {
+        taskRepository.deleteTask(taskId)
+    }
+
+    /**
+     * 获取所有下载任务
+     */
+    fun getAllTasks(): Flow<List<com.example.pffbrowser.download.db.DownloadTaskEntity>> {
+        return taskRepository.getAllTasks()
+    }
+
+    /**
+     * 获取活跃任务流（正在运行或等待中）
+     * 用于前台服务监听，当所有任务完成时关闭服务
+     */
+    fun getActiveTasks(): Flow<List<com.example.pffbrowser.download.db.DownloadTaskEntity>> {
+        return taskRepository.getActiveTasks()
+    }
+
+    /**
+     * 获取当前活跃任务数量
+     */
+    suspend fun getActiveTaskCount(): Int {
+        return taskRepository.getActiveTaskCount()
+    }
+
+    /**
+     * 获取下载速度流
+     * 用于 UI 实时显示下载速度，避免轮询
+     */
+    val downloadSpeedFlow = taskRepository.speedFlow
+
+    /**
+     * 获取下载目录
+     */
+    fun getDownloadDir(): File {
+        return File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            DOWNLOAD_DIR
+        )
+    }
+
+    /**
+     * 恢复未完成的下载任务（App 启动时调用）
+     */
+    private fun resumeUnfinishedTasks() {
+        managerScope.launch {
+            // 将之前正在运行的任务状态重置为暂停
+            // 等待用户手动继续或新的下载触发队列检查
+            // 这里不需要做特殊处理，Repository 会管理状态
+        }
     }
 
     /**
@@ -248,7 +215,6 @@ class OkDownloadManager @Inject constructor(
      */
     fun shutdown() {
         OkDownload.with().downloadDispatcher().cancelAll()
-        activeTasks.clear()
     }
 
     /**
@@ -257,16 +223,15 @@ class OkDownloadManager @Inject constructor(
     sealed class DownloadStatus {
         object Idle : DownloadStatus()
         data class Started(val taskId: String) : DownloadStatus()
+        data class Paused(val taskId: String) : DownloadStatus()
         data class Progress(
             val taskId: String,
             val progress: Int,
             val downloadedBytes: Long,
-            val totalBytes: Long,
-            val fileName: String
+            val totalBytes: Long
         ) : DownloadStatus()
 
         data class Completed(val taskId: String) : DownloadStatus()
-        data class Cancelled(val taskId: String) : DownloadStatus()
         data class Error(val taskId: String, val errorMessage: String) : DownloadStatus()
     }
 }

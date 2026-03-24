@@ -24,6 +24,12 @@ interface IBaseView<VB : ViewBinding> {
     fun initObserver()
 
     /**
+     * 与视图相关的订阅
+     * 在Fragment的onViewCreated之中调用
+     */
+    fun initViewObserver()
+
+    /**
      * 用于在页面创建时进行请求接口
      * 在Activity onCreate调用
      */

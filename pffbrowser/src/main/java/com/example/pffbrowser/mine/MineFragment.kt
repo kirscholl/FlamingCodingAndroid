@@ -17,5 +17,11 @@ class MineFragment : BaseFragment<PbFragmentMineBinding, MineViewModel>() {
                 R.id.pb_action_searchfragment_to_searchresultfragment
             )
         }
+
+        mViewBinding.btnDownloadManager.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_mineFragment_to_downloadListFragment
+            )
+        }
     }
 }

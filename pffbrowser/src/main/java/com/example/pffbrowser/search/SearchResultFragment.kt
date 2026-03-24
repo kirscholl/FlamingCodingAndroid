@@ -27,8 +27,9 @@ class SearchResultFragment :
         }
         mViewBinding.btnResSearch.setOnClickListener {
 //            findNavController().navigate(R.id.pb_action_searchresultfragment_self)
-            // TODO 换成一个下载链接测试
-            mWebView.loadUrl("https://speed.cloudflare.com/__down?bytes=10240")
+            // 下载链接测试 10k
+//            mWebView.loadUrl("https://speed.cloudflare.com/__down?bytes=10240")
+            mWebView.loadUrl("http://speedtest.tele2.net/10MB.zip")
         }
     }
 }

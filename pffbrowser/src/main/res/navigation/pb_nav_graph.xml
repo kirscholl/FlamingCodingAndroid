@@ -35,7 +35,11 @@
     <fragment
         android:id="@+id/mineFragment"
         android:name="com.example.pffbrowser.mine.MineFragment"
-        tools:layout="@layout/pb_fragment_mine" />
+        tools:layout="@layout/pb_fragment_mine">
+        <action
+            android:id="@+id/action_mineFragment_to_downloadListFragment"
+            app:destination="@id/DownloadListFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/SearchFragment"
@@ -79,5 +83,12 @@
             android:name="downloadInfo"
             app:argType="com.example.pffbrowser.download.DownloadInfo" />
     </dialog>
+
+    <!-- 下载列表页面 -->
+    <fragment
+        android:id="@+id/DownloadListFragment"
+        android:name="com.example.pffbrowser.download.DownloadListFragment"
+        android:label="DownloadListFragment"
+        tools:layout="@layout/pb_fragment_download_list" />
 
 </navigation>

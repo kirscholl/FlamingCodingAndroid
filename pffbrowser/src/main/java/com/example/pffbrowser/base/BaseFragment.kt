@@ -41,6 +41,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), 
         logLifeCycle(this, "onViewCreated")
         mViewBinding.initView()
         mViewBinding.setOnClickListener()
+        initViewObserver()
     }
 
     override fun onStart() {
@@ -86,6 +87,9 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), 
     }
 
     override fun initObserver() {
+    }
+
+    override fun initViewObserver() {
     }
 
     override fun initRequestData() {

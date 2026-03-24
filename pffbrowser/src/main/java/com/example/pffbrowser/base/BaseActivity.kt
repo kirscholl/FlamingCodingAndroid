@@ -49,6 +49,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
 
     override fun onResume() {
         logLifeCycle(this, "onResume")
+        initViewObserver()
         super.onResume()
     }
 
@@ -80,6 +81,10 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
     }
 
     override fun initObserver() {
+    }
+
+    override fun initViewObserver() {
+
     }
 
     override fun initRequestData() {

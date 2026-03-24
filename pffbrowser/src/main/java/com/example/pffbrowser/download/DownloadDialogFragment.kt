@@ -25,6 +25,10 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class DownloadDialogFragment : BottomSheetDialogFragment() {
+    
+    companion object {
+        const val TAG = "DownloadDialogFragment"
+    }
 
     private var _binding: PbFragmentDownloadDialogBinding? = null
     private val binding get() = _binding!!
@@ -198,8 +202,13 @@ class DownloadDialogFragment : BottomSheetDialogFragment() {
         } else {
             finalFileName
         }
-        // 开始下载（启动前台服务）
-        downloadManager.startDownload(downloadInfo.url, validFileName)
+        // 开始下载（启动前台服务，传递所有参数）
+        downloadManager.startDownload(
+            url = downloadInfo.url,
+            fileName = validFileName,
+            mimeType = downloadInfo.mimeType,
+            contentLength = downloadInfo.contentLength
+        )
         binding.etFileName.clearFocus()
         hideKeyboard(binding.etFileName)
         dismiss()
@@ -235,9 +244,5 @@ class DownloadDialogFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        const val TAG = "DownloadDialogFragment"
     }
 }

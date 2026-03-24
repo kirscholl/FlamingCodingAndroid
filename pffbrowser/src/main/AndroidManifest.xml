@@ -27,7 +27,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/PbTheme.PffBrowser"
         android:requestLegacyExternalStorage="true">
-        
+
         <activity
             android:name=".main.PffBrowserMainActivity"
             android:exported="true"

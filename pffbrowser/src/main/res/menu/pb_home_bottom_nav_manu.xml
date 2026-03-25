@@ -10,9 +10,13 @@
         android:icon="@drawable/pb_icon_home"
         android:title="广场" />
     <item
-        android:id="@+id/GameFragment"
+        android:id="@+id/GameUnityFragment"
         android:icon="@drawable/pb_icon_home"
         android:title="游戏" />
+    <item
+        android:id="@+id/MineUnityFragment"
+        android:icon="@drawable/pb_icon_home"
+        android:title="我的游戏" />
     <item
         android:id="@+id/mineFragment"
         android:icon="@drawable/pb_icon_home"

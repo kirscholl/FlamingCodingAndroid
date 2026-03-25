@@ -91,4 +91,13 @@
         android:label="DownloadListFragment"
         tools:layout="@layout/pb_fragment_download_list" />
 
+    <fragment
+        android:id="@+id/GameUnityFragment"
+        android:name="com.example.pffbrowser.unity.GameUnityFragment"
+        android:label="UnityFragment" />
+
+    <fragment
+        android:id="@+id/MineUnityFragment"
+        android:name="com.example.pffbrowser.unity.MineUnityFragment"
+        android:label="UnityFragment" />
 </navigation>

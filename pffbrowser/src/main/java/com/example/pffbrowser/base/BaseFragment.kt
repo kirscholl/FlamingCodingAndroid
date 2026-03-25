@@ -1,5 +1,6 @@
 package com.example.pffbrowser.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,11 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), 
 
     lateinit var mViewModel: VM
     lateinit var mViewBinding: VB
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        logLifeCycle(this, "onAttach")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +79,11 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), 
     override fun onDestroy() {
         super.onDestroy()
         logLifeCycle(this, "onDestroy")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        logLifeCycle(this, "onDetach")
     }
 
     private fun <VM : BaseViewModel> createViewModel(): VM {

@@ -22,6 +22,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters.add("arm64-v8a")  // Unity 2020+ 主要用这个
+            abiFilters.add("armeabi-v7a") // 兼容旧设备
+            // 注意：如果 Unity 只导出了 arm64，就不要加 x86
+        }
     }
 
     buildTypes {
@@ -43,6 +48,9 @@ android {
     }
 }
 
+// 在 dependencies 块外定义
+val unityLibraryProject = rootProject.project("unityLibrary")
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -53,6 +61,11 @@ dependencies {
     implementation(libs.androidx.navigation.ui)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.fragment.ktx)
+    implementation(project(":unityLibrary"))
+    implementation(fileTree(unityLibraryProject.projectDir.resolve("libs")) {
+        include("*.jar")
+        include("*.aar")
+    })
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

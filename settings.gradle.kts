@@ -23,3 +23,4 @@ rootProject.name = "FlaMingCoding"
 include(":app")
 include(":trials")
 include(":pffbrowser")
+include(":unityLibrary")

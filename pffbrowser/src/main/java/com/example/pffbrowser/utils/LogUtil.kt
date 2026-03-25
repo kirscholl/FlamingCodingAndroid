@@ -4,7 +4,7 @@ import android.util.Log
 
 object LogUtil {
 
-    const val LIFE_CYCLE_LOG_FLAG = false
+    const val LIFE_CYCLE_LOG_FLAG = true
     const val LIFE_CYCLE_TAG = "LifeCycleLog"
 
     const val WEB_VIEW_LOG_FLAG = false

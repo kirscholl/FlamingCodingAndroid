@@ -5,7 +5,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.pffbrowser.R
 import com.example.pffbrowser.base.BaseFragment
 import com.example.pffbrowser.databinding.PbFragmentHomeBinding
-import com.example.pffbrowser.ext.safeNavigateThrottle
+import com.example.pffbrowser.ext.safeNavigateWithAnim
 import com.unity3d.player.UnityPlayerActivity
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Retrofit
@@ -24,7 +24,7 @@ class HomeFragment : BaseFragment<PbFragmentHomeBinding, HomeViewModel>() {
 
     override fun PbFragmentHomeBinding.setOnClickListener() {
         mViewBinding.searchBtn.setOnClickListener {
-            findNavController().safeNavigateThrottle(
+            findNavController().safeNavigateWithAnim(
                 R.id.HomeFragment,
                 R.id.pb_action_homefragment_to_searchfragment
             )

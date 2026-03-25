@@ -12,6 +12,35 @@ class TestLifecycleObserver : LifecycleEventObserver {
         source: LifecycleOwner,
         event: Lifecycle.Event
     ) {
+        when (event) {
+            Lifecycle.Event.ON_CREATE -> {
+
+            }
+
+            Lifecycle.Event.ON_START -> {
+
+            }
+
+            Lifecycle.Event.ON_RESUME -> {
+
+            }
+
+            Lifecycle.Event.ON_PAUSE -> {
+
+            }
+
+            Lifecycle.Event.ON_STOP -> {
+
+            }
+
+            Lifecycle.Event.ON_DESTROY -> {
+
+            }
+
+            else -> {
+
+            }
+        }
         Log.d("TestLifecycleObserver", "Lifecycle.Event: $event")
     }
 }
@@ -27,14 +56,9 @@ class TestLifecycleObserver2 : DefaultLifecycleObserver {
         Log.d(TAG, "onCreate")
     }
 
-    override fun onDestroy(owner: LifecycleOwner) {
-        super.onDestroy(owner)
-        Log.d(TAG, "onDestroy")
-    }
-
-    override fun onPause(owner: LifecycleOwner) {
-        super.onPause(owner)
-        Log.d(TAG, "onPause")
+    override fun onStart(owner: LifecycleOwner) {
+        super.onStart(owner)
+        Log.d(TAG, "onStart")
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -42,13 +66,18 @@ class TestLifecycleObserver2 : DefaultLifecycleObserver {
         Log.d(TAG, "onResume")
     }
 
-    override fun onStart(owner: LifecycleOwner) {
-        super.onStart(owner)
-        Log.d(TAG, "onStart")
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
+        Log.d(TAG, "onPause")
     }
 
     override fun onStop(owner: LifecycleOwner) {
         super.onStop(owner)
         Log.d(TAG, "onStop")
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        Log.d(TAG, "onDestroy")
     }
 }

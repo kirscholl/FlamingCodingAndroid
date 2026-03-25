@@ -19,7 +19,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.flamingcoding.R;
 import com.example.flamingcoding.common.FunctionalTestActivity;
 import com.example.flamingcoding.dagger2Hilt.DaggerTestActivity;
-import com.example.flamingcoding.fragmentNavigation.FragmentNavigationTestActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -40,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
         Button homeButton1 = findViewById(R.id.HomeButton1);
         homeButton1.setOnClickListener(v -> {
 //            Toast.makeText(this, "HomeButton1 Click", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, FragmentNavigationTestActivity.class);
+            Intent intent = new Intent(this, ViewModelPracticeActivity.class);
             startActivity(intent);
         });
 

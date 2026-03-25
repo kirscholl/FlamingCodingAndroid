@@ -8,6 +8,10 @@ import androidx.lifecycle.switchMap
 
 class PracticeViewModel(countReserved: Int) : ViewModel() {
 
+    // 粘性测试
+    var stickyLiveDataTest: MutableLiveData<Int> = MutableLiveData()
+
+
     // 如果你需要在子线程中给LiveData设置数据，一定要调用postValue()方法
 
 

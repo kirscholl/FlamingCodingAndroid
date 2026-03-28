@@ -24,9 +24,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlaMingCoding">
         <activity
-            android:name=".fragmentNavigation.FragmentNavigationTestActivity"
-            android:label="FragmentNavigationTestActivity"
+            android:name=".threadAsync.HandlerTestActivity"
             android:exported="false" />
+        <activity
+            android:name=".fragmentNavigation.FragmentNavigationTestActivity"
+            android:exported="false"
+            android:label="FragmentNavigationTestActivity" />
         <activity
             android:name=".mvxprojectframe.mvvm.MVVMActivityTest"
             android:exported="false" />

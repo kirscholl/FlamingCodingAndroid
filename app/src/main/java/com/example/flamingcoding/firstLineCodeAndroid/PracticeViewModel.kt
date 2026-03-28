@@ -1,16 +1,15 @@
 package com.example.flamingcoding.firstLineCodeAndroid
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 
 class PracticeViewModel(countReserved: Int) : ViewModel() {
-
-    // 粘性测试
-    var stickyLiveDataTest: MutableLiveData<Int> = MutableLiveData()
-
 
     // 如果你需要在子线程中给LiveData设置数据，一定要调用postValue()方法
 
@@ -82,4 +81,72 @@ class PracticeViewModel(countReserved: Int) : ViewModel() {
         repository.getUser(userId)
     }
     //##############################################################################################
+
+    // 粘性测试
+    var stickyLiveDataTest: MutableLiveData<Int> = MutableLiveData()
+
+
+    class UserAccount {
+
+    }
+
+    class UserPassWord {
+
+    }
+
+    class UIState {
+
+        companion object {
+            fun Loading() {
+
+            }
+
+            fun Success(acc: UserAccount, pw: UserPassWord) {
+                //...
+            }
+        }
+
+        var loading = false
+
+
+        fun loading() {
+
+        }
+    }
+
+
+    val mediatorLiveData = MediatorLiveData<String>()
+    val passWord = MutableLiveData<UserPassWord>()
+    val userAccount = MutableLiveData<UserAccount>()
+
+    fun test() {
+        mediatorLiveData.apply {
+            addSource(userAccount) { acc ->
+                combineLatest(acc, passWord.value)
+            }
+
+            addSource(passWord) { pw ->
+                combineLatest(userAccount.value, pw)
+            }
+        }
+    }
+
+    private fun combineLatest(acc: UserAccount?, pw: UserPassWord?) {
+        return if (acc == null || pw == null) {
+            UIState.Loading()
+        } else {
+            UIState.Success(acc, pw)
+        }
+    }
+
+    // distinctUntilChanged
+    private val _searchQuery = MutableLiveData<String>()
+
+    // 扩展：添加 distinctUntilChanged 能力
+    val searchQuery: LiveData<String> = _searchQuery.distinctUntilChanged()
+
+    // 使用 switchMap 时配合去重，避免重复搜索相同关键词
+    val results = searchQuery.switchMap { query ->
+        liveData { emit(1) }
+    }
 }

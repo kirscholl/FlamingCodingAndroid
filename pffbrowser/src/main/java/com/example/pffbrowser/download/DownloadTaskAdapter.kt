@@ -36,41 +36,6 @@ class DownloadTaskAdapter(
     }
 
     /**
-     * 更新指定任务的进度（用于快速刷新速度）
-     */
-    fun updateTaskProgress(taskId: String, downloadedBytes: Long) {
-        val position = currentList.indexOfFirst { it.taskId == taskId }
-        if (position != -1) {
-            // 更新速度计算器
-            DownloadSpeedManager.updateProgress(taskId, downloadedBytes)
-            // 通知局部刷新
-            notifyItemChanged(position, PAYLOAD_PROGRESS)
-        }
-    }
-
-    /**
-     * 刷新所有可见 item 的速度显示（旧版轮询方式，已弃用）
-     */
-    fun refreshAllRunningTaskSpeed() {
-        recyclerView?.let { rv ->
-            val layoutManager =
-                rv.layoutManager as? androidx.recyclerview.widget.LinearLayoutManager
-                    ?: return
-            val firstVisible = layoutManager.findFirstVisibleItemPosition()
-            val lastVisible = layoutManager.findLastVisibleItemPosition()
-
-            for (i in firstVisible..lastVisible) {
-                if (i < 0 || i >= currentList.size) continue
-                val task = currentList[i]
-                if (task.status == DownloadTaskStatus.RUNNING) {
-                    val holder = rv.findViewHolderForAdapterPosition(i) as? ViewHolder
-                    holder?.refreshSpeed(task)
-                }
-            }
-        }
-    }
-
-    /**
      * 根据速度映射更新 UI（新方式：响应式更新）
      */
     fun updateSpeeds(speedMap: Map<String, String>) {

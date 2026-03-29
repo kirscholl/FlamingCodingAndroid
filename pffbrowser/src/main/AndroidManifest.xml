@@ -49,6 +49,18 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <!-- 通知删除监听器 -->
+        <receiver
+            android:name=".download.notification.NotificationDismissReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- 文件打开监听器 -->
+        <receiver
+            android:name=".download.notification.FileOpenReceiver"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

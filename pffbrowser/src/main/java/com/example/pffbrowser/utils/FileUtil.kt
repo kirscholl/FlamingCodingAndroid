@@ -31,4 +31,56 @@ object FileUtil {
 
         return filename
     }
+
+    /**
+     * 根据文件扩展名获取文件图标资源ID
+     * @param extension 文件扩展名（带或不带点都可以）
+     * @return drawable资源ID
+     */
+    fun getFileIconByExtension(extension: String): Int {
+        val ext = extension.lowercase().removePrefix(".")
+        return when (ext) {
+            "jpg", "jpeg", "png", "gif", "bmp", "webp", "svg" ->
+                com.example.pffbrowser.R.drawable.pb_ic_file_image
+            "mp4", "avi", "mkv", "mov", "wmv", "flv", "webm" ->
+                com.example.pffbrowser.R.drawable.pb_ic_file_video
+            "mp3", "wav", "flac", "aac", "ogg", "m4a" ->
+                com.example.pffbrowser.R.drawable.pb_ic_file_audio
+            "pdf" ->
+                com.example.pffbrowser.R.drawable.pb_ic_file_pdf
+            "doc", "docx" ->
+                com.example.pffbrowser.R.drawable.pb_ic_file_word
+            "xls", "xlsx" ->
+                com.example.pffbrowser.R.drawable.pb_ic_file_excel
+            "ppt", "pptx" ->
+                com.example.pffbrowser.R.drawable.pb_ic_file_ppt
+            "zip", "rar", "7z", "tar", "gz" ->
+                com.example.pffbrowser.R.drawable.pb_ic_file_archive
+            "apk" ->
+                com.example.pffbrowser.R.drawable.pb_ic_file_apk
+            "txt", "log" ->
+                com.example.pffbrowser.R.drawable.pb_ic_file_text
+            else ->
+                com.example.pffbrowser.R.drawable.pb_ic_file_unknown
+        }
+    }
+
+    /**
+     * 格式化文件大小
+     * @param bytes 文件大小（字节）
+     * @return 格式化后的字符串，如 "1.5 MB"
+     */
+    fun formatFileSize(bytes: Long): String {
+        if (bytes < 0) return "未知大小"
+        if (bytes < 1024) return "$bytes B"
+
+        val kb = bytes / 1024.0
+        if (kb < 1024) return String.format("%.1f KB", kb)
+
+        val mb = kb / 1024.0
+        if (mb < 1024) return String.format("%.1f MB", mb)
+
+        val gb = mb / 1024.0
+        return String.format("%.2f GB", gb)
+    }
 }

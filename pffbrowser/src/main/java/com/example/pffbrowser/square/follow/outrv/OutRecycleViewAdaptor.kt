@@ -21,10 +21,10 @@ class OutRecycleViewAdaptor : RecyclerView.Adapter<OutRecycleViewHolder>() {
         holder: OutRecycleViewHolder,
         position: Int
     ) {
-        holder.img.setImageResource("")
+
     }
 
     override fun getItemCount(): Int {
-
+        return 0
     }
 }

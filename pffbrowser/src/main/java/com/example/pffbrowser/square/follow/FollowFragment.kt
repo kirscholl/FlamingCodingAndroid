@@ -5,4 +5,8 @@ import com.example.pffbrowser.databinding.PbFragmentFollowBinding
 
 class FollowFragment : BaseFragment<PbFragmentFollowBinding, FollowViewModel>() {
 
+
+    override fun PbFragmentFollowBinding.initView() {
+
+    }
 }

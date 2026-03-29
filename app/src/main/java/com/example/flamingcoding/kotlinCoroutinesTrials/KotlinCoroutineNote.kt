@@ -18,6 +18,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
@@ -935,6 +936,33 @@ class KotlinCoroutinesNote {
             withTimeoutOrNull(1.seconds) {
 
             }
+        }
+    }
+
+    fun awaitAllTest() {
+        fun asyncGetData1(): String {
+            return "2"
+        }
+
+        fun asyncGetData2(): Int {
+            return 1
+        }
+
+        fun asyncGetData3(): Float {
+            return 3f
+        }
+
+        val scope = CoroutineScope(Dispatchers.IO)
+        scope.launch {
+            val deferredList = listOf(
+                async { asyncGetData1() },
+                async { asyncGetData2() },
+                async { asyncGetData3() }
+            )
+            val resList = deferredList.awaitAll()
+            val a = resList[0]
+            val b = resList[1]
+            val c = resList[2]
         }
     }
 }

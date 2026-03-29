@@ -15,6 +15,11 @@ class TestCustomView(context: Context?, attrs: AttributeSet) : View(context, att
     var lastX: Int = 0
     var lastY: Int = 0
 
+
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        return super.dispatchTouchEvent(event)
+    }
+
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val x = event.x.toInt()
         val y = event.y.toInt()
@@ -36,5 +41,10 @@ class TestCustomView(context: Context?, attrs: AttributeSet) : View(context, att
             }
         }
         return true
+    }
+
+
+    override fun setOnTouchListener(l: OnTouchListener?) {
+        super.setOnTouchListener(l)
     }
 }

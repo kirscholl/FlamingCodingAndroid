@@ -1,7 +1,10 @@
 package com.example.pffbrowser.mine
 
+import androidx.navigation.fragment.findNavController
+import com.example.pffbrowser.R
 import com.example.pffbrowser.base.BaseFragment
 import com.example.pffbrowser.databinding.PbFragmentMineBinding
+import com.example.pffbrowser.ext.safeNavigateWithAnim
 
 class MineFragment : BaseFragment<PbFragmentMineBinding, MineViewModel>() {
 
@@ -15,7 +18,10 @@ class MineFragment : BaseFragment<PbFragmentMineBinding, MineViewModel>() {
         }
 
         mViewBinding.btnDownloadManager.setOnClickListener {
-
+            findNavController().safeNavigateWithAnim(
+                R.id.mineFragment,
+                R.id.pb_action_minefragment_to_downloadlistfragment
+            )
         }
     }
 }

@@ -124,7 +124,7 @@ abstract class BaseDownloadListener : DownloadListener4WithSpeed() {
         val progress = ((currentOffset * 100) / totalBytes).toInt().coerceIn(0, 100)
 
         // 获取下载速度（字节/秒）
-        val speed = taskSpeed.speed().toLong()
+        val speed = taskSpeed.getBytesPerSecondAndFlush()
 
         Log.d(TAG, "进度更新: $currentOffset/$totalBytes ($progress%), 速度: ${formatSpeed(speed)}")
 

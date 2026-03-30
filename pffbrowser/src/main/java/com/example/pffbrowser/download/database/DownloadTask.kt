@@ -61,6 +61,11 @@ data class DownloadTask(
      */
     val progress: Int = 0,
 
+    /**
+     * 下载速度
+     */
+    val speed: Long = 0,
+
     // ========== 状态信息 ==========
     /**
      * 下载状态

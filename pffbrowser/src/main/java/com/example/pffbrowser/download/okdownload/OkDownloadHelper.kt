@@ -62,20 +62,17 @@ object OkDownloadHelper {
             .setAutoCallbackToUIThread(true)  // 自动切换到UI线程回调
             .setWifiRequired(false)  // 不要求WiFi
             .build()
-            .also {
-                // 设置监听器
-                it.enqueue(listener)
-            }
     }
 
     /**
      * 开始下载
      *
      * @param task 下载任务
+     * @param listener 下载监听器
      */
-    fun startDownload(task: DownloadTask) {
+    fun startDownload(task: DownloadTask, listener: DownloadListener4WithSpeed) {
         Log.d(TAG, "开始下载: ${task.url}")
-        task.execute(task.listener)
+        task.enqueue(listener)
     }
 
     /**

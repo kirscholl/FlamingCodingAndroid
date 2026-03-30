@@ -85,7 +85,8 @@ class DownloadTaskAdapter(
 
             when (task.status) {
                 DownloadStatus.DOWNLOADING -> {
-                    tvProgress.text = "${task.progress}%"
+                    val speedText = formatSpeed(task.speed)
+                    tvProgress.text = "${task.progress}% · $speedText"
                     tvProgress.visibility = View.VISIBLE
                     progressBar.visibility = View.VISIBLE
                 }
@@ -132,6 +133,20 @@ class DownloadTaskAdapter(
                 View.VISIBLE
             }
         }
+
+
+        private fun formatSpeed(bytesPerSecond: Long): String {
+            return when {
+                bytesPerSecond < 1024 -> "${bytesPerSecond} B/s"
+                bytesPerSecond < 1024 * 1024 -> {
+                    String.format("%.1f KB/s", bytesPerSecond / 1024.0)
+                }
+
+                else -> {
+                    String.format("%.1f MB/s", bytesPerSecond / (1024.0 * 1024.0))
+                }
+            }
+        }
     }
 
     /**
@@ -147,18 +162,19 @@ class DownloadTaskAdapter(
         }
 
         override fun getChangePayload(oldItem: DownloadTask, newItem: DownloadTask): Any? {
-            // 如果只有进度变化，返回PAYLOAD_PROGRESS
+            // 如果只有进度或速度变化，返回PAYLOAD_PROGRESS
             if (oldItem.status == newItem.status &&
                 oldItem.fileName == newItem.fileName &&
                 oldItem.totalBytes == newItem.totalBytes &&
-                oldItem.progress != newItem.progress
+                (oldItem.progress != newItem.progress || oldItem.speed != newItem.speed)
             ) {
                 return PAYLOAD_PROGRESS
             }
 
             // 如果只有状态变化，返回PAYLOAD_STATUS
             if (oldItem.status != newItem.status &&
-                oldItem.progress == newItem.progress
+                oldItem.progress == newItem.progress &&
+                oldItem.speed == newItem.speed
             ) {
                 return PAYLOAD_STATUS
             }

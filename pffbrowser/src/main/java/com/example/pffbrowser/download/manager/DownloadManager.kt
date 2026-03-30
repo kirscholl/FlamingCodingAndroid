@@ -8,7 +8,6 @@ import com.example.pffbrowser.download.database.DownloadTaskDao
 import com.example.pffbrowser.download.notification.DownloadNotificationManager
 import com.example.pffbrowser.download.okdownload.BaseDownloadListener
 import com.example.pffbrowser.download.okdownload.OkDownloadHelper
-import com.liulishuo.okdownload.DownloadTask as OkDownloadTask
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +16,7 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.liulishuo.okdownload.DownloadTask as OkDownloadTask
 
 /**
  * 下载管理器（主类）
@@ -139,7 +139,7 @@ class DownloadManager @Inject constructor(
         stateManager.logTransition(task.id, task.status, DownloadStatus.DOWNLOADING)
 
         // 开始下载
-        OkDownloadHelper.startDownload(okTask)
+        OkDownloadHelper.startDownload(okTask, listener)
     }
 
     /**

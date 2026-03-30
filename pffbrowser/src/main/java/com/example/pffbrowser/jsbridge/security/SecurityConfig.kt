@@ -23,8 +23,14 @@ data class SecurityConfig(
 
         try {
             val uri = Uri.parse(url)
-            val host = uri.host ?: return false
             val scheme = uri.scheme ?: return false
+
+            // 允许本地文件 (file://)
+            if (scheme == "file") {
+                return true
+            }
+
+            val host = uri.host ?: return false
 
             // 检查是否强制HTTPS
             if (forceHttps && scheme != "https") {

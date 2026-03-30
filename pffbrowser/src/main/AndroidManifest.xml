@@ -61,6 +61,13 @@
             android:name=".download.notification.FileOpenReceiver"
             android:enabled="true"
             android:exported="false" />
+
+        <!-- 下载前台服务 -->
+        <service
+            android:name=".download.service.DownloadForegroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
     </application>
 
 </manifest>

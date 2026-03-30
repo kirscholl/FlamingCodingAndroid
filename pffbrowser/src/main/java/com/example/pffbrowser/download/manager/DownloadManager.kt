@@ -1,6 +1,8 @@
 package com.example.pffbrowser.download.manager
 
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.util.Log
 import com.example.pffbrowser.download.DownloadStatus
 import com.example.pffbrowser.download.database.DownloadTask
@@ -8,6 +10,7 @@ import com.example.pffbrowser.download.database.DownloadTaskDao
 import com.example.pffbrowser.download.notification.DownloadNotificationManager
 import com.example.pffbrowser.download.okdownload.BaseDownloadListener
 import com.example.pffbrowser.download.okdownload.OkDownloadHelper
+import com.example.pffbrowser.download.service.DownloadForegroundService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -54,6 +57,9 @@ class DownloadManager @Inject constructor(
     // OkDownload任务映射Map<taskId, OkDownloadTask>
     private val okDownloadTasks = ConcurrentHashMap<Long, OkDownloadTask>()
 
+    // 前台服务相关
+    private var foregroundService: DownloadForegroundService? = null
+
     init {
         // 初始化通知节流器
         progressManager.initNotificationThrottler {
@@ -64,12 +70,65 @@ class DownloadManager @Inject constructor(
     }
 
     /**
+     * 确保前台服务已启动并绑定
+     * 在需要后台保活时调用（有活跃下载任务时）
+     */
+    private fun ensureServiceStarted() {
+        if (foregroundService != null) {
+            Log.d(TAG, "Service 已连接")
+            return
+        }
+//        foregroundService = DownloadForegroundService()
+        val intent = Intent(context, DownloadForegroundService::class.java)
+        // Android 8+ 需要使用 startForegroundService
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            } else {
+                context.startService(intent)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "启动前台服务失败", e)
+            return
+        }
+    }
+
+    /**
+     * 如果没有活跃任务，停止前台服务
+     */
+    private fun stopServiceIfIdle() {
+        val activeCount = queueManager.getDownloadingCount() + queueManager.getPendingCount()
+        if (activeCount > 0) {
+            Log.d(TAG, "仍有活跃任务 $activeCount 个，不停止服务")
+            return
+        }
+
+        Log.d(TAG, "没有活跃任务，停止前台服务")
+
+        // 先通知服务准备停止（移除前台状态）
+        foregroundService?.prepareToStop()
+
+        // 停止服务
+        val intent = Intent(context, DownloadForegroundService::class.java)
+        try {
+            context.stopService(intent)
+        } catch (e: Exception) {
+            Log.w(TAG, "停止服务失败", e)
+        }
+
+        foregroundService = null
+    }
+
+    /**
      * 开始下载
      *
      * @param taskId 任务ID
      */
     suspend fun startDownload(taskId: Long) {
         Log.d(TAG, "开始下载: taskId=$taskId")
+
+        // 启动前台服务保活
+        ensureServiceStarted()
 
         // 获取任务信息
         val task = downloadTaskDao.getTaskById(taskId)
@@ -254,6 +313,9 @@ class DownloadManager @Inject constructor(
 
         // 启动等待中的任务
         checkAndStartPendingTasks()
+
+        // 检查是否需要停止服务
+        stopServiceIfIdle()
     }
 
     /**
@@ -312,6 +374,9 @@ class DownloadManager @Inject constructor(
 
         // 启动等待中的任务
         checkAndStartPendingTasks()
+
+        // 检查是否需要停止服务
+        stopServiceIfIdle()
     }
 
     /**
@@ -381,6 +446,9 @@ class DownloadManager @Inject constructor(
 
         // 启动等待中的任务
         checkAndStartPendingTasks()
+
+        // 检查是否需要停止服务
+        stopServiceIfIdle()
     }
 
     /**
@@ -423,5 +491,57 @@ class DownloadManager @Inject constructor(
             进度管理: ${progressManager.getStatus()}
             OkDownload任务: ${okDownloadTasks.size}
         """.trimIndent()
+    }
+
+    /**
+     * 恢复活跃下载任务
+     * 在 Service 被系统杀死后自动恢复时调用
+     * 1. 将状态为 DOWNLOADING 的任务修正为 PAUSED
+     * 2. 重新启动所有活跃任务（DOWNLOADING + PENDING）
+     */
+    suspend fun restoreActiveDownloads() {
+        Log.d(TAG, "恢复活跃下载任务")
+
+        // 1. 清理内存状态（防止重复）
+        queueManager.clearAll()
+        okDownloadTasks.clear()
+        progressManager.clearAll()
+
+        // 2. 获取所有 DOWNLOADING 状态的任务，修正为 PAUSED
+        val downloadingTasks = downloadTaskDao.getTasksByStatus(DownloadStatus.DOWNLOADING)
+        Log.d(TAG, "发现 ${downloadingTasks.size} 个 DOWNLOADING 状态任务，将修正为 PAUSED")
+
+        downloadingTasks.forEach { task ->
+            downloadTaskDao.updateStatus(
+                id = task.id,
+                status = DownloadStatus.PAUSED,
+                time = System.currentTimeMillis()
+            )
+            stateManager.logTransition(task.id, DownloadStatus.DOWNLOADING, DownloadStatus.PAUSED)
+        }
+
+        // 3. 获取所有 PENDING 状态的任务
+        val pendingTasks = downloadTaskDao.getTasksByStatus(DownloadStatus.PENDING)
+        Log.d(TAG, "发现 ${pendingTasks.size} 个 PENDING 状态任务")
+
+        // 4. 重新启动所有任务（包括刚才修正为 PAUSED 的，以及原本就是 PENDING 的）
+        val tasksToRestore = downloadingTasks + pendingTasks
+        if (tasksToRestore.isEmpty()) {
+            Log.d(TAG, "没有需要恢复的任务")
+            // 如果没有任务，停止服务
+            stopServiceIfIdle()
+            return
+        }
+
+        Log.d(TAG, "开始恢复 ${tasksToRestore.size} 个任务")
+
+        tasksToRestore.forEach { task ->
+            // 使用 startDownload 重新启动任务
+            // 注意：不要直接调用 startDownload(task.id) 因为那会检查状态
+            // 我们直接走内部逻辑
+            startDownload(task.id)
+        }
+
+        Log.d(TAG, "恢复任务完成")
     }
 }

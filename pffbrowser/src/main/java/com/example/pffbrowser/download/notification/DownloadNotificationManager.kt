@@ -1,5 +1,6 @@
 package com.example.pffbrowser.download.notification
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -33,7 +34,7 @@ class DownloadNotificationManager private constructor(
         private const val CHANNEL_NAME = "下载管理"
 
         // 通知ID
-        private const val NOTIFICATION_ID_PROGRESS = 1001  // 进度通知
+        const val SERVICE_NOTIFICATION_ID = 1001  // 前台服务通知ID（复用为进度通知）
         private const val NOTIFICATION_ID_COMPLETED_BASE = 10000  // 完成通知基础ID
 
         // 单例
@@ -49,6 +50,8 @@ class DownloadNotificationManager private constructor(
         }
     }
 
+    // 当前显示的通知（用于前台服务）
+    private var currentProgressNotification: Notification? = null
     private val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -151,7 +154,8 @@ class DownloadNotificationManager private constructor(
             .setContentIntent(createContentIntent())  // 点击跳转到下载列表
             .build()
 
-        notificationManager.notify(NOTIFICATION_ID_PROGRESS, notification)
+        notificationManager.notify(SERVICE_NOTIFICATION_ID, notification)
+        currentProgressNotification = notification
         currentNotificationType = NotificationType.Single(task.id)
     }
 
@@ -171,7 +175,8 @@ class DownloadNotificationManager private constructor(
             .setContentIntent(createContentIntent())
             .build()
 
-        notificationManager.notify(NOTIFICATION_ID_PROGRESS, notification)
+        notificationManager.notify(SERVICE_NOTIFICATION_ID, notification)
+        currentProgressNotification = notification
         currentNotificationType = NotificationType.Multiple(count)
     }
 
@@ -180,8 +185,32 @@ class DownloadNotificationManager private constructor(
      */
     fun cancelProgressNotification() {
         Log.d(TAG, "取消进度通知")
-        notificationManager.cancel(NOTIFICATION_ID_PROGRESS)
+        notificationManager.cancel(SERVICE_NOTIFICATION_ID)
+        currentProgressNotification = null
         currentNotificationType = NotificationType.None
+    }
+
+    /**
+     * 获取用于前台服务的通知
+     * 如果有活跃任务，返回当前进度通知；否则返回占位通知
+     */
+    fun getServiceNotification(): Notification {
+        return currentProgressNotification ?: createPlaceholderNotification()
+    }
+
+    /**
+     * 创建占位通知（用于 Service 启动时暂无任务的情况）
+     */
+    private fun createPlaceholderNotification(): android.app.Notification {
+        return NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.stat_sys_download)
+            .setContentTitle("下载服务")
+            .setContentText("正在运行")
+            .setOngoing(true)
+            .setAutoCancel(false)
+            .setSilent(true)
+            .setContentIntent(createContentIntent())
+            .build()
     }
 
     /**

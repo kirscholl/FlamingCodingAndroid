@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSBridge Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 5px 5px 5px 0;
+        }
+
+        button:active {
+            opacity: 0.8;
+        }
+
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-size: 12px;
+            word-break: break-all;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JSBridge 功能演示</h1>
+
+        <!-- UI模块 -->
+        <div class="section">
+            <div class="section-title">UI 模块</div>
+            <button onclick="testShowToast()">显示Toast</button>
+            <button onclick="testShowDialog()">显示对话框</button>
+            <button onclick="testVibrate()">震动</button>
+            <div id="ui-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- 存储模块 -->
+        <div class="section">
+            <div class="section-title">存储模块</div>
+            <input type="text" id="storage-key" placeholder="输入key">
+            <input type="text" id="storage-value" placeholder="输入value">
+            <button onclick="testSetItem()">存储</button>
+            <button onclick="testGetItem()">读取</button>
+            <button onclick="testRemoveItem()">删除</button>
+            <button onclick="testGetAllKeys()">获取所有key</button>
+            <div id="storage-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- 设备信息模块 -->
+        <div class="section">
+            <div class="section-title">设备信息模块</div>
+            <button onclick="testGetDeviceInfo()">获取设备信息</button>
+            <button onclick="testGetAppInfo()">获取应用信息</button>
+            <button onclick="testGetSystemInfo()">获取系统信息</button>
+            <div id="device-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- 网络模块 -->
+        <div class="section">
+            <div class="section-title">网络模块</div>
+            <button onclick="testGetNetworkType()">获取网络类型</button>
+            <button onclick="testIsNetworkAvailable()">检查网络</button>
+            <button onclick="testRequest()">发起请求</button>
+            <div id="network-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- 导航模块 -->
+        <div class="section">
+            <div class="section-title">导航模块</div>
+            <input type="text" id="nav-url" placeholder="输入URL" value="https://www.baidu.com">
+            <button onclick="testPush()">加载页面</button>
+            <button onclick="testPop()">返回</button>
+            <button onclick="testReload()">刷新</button>
+            <button onclick="testOpenNewWindow()">新窗口打开</button>
+            <div id="nav-result" class="result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script src="jsbridge.js"></script>
+    <script>
+        // 等待JSBridge就绪
+        JSBridge.ready(() => {
+            console.log('JSBridge is ready!');
+        });
+
+        function showResult(elementId, data) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.textContent = JSON.stringify(data, null, 2);
+        }
+
+        // UI模块测试
+        function testShowToast() {
+            JSBridge.ui.showToast('这是一个Toast消息', 2000)
+                .then(result => showResult('ui-result', { success: true }))
+                .catch(error => showResult('ui-result', error));
+        }
+
+        function testShowDialog() {
+            JSBridge.ui.showDialog('提示', '这是一个对话框', ['取消', '确定'])
+                .then(result => showResult('ui-result', result))
+                .catch(error => showResult('ui-result', error));
+        }
+
+        function testVibrate() {
+            JSBridge.ui.vibrate(200)
+                .then(result => showResult('ui-result', { success: true }))
+                .catch(error => showResult('ui-result', error));
+        }
+
+        // 存储模块测试
+        function testSetItem() {
+            const key = document.getElementById('storage-key').value;
+            const value = document.getElementById('storage-value').value;
+            JSBridge.storage.setItem(key, value)
+                .then(result => showResult('storage-result', { success: true }))
+                .catch(error => showResult('storage-result', error));
+        }
+
+        function testGetItem() {
+            const key = document.getElementById('storage-key').value;
+            JSBridge.storage.getItem(key)
+                .then(result => showResult('storage-result', result))
+                .catch(error => showResult('storage-result', error));
+        }
+
+        function testRemoveItem() {
+            const key = document.getElementById('storage-key').value;
+            JSBridge.storage.removeItem(key)
+                .then(result => showResult('storage-result', { success: true }))
+                .catch(error => showResult('storage-result', error));
+        }
+
+        function testGetAllKeys() {
+            JSBridge.storage.getAllKeys()
+                .then(result => showResult('storage-result', result))
+                .catch(error => showResult('storage-result', error));
+        }
+
+        // 设备信息模块测试
+        function testGetDeviceInfo() {
+            JSBridge.device.getDeviceInfo()
+                .then(result => showResult('device-result', result))
+                .catch(error => showResult('device-result', error));
+        }
+
+        function testGetAppInfo() {
+            JSBridge.device.getAppInfo()
+                .then(result => showResult('device-result', result))
+                .catch(error => showResult('device-result', error));
+        }
+
+        function testGetSystemInfo() {
+            JSBridge.device.getSystemInfo()
+                .then(result => showResult('device-result', result))
+                .catch(error => showResult('device-result', error));
+        }
+
+        // 网络模块测试
+        function testGetNetworkType() {
+            JSBridge.network.getNetworkType()
+                .then(result => showResult('network-result', result))
+                .catch(error => showResult('network-result', error));
+        }
+
+        function testIsNetworkAvailable() {
+            JSBridge.network.isNetworkAvailable()
+                .then(result => showResult('network-result', result))
+                .catch(error => showResult('network-result', error));
+        }
+
+        function testRequest() {
+            JSBridge.network.request('https://api.github.com', 'GET')
+                .then(result => showResult('network-result', result))
+                .catch(error => showResult('network-result', error));
+        }
+
+        // 导航模块测试
+        function testPush() {
+            const url = document.getElementById('nav-url').value;
+            JSBridge.navigation.push(url)
+                .then(result => showResult('nav-result', { success: true }))
+                .catch(error => showResult('nav-result', error));
+        }
+
+        function testPop() {
+            JSBridge.navigation.pop()
+                .then(result => showResult('nav-result', { success: true }))
+                .catch(error => showResult('nav-result', error));
+        }
+
+        function testReload() {
+            JSBridge.navigation.reload()
+                .then(result => showResult('nav-result', { success: true }))
+                .catch(error => showResult('nav-result', error));
+        }
+
+        function testOpenNewWindow() {
+            const url = document.getElementById('nav-url').value;
+            JSBridge.navigation.openNewWindow(url)
+                .then(result => showResult('nav-result', { success: true }))
+                .catch(error => showResult('nav-result', error));
+        }
+    </script>
+</body>
+</html>

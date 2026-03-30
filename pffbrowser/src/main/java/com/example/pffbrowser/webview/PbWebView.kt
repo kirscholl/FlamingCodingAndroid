@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.webkit.WebView
 import com.example.pffbrowser.download.DownloadDialogInfo
+import com.example.pffbrowser.jsbridge.core.JSBridgeCore
+import com.example.pffbrowser.jsbridge.security.SecurityConfig
 import com.example.pffbrowser.utils.FileUtil
 
 class PbWebView : WebView {
@@ -16,6 +18,11 @@ class PbWebView : WebView {
     }
 
     var onDownloadListener: OnDownloadListener? = null
+
+    /**
+     * JSBridge核心
+     */
+    private var jsBridgeCore: JSBridgeCore? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -33,6 +40,27 @@ class PbWebView : WebView {
             javaScriptEnabled = true
             domStorageEnabled = true
         }
+        // 初始化JSBridge
+        initJSBridge()
+    }
+
+    /**
+     * 初始化JSBridge
+     */
+    private fun initJSBridge() {
+        jsBridgeCore = JSBridgeCore(this)
+    }
+
+    /**
+     * 获取JSBridge实例
+     */
+    fun getJSBridge(): JSBridgeCore? = jsBridgeCore
+
+    /**
+     * 设置JSBridge安全配置
+     */
+    fun setJSBridgeSecurityConfig(config: SecurityConfig) {
+        jsBridgeCore?.setSecurityConfig(config)
     }
 
     private fun setDownLoaderListener() {
@@ -53,5 +81,14 @@ class PbWebView : WebView {
             // 回调到Fragment
             onDownloadListener?.onDownloadStart(downloadInfo)
         }
+    }
+
+    /**
+     * 销毁时清理JSBridge
+     */
+    override fun destroy() {
+        jsBridgeCore?.destroy()
+        jsBridgeCore = null
+        super.destroy()
     }
 }

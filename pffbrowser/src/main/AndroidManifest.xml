@@ -17,6 +17,9 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
+    <!-- 震动权限 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name=".base.PbHiltApplication"
         android:allowBackup="true"
@@ -38,6 +41,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".jsbridge.JSBridgeDemoActivity"
+            android:exported="true"
+            android:theme="@style/PbTheme.PffBrowser"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <!-- FileProvider 用于文件分享和打开 -->
         <provider

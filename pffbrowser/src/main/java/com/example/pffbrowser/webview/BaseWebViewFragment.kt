@@ -8,6 +8,12 @@ import com.example.pffbrowser.base.BaseFragment
 import com.example.pffbrowser.base.BaseViewModel
 import com.example.pffbrowser.download.DownloadDialogFragment
 import com.example.pffbrowser.download.DownloadDialogInfo
+import com.example.pffbrowser.jsbridge.module.impl.DeviceModule
+import com.example.pffbrowser.jsbridge.module.impl.NavigationModule
+import com.example.pffbrowser.jsbridge.module.impl.NetworkModule
+import com.example.pffbrowser.jsbridge.module.impl.StorageModule
+import com.example.pffbrowser.jsbridge.module.impl.UIModule
+import com.example.pffbrowser.jsbridge.security.SecurityConfig
 
 abstract class BaseWebViewFragment<VB : ViewBinding, VM : BaseViewModel> : BaseFragment<VB, VM>() {
 
@@ -17,6 +23,7 @@ abstract class BaseWebViewFragment<VB : ViewBinding, VM : BaseViewModel> : BaseF
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initWebView()
+        initJSBridge()
         setInterceptBackPress()
         setupDownloadListener()
     }
@@ -24,6 +31,36 @@ abstract class BaseWebViewFragment<VB : ViewBinding, VM : BaseViewModel> : BaseF
     fun initWebView() {
         mWebView.webViewClient = PbWebViewClient(mViewModel)
         mWebView.webChromeClient = PbWebChromeClient(mViewModel)
+    }
+
+    /**
+     * 初始化JSBridge
+     * 子类可以重写此方法来自定义JSBridge配置
+     */
+    protected open fun initJSBridge() {
+        val jsBridge = mWebView.getJSBridge() ?: return
+
+        // 注册基础模块
+        jsBridge.registerModule(UIModule(requireContext()))
+        jsBridge.registerModule(StorageModule(requireContext()))
+        jsBridge.registerModule(DeviceModule(requireContext()))
+        jsBridge.registerModule(NetworkModule(requireContext()))
+        jsBridge.registerModule(NavigationModule(requireActivity(), mWebView))
+
+        // 设置安全配置（子类可以重写getJSBridgeSecurityConfig方法来自定义）
+        jsBridge.setSecurityConfig(getJSBridgeSecurityConfig())
+    }
+
+    /**
+     * 获取JSBridge安全配置
+     * 子类可以重写此方法来自定义安全配置
+     */
+    protected open fun getJSBridgeSecurityConfig(): SecurityConfig {
+        return SecurityConfig(
+            allowedDomains = listOf(
+                // 在这里添加允许的域名
+            )
+        )
     }
 
     /**

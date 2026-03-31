@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(./gradlew :pffbrowser:compileDebugKotlin)",
-      "Bash(find E:/FlaMingCoding/pffbrowser/src/main/res/drawable -name pb_ic_file_*.xml)"
+      "Bash(find E:/FlaMingCoding/pffbrowser/src/main/res/drawable -name pb_ic_file_*.xml)",
+      "Bash(xargs grep:*)"
     ]
   }
 }

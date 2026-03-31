@@ -6,7 +6,6 @@ import com.example.pffbrowser.R
 import com.example.pffbrowser.base.BaseFragment
 import com.example.pffbrowser.databinding.PbFragmentHomeBinding
 import com.example.pffbrowser.ext.safeNavigateWithAnim
-import com.example.pffbrowser.jsbridge.JSBridgeDemoActivity
 import com.unity3d.player.UnityPlayerActivity
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Retrofit
@@ -32,8 +31,12 @@ class HomeFragment : BaseFragment<PbFragmentHomeBinding, HomeViewModel>() {
         }
 
         mViewBinding.btnTest1.setOnClickListener {
-            val intent = Intent(context, JSBridgeDemoActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(context, JSBridgeDemoActivity::class.java)
+//            startActivity(intent)
+            findNavController().safeNavigateWithAnim(
+                R.id.HomeFragment,
+                R.id.pb_action_homefragment_to_optimizedWebViewFragment
+            )
         }
 
         mViewBinding.btnTest2.setOnClickListener {

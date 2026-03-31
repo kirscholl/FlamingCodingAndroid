@@ -7,6 +7,7 @@ import com.example.pffbrowser.download.DownloadDialogInfo
 import com.example.pffbrowser.jsbridge.core.JSBridgeCore
 import com.example.pffbrowser.jsbridge.security.SecurityConfig
 import com.example.pffbrowser.utils.FileUtil
+import com.example.pffbrowser.webview.optimization.WebViewOptimizationManager
 
 class PbWebView : WebView {
 
@@ -36,12 +37,17 @@ class PbWebView : WebView {
 
     init {
         setDownLoaderListener()
-        settings.apply {
-            javaScriptEnabled = true
-            domStorageEnabled = true
-        }
         // 初始化JSBridge
         initJSBridge()
+        // 应用WebView优化
+        applyOptimizations()
+    }
+
+    /**
+     * 应用WebView优化配置
+     */
+    private fun applyOptimizations() {
+        WebViewOptimizationManager.applyRecommendedOptimizations(this, context)
     }
 
     /**

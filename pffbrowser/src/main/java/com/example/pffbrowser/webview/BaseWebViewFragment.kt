@@ -79,7 +79,8 @@ abstract class BaseWebViewFragment<VB : ViewBinding, VM : BaseViewModel> : BaseF
      */
     private fun showDownloadDialog(downloadInfo: DownloadDialogInfo) {
         val dialog = DownloadDialogFragment.newInstance(downloadInfo)
-        dialog.setOnDownloadConfirmListener(object : DownloadDialogFragment.OnDownloadConfirmListener {
+        dialog.setOnDownloadConfirmListener(object :
+            DownloadDialogFragment.OnDownloadConfirmListener {
             override fun onDownloadConfirm(fileName: String, url: String) {
                 // 子类可以重写此方法来处理下载
                 onDownloadConfirmed(fileName, url, downloadInfo)
@@ -91,7 +92,11 @@ abstract class BaseWebViewFragment<VB : ViewBinding, VM : BaseViewModel> : BaseF
     /**
      * 下载确认回调，子类可以重写此方法来处理实际的下载逻辑
      */
-    protected open fun onDownloadConfirmed(fileName: String, url: String, downloadInfo: DownloadDialogInfo) {
+    protected open fun onDownloadConfirmed(
+        fileName: String,
+        url: String,
+        downloadInfo: DownloadDialogInfo
+    ) {
         // 默认实现：打印日志
         // 子类可以重写此方法来启动实际的下载任务
     }
@@ -123,6 +128,6 @@ abstract class BaseWebViewFragment<VB : ViewBinding, VM : BaseViewModel> : BaseF
 
     override fun onDestroy() {
         super.onDestroy()
-        mWebView.destroy()
+//        mWebView.destroy()
     }
 }

@@ -12,6 +12,9 @@
         <action
             android:id="@+id/pb_action_homefragment_to_searchfragment"
             app:destination="@id/SearchFragment" />
+        <action
+            android:id="@+id/pb_action_homefragment_to_optimizedWebViewFragment"
+            app:destination="@id/OptimizedWebViewFragment" />
     </fragment>
 
     <fragment
@@ -74,4 +77,10 @@
         android:name="com.example.pffbrowser.download.ui.DownloadListFragment"
         android:label="下载列表"
         tools:layout="@layout/pb_fragment_download_list" />
+
+    <fragment
+        android:id="@+id/OptimizedWebViewFragment"
+        android:name="com.example.pffbrowser.webview.example.OptimizedWebViewFragment"
+        android:label="webView测试页面"
+        tools:layout="@layout/pb_fragment_optimized_web_view" />
 </navigation>

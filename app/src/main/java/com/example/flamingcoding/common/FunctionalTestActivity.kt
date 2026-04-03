@@ -6,12 +6,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.flamingcoding.R
 import com.example.flamingcoding.dagger2Hilt.chaintest.Test1
 import com.example.flamingcoding.kotlinCoroutinesTrials.SuspendJavaTest
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -78,6 +81,14 @@ class FunctionalTestActivity : AppCompatActivity() {
             delay(1000)
             ld.observe(this@FunctionalTestActivity) {
                 println("FunctionalTestActivity ob $it")
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch(Dispatchers.IO) {
+
+                }
             }
         }
     }

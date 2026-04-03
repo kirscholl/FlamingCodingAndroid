@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.chunked
 import kotlinx.coroutines.flow.collectIndexed
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.conflate
@@ -961,6 +962,9 @@ class KotlinFlowNote {
                     delay(1000)
                     println("Buffer test collect输出：$it")
                 }
+                flowTest.collectLatest {
+
+                }
             }
         }
     }
@@ -1430,5 +1434,9 @@ class KotlinFlowNote {
             emit(1)
         }.asLiveData()
         return ld
+    }
+
+    fun flowAddTest() {
+
     }
 }

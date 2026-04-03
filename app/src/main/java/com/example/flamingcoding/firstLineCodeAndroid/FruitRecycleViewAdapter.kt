@@ -80,4 +80,6 @@ class FruitRecycleViewAdapter(val fruitList: List<Fruit>) :
     //    }
     //    ...
     //}
+
+
 }

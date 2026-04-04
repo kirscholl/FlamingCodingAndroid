@@ -36,6 +36,9 @@ class DownloadListFragment : BaseFragment<PbFragmentDownloadListBinding, Downloa
 
         rvDownloadList.layoutManager = LinearLayoutManager(requireContext())
         rvDownloadList.adapter = adapter
+        
+        // 禁用默认动画避免闪烁，使用自定义局部更新
+        rvDownloadList.itemAnimator = null
     }
 
     override fun initViewObserver() {

@@ -43,15 +43,33 @@ class DownloadTaskAdapter(
     ) {
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads)
-        } else {
-            // 使用Payload进行局部更新
-            val task = getItem(position)
-            for (payload in payloads) {
-                when (payload) {
-                    PAYLOAD_PROGRESS -> holder.updateProgress(task)
-                    PAYLOAD_STATUS -> holder.updateStatus(task)
+            return
+        }
+        
+        // 使用Payload进行局部更新
+        val task = getItem(position)
+        var needFullBind = false
+        
+        for (payload in payloads) {
+            when (payload) {
+                is List<*> -> {
+                    // 处理多个 payload 的情况
+                    payload.filterIsInstance<String>().forEach { p ->
+                        when (p) {
+                            PAYLOAD_PROGRESS -> holder.updateProgress(task)
+                            PAYLOAD_STATUS -> holder.updateStatus(task)
+                        }
+                    }
                 }
+                PAYLOAD_PROGRESS -> holder.updateProgress(task)
+                PAYLOAD_STATUS -> holder.updateStatus(task)
+                else -> needFullBind = true
             }
+        }
+        
+        // 如果有未知 payload，执行完整绑定
+        if (needFullBind) {
+            super.onBindViewHolder(holder, position, payloads)
         }
     }
 
@@ -162,24 +180,32 @@ class DownloadTaskAdapter(
         }
 
         override fun getChangePayload(oldItem: DownloadTask, newItem: DownloadTask): Any? {
-            // 如果只有进度或速度变化，返回PAYLOAD_PROGRESS
-            if (oldItem.status == newItem.status &&
-                oldItem.fileName == newItem.fileName &&
-                oldItem.totalBytes == newItem.totalBytes &&
-                (oldItem.progress != newItem.progress || oldItem.speed != newItem.speed)
-            ) {
-                return PAYLOAD_PROGRESS
+            // 构建变更标记集合
+            val payloads = mutableListOf<String>()
+            
+            // 检查进度或速度是否变化
+            if (oldItem.progress != newItem.progress || oldItem.speed != newItem.speed) {
+                payloads.add(PAYLOAD_PROGRESS)
             }
-
-            // 如果只有状态变化，返回PAYLOAD_STATUS
-            if (oldItem.status != newItem.status &&
-                oldItem.progress == newItem.progress &&
-                oldItem.speed == newItem.speed
-            ) {
-                return PAYLOAD_STATUS
+            
+            // 检查状态是否变化
+            if (oldItem.status != newItem.status) {
+                payloads.add(PAYLOAD_STATUS)
             }
-
-            return null
+            
+            // 如果只有进度/速度/状态变化（或它们的组合），返回对应的 payload
+            // 检查其他可能影响 UI 的字段是否变化
+            val otherFieldsChanged = oldItem.fileName != newItem.fileName ||
+                    oldItem.filePath != newItem.filePath ||
+                    oldItem.totalBytes != newItem.totalBytes ||
+                    oldItem.errorMsg != newItem.errorMsg ||
+                    oldItem.completeTime != newItem.completeTime
+            
+            return if (payloads.isNotEmpty() && !otherFieldsChanged) {
+                payloads
+            } else {
+                null
+            }
         }
     }
 

@@ -72,3 +72,8 @@ fun NavController.safeNavigateWithAnim(
 object NavigationThrottleHelper {
     var lastNavigateTime: Long = 0L
 }
+
+fun String.strExtTest(str: String): String {
+    println("111")
+    return this + str
+}

@@ -10,9 +10,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.flamingcoding.Algorithm.OtherAlgorithm
 import com.example.flamingcoding.R
 import com.example.flamingcoding.dagger2Hilt.chaintest.Test1
-import com.example.flamingcoding.kotlinCoroutinesTrials.SuspendJavaTest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -54,10 +54,17 @@ class FunctionalTestActivity : AppCompatActivity() {
 //            println(str2)
 
             // java 和suspend交互
-            val test = SuspendJavaTest()
-            test.callSuspendTestForJava()
-            test.callSuspendTestForJavaAsync()
-            test.callSuspend()
+//            val test = SuspendJavaTest()
+//            test.callSuspendTestForJava()
+//            test.callSuspendTestForJavaAsync()
+//            test.callSuspend()
+
+            val other = OtherAlgorithm()
+            val arr = intArrayOf(8, 7, 4, 4, 3, 5, 4, 1, 2, 3, 5)
+            other.quickSort(arr)
+            for (i in arr) {
+                println("排序结果：$i")
+            }
         }
 //        println("自动Inject测试：${test.testStr}")
     }

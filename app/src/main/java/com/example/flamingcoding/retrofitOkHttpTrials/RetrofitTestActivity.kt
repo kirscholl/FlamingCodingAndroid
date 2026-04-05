@@ -63,7 +63,7 @@ class RetrofitTestActivity : AppCompatActivity() {
                 call: Call<List<Repo>?>,
                 t: Throwable
             ) {
-                TODO("Not yet implemented")
+                
             }
         })
     }

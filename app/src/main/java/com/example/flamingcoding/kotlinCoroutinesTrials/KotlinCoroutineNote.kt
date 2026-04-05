@@ -176,7 +176,7 @@ class KotlinCoroutinesNote {
 //        public actual val Unconfined: CoroutineDispatcher = kotlinx.coroutines.Unconfined
 //
             // I/O密集型任务：跟磁盘和网络交互相关的任务
-            // 在I/O密集型任务的线程池设置中，线程池的大小: * <= 64 = 64 || * > 64 = *
+            // 在I/O密集型任务的线程池设置中，线程池的大小: CPU核心数 <= 64 = 64 || CPU核心数 > 64 = CPU核心数
 //        @JvmStatic
 //        public val IO: CoroutineDispatcher get() = DefaultIoScheduler
         }

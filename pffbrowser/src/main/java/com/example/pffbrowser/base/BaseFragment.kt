@@ -19,6 +19,11 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), 
     lateinit var mViewModel: VM
     lateinit var mViewBinding: VB
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        logLifeCycle(this, "onSaveInstanceState")
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         logLifeCycle(this, "onAttach")

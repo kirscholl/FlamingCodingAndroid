@@ -11,7 +11,7 @@ object LogUtil {
     const val WEB_VIEW_CLIENT_TRACK_TAG = "WebViewClientTrack"
     const val WEB_CHROME_CLIENT_TRACK_TAG = "WebChromeClientTrack"
 
-    const val DOWN_LOAD_FLAG = true
+    const val DOWN_LOAD_FLAG = false
 
     const val DOWN_LOAD_STATE_TAG = "DownloadState"
 

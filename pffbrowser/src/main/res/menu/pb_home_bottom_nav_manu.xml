@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <!--    这里的id要和pb_nav_graph中的fragmentId一样，Navigation才能自动导航-->
     <item
+        android:id="@+id/GameUnityFragment"
+        android:icon="@drawable/pb_icon_home"
+        android:title="游戏" />
+    <item
         android:id="@+id/HomeFragment"
         android:icon="@drawable/pb_icon_home"
         android:title="主页" />
@@ -9,10 +13,6 @@
         android:id="@+id/SquareFragment"
         android:icon="@drawable/pb_icon_home"
         android:title="广场" />
-    <item
-        android:id="@+id/GameUnityFragment"
-        android:icon="@drawable/pb_icon_home"
-        android:title="游戏" />
     <item
         android:id="@+id/MineUnityFragment"
         android:icon="@drawable/pb_icon_home"

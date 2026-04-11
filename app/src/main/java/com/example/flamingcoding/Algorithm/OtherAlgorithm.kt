@@ -1,6 +1,9 @@
 package com.example.flamingcoding.Algorithm
 
+import okio.Lock
 import java.util.PriorityQueue
+import java.util.concurrent.locks.ReentrantLock
+import java.util.concurrent.locks.ReentrantReadWriteLock
 
 class OtherAlgorithm {
 
@@ -266,6 +269,113 @@ class OtherAlgorithm {
             }
         }
         return rightIndex
+    }
+
+    // 每日温度
+    fun dailyTemperatures(temperatures: IntArray): IntArray {
+        val n = temperatures.size
+        val ans = IntArray(n) // 默认都是 0，如果最后没找到更高温，就保留 0
+
+        // ArrayDeque 是官方推荐的栈实现
+        val dequeue = ArrayDeque<Int>()
+
+        for (i in 0 until n) {
+            // 当 栈不为空 且 当前温度 > 栈顶那天的温度 时
+            // 说明找到了“第一个比栈顶那天更高”的温度
+            while (dequeue.isNotEmpty() && temperatures[i] > temperatures[dequeue.first()]) {
+                // 1. 取出那个需要“结案”的旧日期下标
+                val prevIndex = dequeue.removeFirst()
+                // 2. 计算间隔天数并填入结果
+                ans[prevIndex] = i - prevIndex
+            }
+
+            // 3. 每一个日期无论如何都要进栈一次，等待属于它的“更高温”
+            dequeue.addFirst(i)
+        }
+
+        return ans
+    }
+
+    fun firstMissingPositive(nums: IntArray): Int {
+        val n = nums.size
+        for (i in 0 until n) {
+            // 条件解析：
+            // 1. nums[i] > 0 且 nums[i] <= n：数字在有效范围内
+            // 2. nums[nums[i] - 1] != nums[i]：目标位置上的数字还不是它自己
+            // 使用 while 是因为交换过来的新数字可能还需要继续找它的家
+            while (nums[i] > 0 && nums[i] <= n && nums[nums[i] - 1] != nums[i]) {
+                // nums[i] 应该去的位置：correctIndex
+                val correctIndex = nums[i] - 1
+
+                // 交换 nums[i] 和 nums[correctIndex]
+                val temp = nums[i]
+                nums[i] = nums[correctIndex]
+                nums[correctIndex] = temp
+            }
+        }
+        // 再次遍历，找第一个位置不对的人
+        for (i in 0 until n) {
+            if (nums[i] != i + 1) {
+                return i + 1
+            }
+        }
+        // 如果大家都在该在的位置，比如 [1, 2, 3]，那就缺 4
+        return n + 1
+    }
+
+    fun sortArrayByParity(nums: IntArray): IntArray {
+        var leftIndex = 0
+        var rightIndex = nums.size - 1
+        var tempValue: Int
+        while (leftIndex != rightIndex) {
+            if (nums[leftIndex] % 2 != 0) {
+                tempValue = nums[rightIndex]
+                nums[rightIndex] = nums[leftIndex]
+                nums[leftIndex] = tempValue
+                rightIndex--
+            } else {
+                leftIndex++
+            }
+        }
+        return nums
+    }
+
+    fun search(nums: IntArray, target: Int): Int {
+        var left = 0
+        var right = nums.size - 1
+
+        while (left <= right) {
+            val mid = left + (right - left) / 2
+
+            if (nums[mid] == target) return mid
+
+            // 情况 1: 左半部分 [left, mid] 是有序的
+            if (nums[left] <= nums[mid]) {
+                // 判断 target 是否在左侧有序区间内
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1
+                } else {
+                    left = mid + 1
+                }
+            }
+            // 情况 2: 右半部分 [mid, right] 是有序的
+            else {
+                // 判断 target 是否在右侧有序区间内
+                if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1
+                } else {
+                    right = mid - 1
+                }
+            }
+        }
+
+        return -1
+
+        ReentrantLock
+        ReentrantReadWriteLock
+        Lock
+        synchronized()
+
     }
 }
 

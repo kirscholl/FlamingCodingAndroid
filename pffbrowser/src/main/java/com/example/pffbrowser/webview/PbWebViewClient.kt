@@ -19,6 +19,7 @@ import com.example.pffbrowser.utils.LogUtil
 
 class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
 
+    // 通知应用 WebView 的访问历史记录已更新
     override fun doUpdateVisitedHistory(
         view: WebView?,
         url: String?,
@@ -35,14 +36,17 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         super.onFormResubmission(view, dontResend, resend)
     }
 
+    // 通知应用 WebView 即将加载某个资源（图片、CSS、JS、iframe 等）
     override fun onLoadResource(view: WebView?, url: String?) {
         super.onLoadResource(view, url)
     }
 
+    // 通知应用页面的内容已经开始渲染并可见（但尚未完全加载完成）
     override fun onPageCommitVisible(view: WebView?, url: String?) {
         super.onPageCommitVisible(view, url)
     }
 
+    // 通知应用页面开始加载。可以在此显示加载进度条或更改 UI
     override fun onPageStarted(
         view: WebView?,
         url: String?,
@@ -52,11 +56,13 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         LogUtil.logWebViewClient("onPageStarted -> url: $url --- favicon: $favicon")
     }
 
+    // 通知应用页面加载完成。可以隐藏进度条、执行 JS 注入等
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         LogUtil.logWebViewClient("onPageFinished -> url: $url")
     }
 
+    // 处理服务端要求客户端提供 SSL 证书进行身份验证的请求
     override fun onReceivedClientCertRequest(
         view: WebView?,
         request: ClientCertRequest?
@@ -64,6 +70,7 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         super.onReceivedClientCertRequest(view, request)
     }
 
+    // 通知应用主资源（或子资源）加载过程中发生错误（如网络不可达、DNS 解析失败）
     override fun onReceivedError(
         view: WebView?,
         request: WebResourceRequest?,
@@ -72,6 +79,8 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         super.onReceivedError(view, request, error)
     }
 
+    // 处理 HTTP 基础认证（Basic/Digest）请求。
+    //回调时机：当服务器返回 401 状态码并要求提供用户名/密码时触发
     override fun onReceivedHttpAuthRequest(
         view: WebView?,
         handler: HttpAuthHandler?,
@@ -81,6 +90,7 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         super.onReceivedHttpAuthRequest(view, handler, host, realm)
     }
 
+    // 专门通知 HTTP 错误状态码（4xx、5xx）的响应
     override fun onReceivedHttpError(
         view: WebView?,
         request: WebResourceRequest?,
@@ -98,6 +108,7 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         super.onReceivedLoginRequest(view, realm, account, args)
     }
 
+    // 通知应用 SSL 证书验证失败（证书过期、域名不匹配等）
     override fun onReceivedSslError(
         view: WebView?,
         handler: SslErrorHandler?,
@@ -106,6 +117,8 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         super.onReceivedSslError(view, handler, error)
     }
 
+    // 通知应用渲染进程意外终止（崩溃或被系统杀死）
+    // 回调时机：当 WebView 的内部渲染进程因内存不足、崩溃等原因被杀死时触发
     override fun onRenderProcessGone(
         view: WebView?,
         detail: RenderProcessGoneDetail?
@@ -113,6 +126,8 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         return super.onRenderProcessGone(view, detail)
     }
 
+    // Google 安全浏览服务检测到当前 URL 为恶意/钓鱼网站时进行拦截
+    // 回调时机：当 WebView 准备加载的 URL 被 Safe Browsing 标记为威胁时调用
     override fun onSafeBrowsingHit(
         view: WebView?,
         request: WebResourceRequest?,
@@ -122,6 +137,8 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         super.onSafeBrowsingHit(view, request, threatType, callback)
     }
 
+    // 通知应用页面缩放比例发生变化
+    // 回调时机：用户双指缩放或通过脚本改变缩放时触发
     override fun onScaleChanged(
         view: WebView?,
         oldScale: Float,
@@ -130,10 +147,14 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         super.onScaleChanged(view, oldScale, newScale)
     }
 
+    // 通知应用有一个按键事件未被 WebView 内部处理
+    // 回调时机：当 WebView 不处理某个按键事件（比如它不关心 BACK 键）时调用
     override fun onUnhandledKeyEvent(view: WebView?, event: KeyEvent?) {
         super.onUnhandledKeyEvent(view, event)
     }
 
+    // 拦截页面的每一个网络请求，允许应用返回自定义数据作为响应（例如离线资源、缓存替换、广告屏蔽）
+    // 当 WebView 准备发出任何资源请求（主框架、子资源、Ajax 等）时调用，在 UI 线程之外执行（不会阻塞 UI）
     override fun shouldInterceptRequest(
         view: WebView?,
         request: WebResourceRequest?
@@ -141,6 +162,8 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         return super.shouldInterceptRequest(view, request)
     }
 
+    // 决定是否由 WebView 处理按键事件。
+    // 回调时机：当 WebView 获得焦点且有按键事件发生时（例如音量键、返回键等）
     override fun shouldOverrideKeyEvent(
         view: WebView?,
         event: KeyEvent?
@@ -148,6 +171,8 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
         return super.shouldOverrideKeyEvent(view, event)
     }
 
+    // 当页面内即将发生导航行为（点击链接、重定向、表单提交等）并且WebView即将加载新的URL时调用
+    // 当WebView内的主框架即将从一个旧URL切换到新URL时
     override fun shouldOverrideUrlLoading(
         view: WebView?,
         request: WebResourceRequest?
@@ -165,18 +190,6 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
     }
 
     fun handleCustomScheme(url: String?) {
-        
-    }
 
-    override fun equals(other: Any?): Boolean {
-        return super.equals(other)
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
-
-    override fun toString(): String {
-        return super.toString()
     }
 }

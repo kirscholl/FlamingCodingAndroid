@@ -3,6 +3,7 @@ package com.example.pffbrowser.webview
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.example.pffbrowser.base.BaseFragment
 import com.example.pffbrowser.base.BaseViewModel
@@ -14,6 +15,10 @@ import com.example.pffbrowser.jsbridge.module.impl.NetworkModule
 import com.example.pffbrowser.jsbridge.module.impl.StorageModule
 import com.example.pffbrowser.jsbridge.module.impl.UIModule
 import com.example.pffbrowser.jsbridge.security.SecurityConfig
+import com.example.pffbrowser.mine.di.HistoryRepositoryEntryPoint
+import dagger.hilt.android.EntryPointAccessors
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 abstract class BaseWebViewFragment<VB : ViewBinding, VM : BaseViewModel> : BaseFragment<VB, VM>() {
 
@@ -29,7 +34,15 @@ abstract class BaseWebViewFragment<VB : ViewBinding, VM : BaseViewModel> : BaseF
     }
 
     fun initWebView() {
-        mWebView.webViewClient = PbWebViewClient(mViewModel)
+        val historyRepo = EntryPointAccessors.fromApplication(
+            requireContext().applicationContext,
+            HistoryRepositoryEntryPoint::class.java
+        ).historyRepository()
+        mWebView.webViewClient = PbWebViewClient(mViewModel) { url, title ->
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                historyRepo.addHistory(url, title)
+            }
+        }
         mWebView.webChromeClient = PbWebChromeClient(mViewModel)
     }
 

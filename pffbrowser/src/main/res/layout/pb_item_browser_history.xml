@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- 红色删除背景（左滑时显示） -->
+    <LinearLayout
+        android:id="@+id/llDeleteBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E53935"
+        android:gravity="center_vertical|end"
+        android:orientation="horizontal"
+        android:paddingEnd="24dp">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="6dp"
+            android:src="@drawable/pb_icon_delete"
+            android:tint="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- 前景内容（可滑动） -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/clForeground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp">
+
+        <!-- Favicon -->
+        <ImageView
+            android:id="@+id/ivFavicon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/pb_bg_favicon"
+            android:padding="4dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 时间 -->
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#AAAAAA"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivFavicon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivFavicon" />
+
+        <!-- 页面标题 -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvTime"
+            app:layout_constraintStart_toEndOf="@id/ivFavicon"
+            app:layout_constraintTop_toTopOf="@id/ivFavicon" />
+
+        <!-- URL -->
+        <TextView
+            android:id="@+id/tvUrl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#888888"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toStartOf="@id/tvTime"
+            app:layout_constraintStart_toEndOf="@id/ivFavicon"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

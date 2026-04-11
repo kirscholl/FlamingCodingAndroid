@@ -14,7 +14,10 @@ class MineFragment : BaseFragment<PbFragmentMineBinding, MineViewModel>() {
 
     override fun PbFragmentMineBinding.setOnClickListener() {
         mViewBinding.btnBrowserHistory.setOnClickListener {
-
+            findNavController().safeNavigateWithAnim(
+                R.id.mineFragment,
+                R.id.pb_action_minefragment_to_browserhistoryfragment
+            )
         }
 
         mViewBinding.btnDownloadManager.setOnClickListener {

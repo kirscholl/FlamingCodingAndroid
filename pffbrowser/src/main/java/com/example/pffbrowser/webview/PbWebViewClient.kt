@@ -17,7 +17,10 @@ import android.webkit.WebViewClient
 import com.example.pffbrowser.base.BaseViewModel
 import com.example.pffbrowser.utils.LogUtil
 
-class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
+class PbWebViewClient(
+    mViewModel: BaseViewModel,
+    private val onPageVisited: ((url: String, title: String) -> Unit)? = null
+) : WebViewClient() {
 
     // 通知应用 WebView 的访问历史记录已更新
     override fun doUpdateVisitedHistory(
@@ -60,6 +63,10 @@ class PbWebViewClient(mViewModel: BaseViewModel) : WebViewClient() {
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         LogUtil.logWebViewClient("onPageFinished -> url: $url")
+        val finalUrl = url ?: return
+        if (finalUrl.isBlank() || finalUrl == "about:blank" || finalUrl == "about:newtab") return
+        val title = view?.title?.takeIf { it.isNotBlank() } ?: finalUrl
+        onPageVisited?.invoke(finalUrl, title)
     }
 
     // 处理服务端要求客户端提供 SSL 证书进行身份验证的请求

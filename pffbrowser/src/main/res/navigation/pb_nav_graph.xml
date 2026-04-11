@@ -34,7 +34,16 @@
         <action
             android:id="@+id/pb_action_minefragment_to_downloadlistfragment"
             app:destination="@id/DownloadListFragment" />
+        <action
+            android:id="@+id/pb_action_minefragment_to_browserhistoryfragment"
+            app:destination="@id/BrowserHistoryFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/BrowserHistoryFragment"
+        android:name="com.example.pffbrowser.mine.BrowserHistoryFragment"
+        android:label="浏览历史"
+        tools:layout="@layout/pb_fragment_browser_history" />
 
     <fragment
         android:id="@+id/SearchFragment"

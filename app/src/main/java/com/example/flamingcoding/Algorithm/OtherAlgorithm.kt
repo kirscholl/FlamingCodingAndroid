@@ -1,9 +1,6 @@
 package com.example.flamingcoding.Algorithm
 
-import okio.Lock
 import java.util.PriorityQueue
-import java.util.concurrent.locks.ReentrantLock
-import java.util.concurrent.locks.ReentrantReadWriteLock
 
 class OtherAlgorithm {
 
@@ -370,12 +367,6 @@ class OtherAlgorithm {
         }
 
         return -1
-
-        ReentrantLock
-        ReentrantReadWriteLock
-        Lock
-        synchronized()
-
     }
 }
 

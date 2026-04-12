@@ -84,6 +84,12 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, FunctionalTestActivity.class);
             startActivity(intent);
         });
+
+        Button homeButtonAidl = findViewById(R.id.HomeButtonAidl);
+        homeButtonAidl.setOnClickListener(v -> {
+            Intent intent = new Intent(this, com.example.flamingcoding.aidltest.AidlTestActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override

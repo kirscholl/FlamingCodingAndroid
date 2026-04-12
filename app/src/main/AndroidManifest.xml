@@ -24,6 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlaMingCoding">
         <activity
+            android:name=".aidltest.AidlTestActivity"
+            android:exported="false" />
+        <activity
             android:name=".thread.HandlerTestActivity"
             android:exported="false" />
         <activity
@@ -221,6 +224,11 @@
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="dataSync" />
+        <service
+            android:name=".aidltest.AidlService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":remote" />
     </application>
 
 </manifest>

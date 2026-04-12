@@ -3,7 +3,8 @@
     "allow": [
       "Bash(./gradlew :pffbrowser:compileDebugKotlin)",
       "Bash(find E:/FlaMingCoding/pffbrowser/src/main/res/drawable -name pb_ic_file_*.xml)",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(./gradlew :app:build --dry-run)"
     ]
   }
 }

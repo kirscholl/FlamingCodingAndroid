@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.flamingcoding.fragmentNavigation.FirstNavigationTestFragment"
+        android:name="com.example.flamingcoding.fragmentnavigation.FirstNavigationTestFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first_navigation_test">
 
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.example.flamingcoding.fragmentNavigation.SecondNavigationTestFragment"
+        android:name="com.example.flamingcoding.fragmentnavigation.SecondNavigationTestFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second_navigation_test">
 
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/ThirdFragment"
-        android:name="com.example.flamingcoding.fragmentNavigation.ThirdNavigationTestFragment"
+        android:name="com.example.flamingcoding.fragmentnavigation.ThirdNavigationTestFragment"
         android:label="ThirdFragment"
         tools:layout="@layout/fragment_third_navigation_test">
 

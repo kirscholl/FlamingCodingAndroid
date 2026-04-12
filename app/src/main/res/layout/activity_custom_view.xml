@@ -5,10 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".customViewTrials.CustomViewActivity">
+    tools:context=".customview.CustomViewActivity">
 
 
-    <com.example.flamingcoding.customViewTrials.TestCustomView
+    <com.example.flamingcoding.customview.TestCustomView
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@color/design_default_color_primary_dark"

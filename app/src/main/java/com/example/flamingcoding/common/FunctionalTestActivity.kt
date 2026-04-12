@@ -10,9 +10,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.flamingcoding.Algorithm.OtherAlgorithm
 import com.example.flamingcoding.R
-import com.example.flamingcoding.dagger2Hilt.chaintest.Test1
+import com.example.flamingcoding.algorithm.OtherAlgorithm
+import com.example.flamingcoding.dagger2hilt.chaintest.Test1
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

@@ -13,7 +13,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/leftFrag"
-        android:name="com.example.flamingcoding.firstLineCodeAndroid.LeftFragment"
+        android:name="com.example.flamingcoding.firstlinecode.LeftFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />

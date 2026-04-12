@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".dagger2Hilt.HiltApplication"
+        android:name=".dagger2hilt.HiltApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -24,20 +24,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlaMingCoding">
         <activity
-            android:name=".threadAsync.HandlerTestActivity"
+            android:name=".thread.HandlerTestActivity"
             android:exported="false" />
         <activity
-            android:name=".fragmentNavigation.FragmentNavigationTestActivity"
+            android:name=".fragmentnavigation.FragmentNavigationTestActivity"
             android:exported="false"
             android:label="FragmentNavigationTestActivity" />
         <activity
-            android:name=".mvxprojectframe.mvvm.MVVMActivityTest"
+            android:name=".mvx.mvvm.MVVMActivityTest"
             android:exported="false" />
         <activity
-            android:name=".mvxprojectframe.mvp.MVPActivityTest"
+            android:name=".mvx.mvp.MVPActivityTest"
             android:exported="false" />
         <activity
-            android:name=".mvxprojectframe.mvc.MVCActivityTest"
+            android:name=".mvx.mvc.MVCActivityTest"
             android:exported="false" />
         <activity
             android:name=".framework.binder.BinderTestActivity"
@@ -46,24 +46,24 @@
             android:name=".framework.handler.HandlerTestActivity"
             android:exported="false" />
         <activity
-            android:name=".customViewTrials.ViewRenderProcessTestActivity"
+            android:name=".customview.ViewRenderProcessTestActivity"
             android:exported="false" />
         <activity
-            android:name=".dagger2Hilt.HiltTestActivity"
+            android:name=".dagger2hilt.HiltTestActivity"
             android:exported="false"
             android:label="HiltTestActivity" />
         <activity
-            android:name=".dagger2Hilt.DaggerTestActivity"
+            android:name=".dagger2hilt.DaggerTestActivity"
             android:exported="false"
             android:label="DaggerTestActivity" />
         <activity
-            android:name=".lifecycleViewModelLiveDataTrials.LifecycleTestActivity"
+            android:name=".lifecycle.LifecycleTestActivity"
             android:exported="false" />
         <activity
-            android:name=".rxJavaTrials.RxJavaTestActivity"
+            android:name=".rxjava.RxJavaTestActivity"
             android:exported="false" />
         <activity
-            android:name=".customViewTrials.CustomViewActivity"
+            android:name=".customview.CustomViewActivity"
             android:exported="false" />
         <activity
             android:name=".common.FunctionalTestActivityJava"
@@ -74,96 +74,96 @@
             android:exported="false"
             android:label="FunctionalTestActivity" />
         <activity
-            android:name=".kotlinCoroutinesTrials.CoroutinesTestActivity"
+            android:name=".coroutines.CoroutinesTestActivity"
             android:exported="false"
             android:label="CoroutinesTestActivity" />
         <activity
-            android:name=".retrofitOkHttpTrials.OkHttpTestActivity"
+            android:name=".retrofit.OkHttpTestActivity"
             android:exported="false" />
         <activity
-            android:name=".retrofitOkHttpTrials.RetrofitTestActivity"
+            android:name=".retrofit.RetrofitTestActivity"
             android:exported="false"
             android:label="RetrofitTestActivity" />
         <activity
-            android:name=".firstLineCodeAndroid.ConstraintLayoutPracticeActivity"
+            android:name=".firstlinecode.ConstraintLayoutPracticeActivity"
             android:exported="false" />
         <activity
-            android:name=".composeTrials.NativeComposeMixTestActivity"
+            android:name=".compose.NativeComposeMixTestActivity"
             android:exported="false" />
         <activity
-            android:name=".composeTrials.ComposeTestActivity"
+            android:name=".compose.ComposeTestActivity"
             android:exported="false"
             android:label="ComposeTestActivity" />
         <activity
-            android:name=".androidDevArt.ActivityLifecycleActivity2"
+            android:name=".androiddevart.ActivityLifecycleActivity2"
             android:exported="false" />
         <activity
-            android:name=".androidDevArt.ActivityLifecycleActivity1"
+            android:name=".androiddevart.ActivityLifecycleActivity1"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.WorkManagerPracticeActivity"
+            android:name=".firstlinecode.WorkManagerPracticeActivity"
             android:exported="false"
             android:label="WorkManagerPracticeActivity" />
         <activity
-            android:name=".firstLineCodeAndroid.RoomPracticeActivity"
+            android:name=".firstlinecode.RoomPracticeActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.ViewModelPracticeActivity"
+            android:name=".firstlinecode.ViewModelPracticeActivity"
             android:exported="false"
             android:label="JetPackTest" />
         <activity
-            android:name=".firstLineCodeAndroid.MaterialDesignActivity"
+            android:name=".firstlinecode.MaterialDesignActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".firstLineCodeAndroid.CoroutinesPracticeActivity"
+            android:name=".firstlinecode.CoroutinesPracticeActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.HttpRequestPracticeActivity"
+            android:name=".firstlinecode.HttpRequestPracticeActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.WebViewActivity"
+            android:name=".firstlinecode.WebViewActivity"
             android:exported="false"
             android:label="WebViewActivity" />
         <activity
-            android:name=".firstLineCodeAndroid.ServicePracticeActivity"
+            android:name=".firstlinecode.ServicePracticeActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.NotificationActivity"
+            android:name=".firstlinecode.NotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.ContentProviderActivity"
+            android:name=".firstlinecode.ContentProviderActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.PermissionActivity"
+            android:name=".firstlinecode.PermissionActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.SQLLiteDatabaseActivity"
+            android:name=".firstlinecode.SQLLiteDatabaseActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.DataPersistenceActivity"
+            android:name=".firstlinecode.DataPersistenceActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.BroadcastActivity"
+            android:name=".firstlinecode.BroadcastActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.FragmentActivity"
+            android:name=".firstlinecode.FragmentActivity"
             android:exported="false"
             android:label="FragmentActivity" />
         <activity
-            android:name=".firstLineCodeAndroid.RecycleViewActivity"
+            android:name=".firstlinecode.RecycleViewActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.ListViewActivity"
+            android:name=".firstlinecode.ListViewActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.LayoutActivity"
+            android:name=".firstlinecode.LayoutActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.ViewActivity"
+            android:name=".firstlinecode.ViewActivity"
             android:exported="false" />
         <activity
-            android:name=".firstLineCodeAndroid.ThirdActivity"
+            android:name=".firstlinecode.ThirdActivity"
             android:exported="true"
             android:label="ThirdActivity">
             <intent-filter tools:ignore="AppLinkUrlError">
@@ -175,7 +175,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".firstLineCodeAndroid.SecondActivity"
+            android:name=".firstlinecode.SecondActivity"
             android:exported="false"
             android:label="SecondActivity">
             <intent-filter>
@@ -185,7 +185,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".firstLineCodeAndroid.HomeActivity"
+            android:name=".firstlinecode.HomeActivity"
             android:exported="true"
             android:label="HomeActivity"
             android:launchMode="singleInstance"
@@ -198,7 +198,7 @@
         </activity>
 
         <receiver
-            android:name=".firstLineCodeAndroid.TestBoardCastReceiver"
+            android:name=".firstlinecode.TestBoardCastReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -208,7 +208,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.flamingcoding.firstLineCodeAndroid.fileprovider"
+            android:authorities="com.example.flamingcoding.firstlinecode.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -217,7 +217,7 @@
         </provider>
 
         <service
-            android:name=".firstLineCodeAndroid.PracticeService"
+            android:name=".firstlinecode.PracticeService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="dataSync" />

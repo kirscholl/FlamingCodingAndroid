@@ -1346,27 +1346,28 @@ class KotlinFlowNote {
 
     val threadLocalTestValue = ThreadLocal<String>()
 
-    fun threadLockTest() {
+    fun threadLocalTest() {
         // 线程局部变量 只要没出线程其值共享
         // CoroutineContext抽象意义上就是协程的局部变量
-        val threadLock = ThreadLocal<String>()
-        threadLock.set("outTest")
+        val threadLocal = ThreadLocal<String>()
+        threadLocal.set("outTest")
         // out: outTest
-        println("out: ${threadLock.get()}")
+        println("out: ${threadLocal.get()}")
         thread {
-            threadLock.set("flaming")
+            threadLocal.set("flaming1")
             // thread1: flaming
-            println("thread1: ${threadLock.get()}")
+            println("thread1: ${threadLocal.get()}")
         }
         thread {
             // thread2: null
-            println("thread2: ${threadLock.get()}")
+            threadLocal.set("flaming2")
+            println("thread2: ${threadLocal.get()}")
         }
 
         val scope = CoroutineScope(EmptyCoroutineContext)
         scope.launch {
             // 转换成协程局部变量，不管怎么切线程只要没出协程其值不变
-            val coroutineLocal = threadLock.asContextElement("flaming")
+            val coroutineLocal = threadLocal.asContextElement("flaming")
         }
     }
 

@@ -158,8 +158,11 @@ dependencies {
 
     implementation("com.google.android.flexbox:flexbox:3.0.0")
 
-    // ########################################### OkDownload ############################################
+    // ######################################## OkDownload #########################################
     implementation("com.liulishuo.okdownload:okdownload:1.0.7")
     implementation("com.liulishuo.okdownload:sqlite:1.0.7")
     implementation("com.liulishuo.okdownload:okhttp:1.0.7")
+
+    // ####################################### leak Canary #########################################
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
 }

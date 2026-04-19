@@ -27,6 +27,7 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -931,10 +932,18 @@ class KotlinCoroutinesNote {
         }
     }
 
-    fun withTimeoutOrNull() {
+    fun timeOutTest() {
         runBlocking {
-            withTimeoutOrNull(1.seconds) {
+            withTimeout(100L) {
+                // 超时直接抛出取消异常
+            }
 
+            val res = withTimeoutOrNull(1.seconds) {
+                // 超时返回null
+            }
+            if (res == null) {
+                // 处理超时
+                println("withTimeoutOrNull 取消")
             }
         }
     }

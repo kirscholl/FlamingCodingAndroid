@@ -11,7 +11,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.flamingcoding.R
-import com.example.flamingcoding.algorithm.OtherAlgorithm
+import com.example.flamingcoding.coroutines.KotlinFlowNote
 import com.example.flamingcoding.dagger2hilt.chaintest.Test1
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -59,12 +59,15 @@ class FunctionalTestActivity : AppCompatActivity() {
 //            test.callSuspendTestForJavaAsync()
 //            test.callSuspend()
 
-            val other = OtherAlgorithm()
-            val arr = intArrayOf(8, 7, 4, 4, 3, 5, 4, 1, 2, 3, 5)
-            other.quickSort(arr)
-            for (i in arr) {
-                println("排序结果：$i")
-            }
+//            val other = OtherAlgorithm()
+//            val arr = intArrayOf(8, 7, 4, 4, 3, 5, 4, 1, 2, 3, 5)
+//            other.quickSort(arr)
+//            for (i in arr) {
+//                println("排序结果：$i")
+//            }
+
+            val test = KotlinFlowNote()
+            test.threadLocalTest()
         }
 //        println("自动Inject测试：${test.testStr}")
     }

@@ -368,6 +368,47 @@ class OtherAlgorithm {
 
         return -1
     }
+
+    // 多数元素
+    fun majorityElement(nums: IntArray): Int {
+        var res: Int? = null
+        var resCount = 0
+        for (num in nums) {
+            if (resCount == 0) {
+                res = num
+            }
+            if (num == res) {
+                resCount++
+            } else {
+                resCount--
+            }
+        }
+        return res!!
+    }
+
+    fun productExceptSelf(nums: IntArray): IntArray {
+        val n = nums.size
+        val res = IntArray(n)
+
+        // 第一步：计算每个元素左侧的乘积
+        // res[i] 表示 nums[i] 左边所有元素的乘积
+        res[0] = 1
+        for (i in 1 until n) {
+            res[i] = res[i - 1] * nums[i - 1]
+        }
+
+        // 第二步：计算每个元素右侧的乘积，并直接乘到 res 中
+        // right 变量维护从右边遍历过来的累积乘积
+        var right = 1
+        for (i in n - 1 downTo 0) {
+            // 此时 res[i] 是左积，乘以当前的右积 right
+            res[i] = res[i] * right
+            // 更新右积，供下一个（也就是左边的）位置使用
+            right *= nums[i]
+        }
+
+        return res
+    }
 }
 
 fun IntArray.swap(index1: Int, index2: Int) {

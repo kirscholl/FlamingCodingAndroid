@@ -1,6 +1,7 @@
 package com.example.flamingcoding.lifecycle
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -30,5 +31,15 @@ class LifecycleTestActivity : AppCompatActivity() {
         testViewModel.testLiveData.observe(this, Observer {
 
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val btnAddObs = findViewById<Button>(R.id.btn_add_obs)
+        btnAddObs.setOnClickListener {
+            // 新添加的observer会经历前面的所有生命周期回调
+            // 例如在onResume中添加会经历onCreate onStart onResume
+            lifecycle.addObserver(TestLifecycleObserver2())
+        }
     }
 }

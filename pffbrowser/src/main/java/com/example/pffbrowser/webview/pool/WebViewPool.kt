@@ -5,6 +5,7 @@ import android.content.MutableContextWrapper
 import android.os.Handler
 import android.os.Looper
 import android.view.ViewGroup
+import android.webkit.WebViewClient
 import com.example.pffbrowser.webview.PbWebView
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -160,8 +161,8 @@ object WebViewPool {
                 // 停止加载
                 stopLoading()
 
-                // 清空回调
-//                webViewClient = null
+                // 清空回调（设置为新的空实例，避免持有外部引用）
+                webViewClient = WebViewClient()
                 webChromeClient = null
                 onDownloadListener = null
 
@@ -171,9 +172,16 @@ object WebViewPool {
                 // 清空历史
                 clearHistory()
 
+                // 清理JSBridge
+                getJSBridge()?.destroy()
+
                 // 加载空白页
                 loadUrl("about:blank")
             }
+
+            // 重置Context为applicationContext，避免持有Activity引用
+            val contextWrapper = webView.context as? MutableContextWrapper
+            contextWrapper?.baseContext = applicationContext
         } catch (e: Exception) {
             e.printStackTrace()
         }

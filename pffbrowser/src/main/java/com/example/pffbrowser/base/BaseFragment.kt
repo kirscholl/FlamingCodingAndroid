@@ -17,8 +17,8 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), 
     }
 
     lateinit var mViewModel: VM
-    lateinit var mViewBinding: VB
-
+    private var _binding: VB? = null
+    protected val mViewBinding get() = _binding!!
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         logLifeCycle(this, "onSaveInstanceState")
@@ -43,8 +43,8 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), 
         savedInstanceState: Bundle?
     ): View? {
         logLifeCycle(this, "onCreateView")
-        mViewBinding = BindingReflex.reflexViewBinding(javaClass, layoutInflater)
-        return mViewBinding.root
+        _binding = BindingReflex.reflexViewBinding(javaClass, layoutInflater)
+        return _binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,6 +79,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment(), 
     override fun onDestroyView() {
         super.onDestroyView()
         logLifeCycle(this, "onDestroyView")
+        _binding = null
     }
 
     override fun onDestroy() {

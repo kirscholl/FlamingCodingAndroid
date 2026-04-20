@@ -18,7 +18,7 @@
       </SelectionState>
       <SelectionState runConfigName="pffbrowser">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-04-18T07:31:07.847140900Z">
+        <DropdownSelection timestamp="2026-04-20T05:49:16.363075Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Administrator\.android\avd\Medium_Phone.avd" />

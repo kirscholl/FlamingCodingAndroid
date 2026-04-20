@@ -45,7 +45,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="测试2"
+        android:text="Agent对话"
         android:textAllCaps="false" />
 
     <Button

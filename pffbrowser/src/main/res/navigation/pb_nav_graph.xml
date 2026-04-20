@@ -15,6 +15,9 @@
         <action
             android:id="@+id/pb_action_homefragment_to_optimizedWebViewFragment"
             app:destination="@id/OptimizedWebViewFragment" />
+        <action
+            android:id="@+id/pb_action_homefragment_to_agentchatfragment"
+            app:destination="@id/AgentChatFragment" />
     </fragment>
 
     <fragment
@@ -92,4 +95,10 @@
         android:name="com.example.pffbrowser.webview.example.OptimizedWebViewFragment"
         android:label="webView测试页面"
         tools:layout="@layout/pb_fragment_optimized_web_view" />
+
+    <fragment
+        android:id="@+id/AgentChatFragment"
+        android:name="com.example.pffbrowser.agent.AgentChatFragment"
+        android:label="Agent对话"
+        tools:layout="@layout/pb_fragment_agent_chat" />
 </navigation>

@@ -2,7 +2,7 @@ package com.example.pffbrowser.square
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.pffbrowser.square.find.FindFragment
+import com.example.pffbrowser.agent.AgentChatFragment
 import com.example.pffbrowser.square.follow.FollowFragment
 import com.example.pffbrowser.square.location.LocationFragment
 
@@ -19,7 +19,7 @@ class SquareViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment
             }
 
             1 -> {
-                FindFragment()
+                AgentChatFragment()
             }
 
             else -> LocationFragment()

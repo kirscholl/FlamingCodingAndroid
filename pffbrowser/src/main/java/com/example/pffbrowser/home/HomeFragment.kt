@@ -40,7 +40,10 @@ class HomeFragment : BaseFragment<PbFragmentHomeBinding, HomeViewModel>() {
         }
 
         mViewBinding.btnTest2.setOnClickListener {
-
+            findNavController().safeNavigateWithAnim(
+                R.id.HomeFragment,
+                R.id.pb_action_homefragment_to_agentchatfragment
+            )
         }
 
         mViewBinding.btnTest3.setOnClickListener {
